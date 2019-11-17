@@ -49,4 +49,4 @@ export {default as Progress} from '../components/progress/demo'
 export {default as Ruler} from '../components/ruler/demo'
 export {default as TextareaItem} from '../components/textarea-item/demo'
 export {default as Skeleton} from '../components/skeleton/demo'
-export {default as FormInput} from '../components/form-input/demo'/* @init<%export {default as ${componentNameUpper}} from '../components/${componentName}/demo'%> */
+export {default as FormInput} from '../components/form-input/demo'export {default as FormSelect} from '../components/form-select/demo'/* @init<%export {default as ${componentNameUpper}} from '../components/${componentName}/demo'%> */
