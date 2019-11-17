@@ -63,7 +63,7 @@ import Progress from './progress'
 import Ruler from './ruler'
 import TextareaItem from './textarea-item'
 import Skeleton from './skeleton'
-/* @init<%import ${componentNameUpper} from './${componentName}'%> */
+import FormInput from './form-input'/* @init<%import ${componentNameUpper} from './${componentName}'%> */
 
 // Totally importing reminder
 warn(
@@ -135,7 +135,7 @@ export const components = {
   Ruler,
   TextareaItem,
   Skeleton,
-  /* @init<%${componentNameUpper},%> */
+  FormInput,/* @init<%${componentNameUpper},%> */
 }
 
 // Define plugin installation method
@@ -228,7 +228,7 @@ export {
   Ruler,
   TextareaItem,
   Skeleton,
-  /* @init<%${componentNameUpper},%> */
+  FormInput,/* @init<%${componentNameUpper},%> */
 }
 
 export default {
