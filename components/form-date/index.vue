@@ -11,7 +11,7 @@
     </template>
     <template>
       <div @click="showSelector">
-        {{ selectText }}
+        {{ datePickerValue }}
       </div>
     </template>
     <template slot="right">
@@ -51,7 +51,7 @@
 <script>
 import DatePicker from '../date-picker';
 import FieldItem from '../field-item';
-import { dateToStr, dateAdd, strFormatToDate } from '../_util/lang';
+import { dateToStr, dateAdd, strFormatToDate,isNull,isString } from '../_util/lang';
 const FORMAT = {
   date: 'yyyy-MM-dd',
   datetime: 'yyyy-MM-dd HH:mm:ss',
@@ -69,6 +69,9 @@ export default {
       showSelector: false,
       maxDate: null,
       minDate: null,
+      formatStr:'',
+      currentDate:'',
+      datePickerValue:this.value,
     };
   },
   props: {
@@ -113,10 +116,6 @@ export default {
       type: String,
       default: '',
     },
-    list: {
-      type: Array,
-      default: () => [],
-    },
   },
   computed: {},
 
@@ -126,8 +125,19 @@ export default {
     if (!formatStr) {
       formatStr = this.customTypes;
     }
+    this.$_initMin(this.minDate,this.min,-100);
+    this.$_initMin(this.maxDate,this.max,0);
   },
   methods: {
+    $_initMin(data,prop,num){
+      if (isNull(prop)){
+        data = dateAdd('y',num,new Date())
+      }else if (isString(prop)){
+        data = strFormatToDate(this.formatStr,prop)
+      }else {
+        data = prop;
+      }
+    },
     onDatePickerChange(columnIndex, itemIndex, value) {
       console.log(
         `[Mand Mobile] DatePicker Change\ncolumnIndex: ${columnIndex},\nitemIndex:${itemIndex},\nvalue: ${JSON.stringify(
@@ -141,9 +151,7 @@ export default {
           columnsValue
         )}`
       );
-      this.datePickerValue = this.$refs.datePicker.getFormatDate(
-        'yyyy/MM/dd hh:mm'
-      );
+      this.datePickerValue = this.$refs.datePicker.getFormatDate(this.formatStr);
     },
   },
 };

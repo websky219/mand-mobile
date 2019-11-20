@@ -241,3 +241,27 @@ export function dateToStr(formatStr, date) {
     str = str.replace(/s|S/g, date.getSeconds());
     return str;
 }
+
+function getType(obj){
+  let type  = typeof obj;
+  if(type !== 'object'){
+    return type;
+  }
+  return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1');
+}
+
+export function isArray(val){
+  return getType(val)==='Array';
+}
+
+export function isString(val){
+  return getType(val)==='String';
+}
+
+export function isDate(val){
+  return getType(val)==='Date';
+}
+
+export  function isNull(val) {
+  return val===undefined||val===null;
+}
