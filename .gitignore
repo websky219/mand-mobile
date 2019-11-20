@@ -24,3 +24,5 @@ coverage/
 *.ntvs*
 *.njsproj
 *.sln
+.history
+.history/
