@@ -1,21 +1,18 @@
 <template>
   <div class="md-example-child md-example-child-single-component">
-    <md-field>
-      <md-form-input></md-form-input>
-      <md-form-input></md-form-input>
-    </md-field>
+    <md-form-date></md-form-date>
   </div>
 </template>
 
 <script>
-import { FormInput } from 'mand-mobile';
+import { FormDate } from 'mand-mobile';
 
 export default {
-  name: 'form-input-demo',
+  name: 'form-date-demo',
   title: '样例一',
   describe: '样例一说明备注',
   components: {
-    [FormInput.name]: FormInput,
+    [FormDate.name]: FormDate,
   },
 };
 </script>

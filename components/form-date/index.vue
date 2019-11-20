@@ -33,35 +33,53 @@
       </div>
       <!-- ------------ -->
     </template>
-    <md-selector
-      v-model="isSelectorShow"
-      :data="options"
-      :default-value="selectVal"
-      min-height="320px"
+    <md-date-picker
+      ref="datePicker"
+      v-model="showSelector"
+      :type="type"
       :title="'请选择' + label"
-      @choose="onSelectorChoose"
-    ></md-selector>
+      :custom-types="customTypes"
+      :default-date="currentDate"
+      :max-date="maxDate"
+      :min-date="minDate"
+      @change="onDatePickerChange"
+      @confirm="onDatePickerConfirm"
+    ></md-date-picker>
   </md-field-item>
 </template>
 
 <script>
-import Selctor from '../selector/index';
+import DatePicker from '../date-picker';
 import FieldItem from '../field-item';
 export default {
-  name: 'md-form-select',
+  name: 'md-form-date',
+
   components: {
-    [Selctor.name]: Selctor,
     [FieldItem.name]: FieldItem,
+    [DatePicker.name]: DatePicker,
   },
   data() {
     return {
-      isSelectorShow: false,
-      options: this.list,
-      selectVal: this.value,
-      selectText: '请选择' + this.label,
+      showSelector: false,
+      maxDate: null,
+      minDate: null,
     };
   },
   props: {
+    type: {
+      type: String,
+      default: 'date',
+    },
+    min: {
+      type: [String, Date],
+    },
+    max: {
+      type: [String, Date],
+    },
+    customTypes: {
+      type: Array,
+      default: () => ['yyyy', 'MM', 'dd', 'hh', 'mm'],
+    },
     readonly: {
       type: Boolean,
       default: false,
@@ -95,50 +113,33 @@ export default {
     },
   },
   computed: {},
-  created() {
-    if (this.selectList) {
-      this.options = this.selectList;
-    }
-    if (this.options.length > 0) {
-      for (const i of this.options) {
-        if (i.value === this.value) {
-          this.selectText = i.text;
-          break;
-        }
-      }
-    }
-  },
-  watch: {
-    selectVal(val) {
-      // this.value = val;
-      console.log('selectVal', val);
-      this.$emit('input', val);
-    },
-  },
+
+  watch: {},
 
   methods: {
-    showSelector() {
-      if (this.readonly) {
-        return;
-      }
-      this.isSelectorShow = true;
+    onDatePickerChange(columnIndex, itemIndex, value) {
+      console.log(
+        `[Mand Mobile] DatePicker Change\ncolumnIndex: ${columnIndex},\nitemIndex:${itemIndex},\nvalue: ${JSON.stringify(
+          value
+        )}`
+      );
     },
-    onSelectorChoose({ value, text }) {
-      this.selectText = text;
-      this.selectVal = value;
-    },
-    isInputError() {
-      return this.$slots.error || this.error !== '';
-    },
-    isInputBrief() {
-      return this.$slots.brief || this.brief !== '';
+    onDatePickerConfirm(columnsValue) {
+      console.log(
+        `[Mand Mobile] DatePicker Confirm\nvalue: ${JSON.stringify(
+          columnsValue
+        )}`
+      );
+      this.datePickerValue = this.$refs.datePicker.getFormatDate(
+        'yyyy/MM/dd hh:mm'
+      );
     },
   },
 };
 </script>
 
 <style lang="stylus">
-.md-form-select
+.md-form-date
   color color-gray-1
   -webkit-font-smoothing antialiased
   font-size 28px
