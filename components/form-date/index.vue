@@ -51,6 +51,12 @@
 <script>
 import DatePicker from '../date-picker';
 import FieldItem from '../field-item';
+import { dateToStr, dateAdd, strFormatToDate } from '../_util/lang';
+const FORMAT = {
+  date: 'yyyy-MM-dd',
+  datetime: 'yyyy-MM-dd HH:mm:ss',
+  time: 'HH:mm:ss',
+};
 export default {
   name: 'md-form-date',
 
@@ -115,7 +121,12 @@ export default {
   computed: {},
 
   watch: {},
-
+  created() {
+    let formatStr = FORMAT[this.type];
+    if (!formatStr) {
+      formatStr = this.customTypes;
+    }
+  },
   methods: {
     onDatePickerChange(columnIndex, itemIndex, value) {
       console.log(
