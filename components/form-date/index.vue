@@ -8,8 +8,11 @@
     <template slot="left">
       <slot name="left"></slot>
     </template>
-    <p class="md-form-content" @click="showSelector">
-      {{ datePickerValue }}
+    <p class="md-form-content" @click="showSelector" v-if="selectValue">
+      {{ selectValue }}
+    </p>
+    <p class="md-form-content" @click="showSelector" v-else>
+      {{ '请选择' + label }}
     </p>
     <template slot="right">
       <!-- ------------ -->
@@ -39,14 +42,13 @@
     </template>
     <md-date-picker
       ref="datePicker"
-      v-model="dateShow"
+      v-model="show"
       :type="type"
       :title="'请选择' + label"
       :custom-types="customTypes"
       :default-date="dfvalue"
       :max-date="maxDate"
       :min-date="minDate"
-      @change="onDatePickerChange"
       @confirm="onDatePickerConfirm"
       :keep-index="true"
     ></md-date-picker>
@@ -57,6 +59,7 @@
 import DatePicker from '../date-picker';
 import FieldItem from '../field-item';
 import { dateAdd, strFormatToDate, isNull, isString } from '../_util/lang';
+import mixins from '../_util/form_mixins';
 import Icon from '../icon/';
 const FORMAT = {
   date: 'yyyy-MM-dd',
@@ -64,6 +67,7 @@ const FORMAT = {
   time: 'HH:mm:ss',
 };
 export default {
+  mixins: [mixins],
   name: 'md-form-date',
 
   components: {
@@ -74,11 +78,9 @@ export default {
   data() {
     return {
       dfvalue: null,
-      dateShow: false,
       maxDate: null,
       minDate: null,
       formatStr: '',
-      datePickerValue: '',
     };
   },
   props: {
@@ -96,30 +98,6 @@ export default {
       type: Array,
       default: () => ['yyyy', 'MM', 'dd', 'hh', 'mm'],
     },
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    suffix: String,
-    value: {
-      type: String,
-    },
-    error: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    solid: {
-      type: Boolean,
-      default: true,
-    },
-    brief: {
-      type: String,
-      default: '',
-    },
   },
   computed: {},
 
@@ -130,20 +108,11 @@ export default {
       formatStr = this.customTypes;
     }
     this.formatStr = formatStr;
-    if (isNull(this.value) || this.value === '') {
-      this.datePickerValue = '请选择' + this.label;
-    }
     this.$_initMin('minDate', this.min, -100);
     this.$_initMin('maxDate', this.max, 0);
     this.dfvalue = this.maxDate;
   },
   methods: {
-    showSelector() {
-      if (this.readonly) {
-        return;
-      }
-      this.dateShow = true;
-    },
     $_initMin(data, prop, num) {
       if (isNull(prop)) {
         this[data] = dateAdd('y', num, new Date());
@@ -153,28 +122,14 @@ export default {
         this[data] = prop;
       }
     },
-    onDatePickerChange(columnIndex, itemIndex, value) {
-      console.log(
-        `[Mand Mobile] DatePicker Change\ncolumnIndex: ${columnIndex},\nitemIndex:${itemIndex},\nvalue: ${JSON.stringify(
-          value
-        )}`
-      );
-    },
     onDatePickerConfirm(columnsValue) {
       console.log(
         `[Mand Mobile] DatePicker Confirm\nvalue: ${JSON.stringify(
           columnsValue
         )}`
       );
-      this.datePickerValue = this.$refs.datePicker.getFormatDate(
-        this.formatStr
-      );
-    },
-    isInputError() {
-      return this.$slots.error || this.error !== '';
-    },
-    isInputBrief() {
-      return this.$slots.brief || this.brief !== '';
+      this.selectValue = this.$refs.datePicker.getFormatDate(this.formatStr);
+      this.$emit('input', this.selectValue);
     },
   },
 };
