@@ -1,6 +1,6 @@
 <template>
   <div class="md-example-child md-example-child-single-component">
-    <md-form-date></md-form-date>
+    <md-form-date label="开始时间" suffix="生效" error="错误"></md-form-date>
   </div>
 </template>
 

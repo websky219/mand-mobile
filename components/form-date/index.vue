@@ -4,21 +4,25 @@
     :title="label"
     :solid="solid"
     :disabled="readonly"
-    :arrow="arrow"
   >
     <template slot="left">
       <slot name="left"></slot>
     </template>
-    <template>
-      <div @click="showSelector">
-        {{ datePickerValue }}
-      </div>
-    </template>
+    <p class="md-form-content" @click="showSelector">
+      {{ datePickerValue }}
+    </p>
     <template slot="right">
       <!-- ------------ -->
       <!--  RIGHT SLOT  -->
       <!-- ------------ -->
-      <slot name="right"></slot>
+      <slot name="right">
+        <div class="md-form-date-suffix">
+          <md-icon @click="showSelector" name="calendar"></md-icon>
+          <span v-if="suffix">
+            {{ suffix }}
+          </span>
+        </div>
+      </slot>
     </template>
     <template slot="children">
       <!-- BRIEF/ERROR TIP -->
@@ -35,15 +39,16 @@
     </template>
     <md-date-picker
       ref="datePicker"
-      v-model="showSelector"
+      v-model="dateShow"
       :type="type"
       :title="'请选择' + label"
       :custom-types="customTypes"
-      :default-date="currentDate"
+      :default-date="dfvalue"
       :max-date="maxDate"
       :min-date="minDate"
       @change="onDatePickerChange"
       @confirm="onDatePickerConfirm"
+      :keep-index="true"
     ></md-date-picker>
   </md-field-item>
 </template>
@@ -51,7 +56,8 @@
 <script>
 import DatePicker from '../date-picker';
 import FieldItem from '../field-item';
-import { dateToStr, dateAdd, strFormatToDate,isNull,isString } from '../_util/lang';
+import { dateAdd, strFormatToDate, isNull, isString } from '../_util/lang';
+import Icon from '../icon/';
 const FORMAT = {
   date: 'yyyy-MM-dd',
   datetime: 'yyyy-MM-dd HH:mm:ss',
@@ -63,15 +69,16 @@ export default {
   components: {
     [FieldItem.name]: FieldItem,
     [DatePicker.name]: DatePicker,
+    [Icon.name]: Icon,
   },
   data() {
     return {
-      showSelector: false,
+      dfvalue: null,
+      dateShow: false,
       maxDate: null,
       minDate: null,
-      formatStr:'',
-      currentDate:'',
-      datePickerValue:this.value,
+      formatStr: '',
+      datePickerValue: '',
     };
   },
   props: {
@@ -93,12 +100,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    arrow: {
-      type: Boolean,
-      default: true,
-    },
+    suffix: String,
     value: {
-      type: [String, Number, Object, Boolean],
+      type: String,
     },
     error: {
       type: String,
@@ -125,17 +129,28 @@ export default {
     if (!formatStr) {
       formatStr = this.customTypes;
     }
-    this.$_initMin(this.minDate,this.min,-100);
-    this.$_initMin(this.maxDate,this.max,0);
+    this.formatStr = formatStr;
+    if (isNull(this.value) || this.value === '') {
+      this.datePickerValue = '请选择' + this.label;
+    }
+    this.$_initMin('minDate', this.min, -100);
+    this.$_initMin('maxDate', this.max, 0);
+    this.dfvalue = this.maxDate;
   },
   methods: {
-    $_initMin(data,prop,num){
-      if (isNull(prop)){
-        data = dateAdd('y',num,new Date())
-      }else if (isString(prop)){
-        data = strFormatToDate(this.formatStr,prop)
-      }else {
-        data = prop;
+    showSelector() {
+      if (this.readonly) {
+        return;
+      }
+      this.dateShow = true;
+    },
+    $_initMin(data, prop, num) {
+      if (isNull(prop)) {
+        this[data] = dateAdd('y', num, new Date());
+      } else if (isString(prop)) {
+        this[data] = strFormatToDate(this.formatStr, prop);
+      } else {
+        this[data] = prop;
       }
     },
     onDatePickerChange(columnIndex, itemIndex, value) {
@@ -151,7 +166,15 @@ export default {
           columnsValue
         )}`
       );
-      this.datePickerValue = this.$refs.datePicker.getFormatDate(this.formatStr);
+      this.datePickerValue = this.$refs.datePicker.getFormatDate(
+        this.formatStr
+      );
+    },
+    isInputError() {
+      return this.$slots.error || this.error !== '';
+    },
+    isInputBrief() {
+      return this.$slots.brief || this.brief !== '';
     },
   },
 };
@@ -161,8 +184,10 @@ export default {
 .md-form-date
   color color-gray-1
   -webkit-font-smoothing antialiased
-  font-size 28px
+  font-size field-item-font-size
   text-align center
   span
     font-style italic
+.md-form-date-suffix
+  font-size field-item-font-size
 </style>
