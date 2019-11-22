@@ -27,6 +27,7 @@
       v-model="spe.value"
       :min-height="spe.minHeight"
       :list="spe.list"
+      :readonly="spe.readonly"
       :select-list="spe.selectList"
     >
       <p slot="left">
@@ -46,6 +47,7 @@
       :max="spe.endtDate"
       v-model="spe.value"
       :suffix="spe.suffix"
+      :readonly="spe.readonly"
     >
       <p slot="left">
         <span style="color:red" v-if="spe.required">
@@ -54,7 +56,26 @@
         {{ spe.label }}
       </p>
     </md-form-date>
-    <md-form-city v-else-if="spe.inputType == 'addressInput'"> </md-form-city>
+    <md-form-city
+      v-else-if="spe.inputType == 'addressInput'"
+      v-model="spe.value"
+      :root="spe"
+      :plabel="spe.plabel"
+      :hasinput="spe.hasinput"
+      :list="spe.list"
+      :preadonly="spe.preadonly"
+      :pvalue="spe.pvalue"
+      :ivalue="spe.ivalue"
+      :placeholder="spe.placeholder"
+      :readonly="spe.readonly"
+    >
+      <p slot="left">
+        <span style="color:red" v-if="spe.required">
+          *
+        </span>
+        {{ spe.label }}
+      </p>
+    </md-form-city>
   </div>
 </template>
 

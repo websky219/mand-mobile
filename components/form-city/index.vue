@@ -7,9 +7,6 @@
       :disabled="readonly"
       :arrow="arrow"
     >
-      <template slot="left">
-        <slot name="left"></slot>
-      </template>
       <p class="md-form-content" @click="showSelector" v-if="selectValue">
         {{ selectValue }}
       </p>
@@ -44,6 +41,9 @@
       :readonly="readonly"
       v-model="inputValue"
     >
+      <template slot="left">
+        <slot name="left"></slot>
+      </template>
       <template slot="error">
         <div v-if="isInputError()" class="md-input-item-msg">
           <p v-if="error !== ''" v-text="error"></p>
