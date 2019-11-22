@@ -10,9 +10,12 @@
       <slot name="left"></slot>
     </template>
     <template>
-      <div @click="showSelector">
+      <p class="md-form-content" @click="showSelector" v-if="selectValue">
         {{ selectText }}
-      </div>
+      </p>
+      <p class="md-form-content" @click="showSelector" v-else>
+        {{ '请选择' + label }}
+      </p>
     </template>
     <template slot="right">
       <!-- ------------ -->
@@ -34,10 +37,10 @@
       <!-- ------------ -->
     </template>
     <md-selector
-      v-model="isSelectorShow"
+      v-model="show"
       :data="options"
-      :default-value="selectVal"
-      min-height="320px"
+      :default-value="selectValue"
+      :min-height="minHeight"
       :title="'请选择' + label"
       @choose="onSelectorChoose"
     ></md-selector>
@@ -47,47 +50,27 @@
 <script>
 import Selctor from '../selector/index';
 import FieldItem from '../field-item';
+import mixins from '../_util/form_mixins';
 export default {
   name: 'md-form-select',
+  mixins: [mixins],
   components: {
     [Selctor.name]: Selctor,
     [FieldItem.name]: FieldItem,
   },
   data() {
     return {
-      isSelectorShow: false,
       options: this.list,
-      selectVal: this.value,
-      selectText: '请选择' + this.label,
     };
   },
   props: {
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
     arrow: {
       type: Boolean,
       default: true,
     },
-    value: {
-      type: [String, Number, Object, Boolean],
-    },
-    error: {
+    minHeight: {
       type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    solid: {
-      type: Boolean,
-      default: true,
-    },
-    brief: {
-      type: String,
-      default: '',
+      default: '320px',
     },
     list: {
       type: Array,
@@ -109,7 +92,7 @@ export default {
     }
   },
   watch: {
-    selectVal(val) {
+    selectValue(val) {
       // this.value = val;
       console.log('selectVal', val);
       this.$emit('input', val);
@@ -117,21 +100,9 @@ export default {
   },
 
   methods: {
-    showSelector() {
-      if (this.readonly) {
-        return;
-      }
-      this.isSelectorShow = true;
-    },
     onSelectorChoose({ value, text }) {
       this.selectText = text;
-      this.selectVal = value;
-    },
-    isInputError() {
-      return this.$slots.error || this.error !== '';
-    },
-    isInputBrief() {
-      return this.$slots.brief || this.brief !== '';
+      this.selectValue = value;
     },
   },
 };

@@ -1,5 +1,7 @@
 <template>
-  <div class="md-example-child md-example-child-tab-picker md-example-child-tab-picker-0">
+  <div
+    class="md-example-child md-example-child-tab-picker md-example-child-tab-picker-0"
+  >
     <md-field title="地址">
       <md-field-item
         title="联系地址"
@@ -21,8 +23,9 @@
   </div>
 </template>
 
-<script>import {Field, FieldItem, TabPicker} from 'mand-mobile'
-import data from 'mand-mobile/components/tab-picker/demo/data'
+<script>
+import { Field, FieldItem, TabPicker } from 'mand-mobile';
+import data from 'mand-mobile/components/tab-picker/demo/data2';
 
 export default {
   name: 'tab-bar-demo',
@@ -39,17 +42,18 @@ export default {
       show: false,
       address: [],
       data: data,
-    }
+    };
   },
   computed: {
     addressStr() {
-      return this.address.map(item => item.label).join(' ')
+      return this.address.map(item => item.label).join(' ');
     },
   },
   methods: {
-    handleChange({options}) {
-      this.address = options
+    handleChange(data) {
+      console.log('tag', data);
+      this.address = data.options;
     },
   },
-}
-</script>
+};
+</script>

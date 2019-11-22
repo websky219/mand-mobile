@@ -1,105 +1,142 @@
 <template>
-  <md-field-item
-    class="md-input-item"
-    :title="label"
-    :solid="solid"
-    :disabled="readonly"
-  >
-    <template slot="left">
-      <slot name="left"></slot>
-    </template>
-    <p class="md-form-content" @click="showSelector" v-if="selectValue">
-      {{ selectValue }}
-    </p>
-    <p class="md-form-content" @click="showSelector" v-else>
-      {{ '请选择' + label }}
-    </p>
-    <template slot="right">
-      <!-- ------------ -->
-      <!--  RIGHT SLOT  -->
-      <!-- ------------ -->
-      <slot name="right">
-        <span v-if="suffix" class="md-form-date-suffix">
-          {{ suffix }}
-        </span>
-      </slot>
-    </template>
-    <template slot="children">
-      <!-- BRIEF/ERROR TIP -->
-      <!-- -------------------- -->
-      <div v-if="isInputError()" class="md-input-item-msg">
-        <p v-if="error !== ''" v-text="error"></p>
-        <slot name="error" v-else></slot>
-      </div>
-      <div v-if="isInputBrief() && !isInputError()" class="md-input-item-brief">
-        <p v-if="brief !== ''" v-text="brief"></p>
-        <slot name="brief" v-else></slot>
-      </div>
-      <!-- ------------ -->
-    </template>
-    <md-tab-picker
-      :title="'请选择' + label"
-      describe="请选择您所在的省份、城市、区县"
-      :data="options"
-      v-model="show"
-      @change="handleChange"
+  <div>
+    <md-field-item
+      class="md-input-item"
+      :title="plabel"
+      :solid="solid"
+      :disabled="readonly"
+      :arrow="arrow"
     >
-    </md-tab-picker>
-  </md-field-item>
+      <template slot="left">
+        <slot name="left"></slot>
+      </template>
+      <p class="md-form-content" @click="showSelector" v-if="selectValue">
+        {{ selectValue }}
+      </p>
+      <p class="md-form-content" @click="showSelector" v-else>
+        {{ '请选择' + plabel }}
+      </p>
+      <template slot="right">
+        <!-- ------------ -->
+        <!--  RIGHT SLOT  -->
+        <!-- ------------ -->
+        <slot name="right">
+          <span v-if="suffix" class="md-form-date-suffix">
+            {{ suffix }}
+          </span>
+        </slot>
+      </template>
+      <md-tab-picker
+        :title="'请选择' + label"
+        describe="请选择您所在的省份、城市、区县"
+        :data="options"
+        v-model="show"
+        @change="handleChange"
+      >
+      </md-tab-picker>
+    </md-field-item>
+    <md-input-item
+      v-if="hasinput"
+      :title="label"
+      :placeholder="placeholder"
+      :maxlength="maxlength"
+      :clearable="!readonly"
+      :readonly="readonly"
+      v-model="inputValue"
+    >
+      <template slot="error">
+        <div v-if="isInputError()" class="md-input-item-msg">
+          <p v-if="error !== ''" v-text="error"></p>
+          <slot name="error" v-else></slot>
+        </div>
+      </template>
+    </md-input-item>
+  </div>
 </template>
 
 <script>
 import FieldItem from '../field-item';
 import TabPicker from '../tab-picker';
+import InputItem from '../input-item';
 import mixins from '../_util/form_mixins';
 export default {
   name: 'md-form-city',
   mixins: [mixins],
-  components: { [FieldItem.name]: FieldItem, [TabPicker.name]: TabPicker },
-
-  props: {
-    list: Object,
+  components: {
+    [FieldItem.name]: FieldItem,
+    [TabPicker.name]: TabPicker,
+    [InputItem.name]: InputItem,
   },
-
   data() {
     return {
+      inputValue: '',
+      arrow: true,
       address: '',
       options: this.list,
+      rootObj: this.root,
     };
   },
-
-  computed: {},
-
-  watch: {},
-
-  // LiftCircle Hook
-  /*
-  beforeCreate
-  created
-  beforeMount
-  mounted
-  beforeUpdate
-  updated
-  activated
-  deactivated
-  beforeDestroy
-  destroyed
-  errorCaptured
-   */
-
+  props: {
+    root: Object,
+    plabel: {
+      type: String,
+      default: '所在地区',
+    },
+    hasinput: {
+      type: Boolean,
+      default: true,
+    },
+    value: [String, Number],
+    list: Object,
+    branch: String,
+    codes: Array,
+    maxlength: {
+      type: Number,
+      default: 64,
+    },
+    preadonly: {
+      type: Boolean,
+      default: false,
+    },
+    placeholder: String,
+    pvalue: String,
+    ivalue: String,
+  },
+  created() {
+    this.selectValue = this.pvalue;
+    this.inputValue = this.ivalue;
+    this.$_emitValue();
+  },
+  watch: {
+    inputValue(val) {
+      this.$_emitValue(val);
+    },
+  },
   methods: {
-    handleChange({ options }) {
-      this.address = options;
+    $_emitValue() {
+      let v = this.selectValue + (this.hasinput ? this.inputValue : '');
+      this.$emit('input', v);
+    },
+    showSelector() {
+      if (this.preadonly) {
+        return;
+      }
+      this.show = true;
+    },
+    handleChange(data) {
+      console.log('change', data);
+      this.selectValue = data.options.map(item => item.label).join(' ');
+      this.$_emitValue();
+      this.$emit('on-change', {
+        branch: data.options[1].c,
+        codes: data.values,
+      });
+      if (this.rootObj) {
+        this.rootObj.city = this.selectValue;
+        this.rootObj.branch = data.options[1].c;
+        this.rootObj.codes = data.values;
+      }
     },
   },
 };
 </script>
-
-<style lang="stylus">
-.md-form-city
-  color color-gray-1
-  -webkit-font-smoothing antialiased
-  text-align center
-  span
-    font-style italic
-</style>
