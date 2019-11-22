@@ -76,6 +76,7 @@ export default {
       type: Array,
       default: () => [],
     },
+    selectList: Array,
   },
   computed: {},
   created() {

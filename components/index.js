@@ -63,7 +63,7 @@ import Progress from './progress'
 import Ruler from './ruler'
 import TextareaItem from './textarea-item'
 import Skeleton from './skeleton'
-import FormInput from './form-input'import FormSelect from './form-select'import FormDate from './form-date'import FormCity from './form-city'/* @init<%import ${componentNameUpper} from './${componentName}'%> */
+import FormInput from './form-input'import FormSelect from './form-select'import FormDate from './form-date'import FormCity from './form-city'import FormItem from './form-item'/* @init<%import ${componentNameUpper} from './${componentName}'%> */
 
 // Totally importing reminder
 warn(
@@ -135,7 +135,7 @@ export const components = {
   Ruler,
   TextareaItem,
   Skeleton,
-  FormInput,FormSelect,FormDate,FormCity,/* @init<%${componentNameUpper},%> */
+  FormInput,FormSelect,FormDate,FormCity,FormItem,/* @init<%${componentNameUpper},%> */
 }
 
 // Define plugin installation method
@@ -228,7 +228,7 @@ export {
   Ruler,
   TextareaItem,
   Skeleton,
-  FormInput,FormSelect,FormDate,FormCity,/* @init<%${componentNameUpper},%> */
+  FormInput,FormSelect,FormDate,FormCity,FormItem,/* @init<%${componentNameUpper},%> */
 }
 
 export default {

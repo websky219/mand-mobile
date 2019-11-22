@@ -12,13 +12,17 @@
         label="选项"
         :list="list"
       ></md-form-select>
+      <md-field-item solid title="搜索" class="md-input-item">
+        <vue-multiselect v-model="value" :options="options"></vue-multiselect>
+      </md-field-item>
     </md-field>
   </div>
 </template>
 
 <script>
-import { FormSelect, Field } from 'mand-mobile';
-
+import { FormSelect, Field, FieldItem } from 'mand-mobile';
+import MultiSelect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.min.css';
 export default {
   name: 'form-select-demo',
   title: '样例一',
@@ -26,10 +30,13 @@ export default {
   components: {
     [FormSelect.name]: FormSelect,
     [Field.name]: Field,
+    [FieldItem.name]: FieldItem,
+    [MultiSelect.name]: MultiSelect,
   },
   data() {
     return {
       value: '2',
+      options: ['2', '3'],
       list: [
         {
           value: '1',
