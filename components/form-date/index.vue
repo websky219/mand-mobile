@@ -14,7 +14,7 @@
     <p class="md-form-content" @click="showSelector" v-else>
       {{ '请选择' + label }}
     </p>
-    <template slot="right">
+    <template @click="showSelector" slot="right">
       <!-- ------------ -->
       <!--  RIGHT SLOT  -->
       <!-- ------------ -->
