@@ -58,7 +58,13 @@
 <script>
 import DatePicker from '../date-picker';
 import FieldItem from '../field-item';
-import { dateAdd, strFormatToDate, isNull, isString } from '../_util/lang';
+import {
+  dateAdd,
+  strFormatToDate,
+  isNull,
+  isString,
+  isDate,
+} from '../_util/lang';
 import mixins from '../_util/form_mixins';
 import Icon from '../icon/';
 const FORMAT = {
@@ -101,7 +107,23 @@ export default {
   },
   computed: {},
 
-  watch: {},
+  watch: {
+    min(val) {
+      console.log('up-min', val);
+      if (isDate(val)) {
+        this.minDate = val;
+      } else {
+        this.minDate = strFormatToDate(this.formatStr, val);
+      }
+    },
+    max(val) {
+      if (isDate(val)) {
+        this.maxDate = val;
+      } else {
+        this.maxDate = strFormatToDate(this.formatStr, val);
+      }
+    },
+  },
   created() {
     let formatStr = FORMAT[this.type];
     if (!formatStr) {

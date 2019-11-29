@@ -14,13 +14,13 @@
 <script>
 import Field from '../field';
 import FormItem from '../form-item';
+import { sortBy } from '../_util/lang';
 export default {
   name: 'md-form-input',
   components: {
     [Field.name]: Field,
     [FormItem.name]: FormItem,
   },
-  props: {},
   data() {
     return {
       dataArr: [],

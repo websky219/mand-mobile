@@ -58,11 +58,7 @@ export default {
     [Selctor.name]: Selctor,
     [FieldItem.name]: FieldItem,
   },
-  data() {
-    return {
-      options: this.list,
-    };
-  },
+
   props: {
     arrow: {
       type: Boolean,
@@ -78,11 +74,16 @@ export default {
     },
     selectList: Array,
   },
-  computed: {},
+  computed: {
+    options() {
+      if (this.selectList) {
+        return this.selectList;
+      } else {
+        return this.list;
+      }
+    },
+  },
   created() {
-    if (this.selectList) {
-      this.options = this.selectList;
-    }
     if (this.options.length > 0) {
       for (const i of this.options) {
         if (i.value === this.value) {
