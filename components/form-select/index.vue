@@ -58,8 +58,13 @@ export default {
     [Selctor.name]: Selctor,
     [FieldItem.name]: FieldItem,
   },
-
+  data() {
+    return {
+      rootObj: this.root,
+    };
+  },
   props: {
+    root: Object,
     arrow: {
       type: Boolean,
       default: true,
@@ -102,9 +107,10 @@ export default {
   },
 
   methods: {
-    onSelectorChoose({ value, text }) {
-      this.selectText = text;
-      this.selectValue = value;
+    onSelectorChoose(obj) {
+      this.selectText = obj.text;
+      this.selectValue = obj.value;
+      this.rootObj.current = obj;
     },
   },
 };

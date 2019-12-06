@@ -1,87 +1,81 @@
 <template>
-  <component :is="componentName"
-             v-show="spe.show"
-             class="md-form-item">
-    <md-input-item v-if="spe.inputType == 'input' || !spe.inputType"
-                   solid
-                   :type="spe.type"
-                   v-model="spe.value"
-                   :maxlength="spe.length"
-                   :placeholder="'请输入' + spe.label"
-                   :readonly="spe.readonly"
-                   :disabled="spe.disabled"
-                   :is-highlight="spe.highlight"
-                   :clearable="!spe.readonly">
-      <div slot="left"
-           class="md-form-item-left">
-        <span class="md-form-item-required"
-              v-if="spe.required">
+  <component :is="componentName" v-show="spe.show" class="md-form-item">
+    <md-input-item
+      v-if="spe.inputType == 'input' || !spe.inputType"
+      solid
+      :type="spe.type"
+      v-model="spe.value"
+      :maxlength="spe.length"
+      :placeholder="
+        spe.placeholder ? spe.placeholder : '请输入' + module + spe.label
+      "
+      :readonly="spe.readonly"
+      :disabled="spe.disabled"
+      :is-highlight="spe.highlight"
+      :clearable="!spe.readonly"
+    >
+      <div slot="left" class="md-form-item-left">
+        <span class="md-form-item-required" v-if="spe.required">
           *
         </span>
         <span class="md-form-item-text">{{ spe.label }}</span>
-
       </div>
-      <span slot="right"
-            v-if="spe.suffix">
+      <span slot="right" v-if="spe.suffix">
         {{ spe.suffix }}
       </span>
     </md-input-item>
-    <md-form-select v-else-if="spe.inputType == 'select'"
-                    v-model="spe.value"
-                    :min-height="spe.minHeight"
-                    :list="spe.list"
-                    :readonly="spe.readonly"
-                    :select-list="spe.selectList">
-      <div slot="left"
-           class="md-form-item-left">
-        <span class="md-form-item-required"
-              v-if="spe.required">
+    <md-form-select
+      v-else-if="spe.inputType == 'select'"
+      v-model="spe.value"
+      :min-height="spe.minHeight"
+      :list="spe.list"
+      :readonly="spe.readonly"
+      :select-list="spe.selectList"
+    >
+      <div slot="left" class="md-form-item-left">
+        <span class="md-form-item-required" v-if="spe.required">
           *
         </span>
         <span class="md-form-item-text">{{ spe.label }}</span>
-
       </div>
-      <span slot="right"
-            v-if="spe.suffix">
+      <span slot="right" v-if="spe.suffix">
         {{ spe.suffix }}
       </span>
     </md-form-select>
-    <md-form-date v-else-if="spe.inputType == 'datetime'"
-                  :type="spe.type"
-                  :min="spe.startDate"
-                  :max="spe.endtDate"
-                  v-model="spe.value"
-                  :suffix="spe.suffix"
-                  :readonly="spe.readonly">
-      <div slot="left"
-           class="md-form-item-left">
-        <span class="md-form-item-required"
-              v-if="spe.required">
+    <md-form-date
+      v-else-if="spe.inputType == 'datetime'"
+      :type="spe.type"
+      :min="spe.startDate"
+      :max="spe.endtDate"
+      v-model="spe.value"
+      :suffix="spe.suffix"
+      :readonly="spe.readonly"
+    >
+      <div slot="left" class="md-form-item-left">
+        <span class="md-form-item-required" v-if="spe.required">
           *
         </span>
         <span class="md-form-item-text">{{ spe.label }}</span>
-
       </div>
     </md-form-date>
-    <md-form-city v-else-if="spe.inputType == 'addressInput'"
-                  v-model="spe.value"
-                  :root="spe"
-                  :plabel="spe.plabel"
-                  :hasinput="spe.hasinput"
-                  :list="spe.list"
-                  :preadonly="spe.preadonly"
-                  :pvalue="spe.pvalue"
-                  :ivalue="spe.ivalue"
-                  :placeholder="spe.placeholder"
-                  :readonly="spe.readonly">
-      <div slot="left"
-           class="md-form-item-left">
-        <span class="md-form-item-required"
-              v-if="spe.required">
+    <md-form-city
+      v-else-if="spe.inputType == 'addressInput'"
+      v-model="spe.value"
+      :root="spe"
+      :plabel="spe.plabel"
+      :hasinput="spe.hasinput"
+      :list="spe.list"
+      :preadonly="spe.preadonly"
+      :pvalue="spe.pvalue"
+      :ivalue="spe.ivalue"
+      :placeholder="spe.placeholder"
+      :readonly="spe.readonly"
+    >
+      <div slot="left" class="md-form-item-left">
+        <span class="md-form-item-required" v-if="spe.required">
           *
         </span>
         <span class="md-form-item-text">{{ spe.label }}</span>
-
       </div>
     </md-form-city>
   </component>
@@ -95,7 +89,6 @@ import FormDate from '../form-date';
 import FieldSelect from '../form-select';
 export default {
   name: 'md-form-item',
-
   components: {
     [FieldItem.name]: FieldItem,
     [InputItem.name]: InputItem,
@@ -103,13 +96,13 @@ export default {
     [FormDate.name]: FormDate,
     [FieldSelect.name]: FieldSelect,
   },
-  data () {
+  data() {
     return {
       spe: this.special,
     };
   },
   methods: {
-    selectTrack (spe) {
+    selectTrack(spe) {
       if (spe.track) {
         return spe.track;
       } else {
@@ -123,11 +116,15 @@ export default {
   props: {
     componentName: {
       type: String,
-      default: 'div'
+      default: 'div',
     },
     index: [Number, String],
     special: {},
     objkey: {
+      default: '',
+    },
+    module: {
+      type: String,
       default: '',
     },
   },
