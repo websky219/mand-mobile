@@ -6,12 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="../lib/mand-mobile.css">
+    <script>
+        ! function(e) {
+            var t = e.document,
+                n = t.documentElement,
+                i = "orientationchange" in e ? "orientationchange" : "resize",
+                a = function e() {
+                    var t = n.getBoundingClientRect().width;
+                    return n.style.fontSize = 5 * Math.max(Math.min(t / 750 * 20, 11.2), 8.55) + "px", e
+                }();
+            n.setAttribute("data-dpr", e.navigator.appVersion.match(/iphone/gi) ? e.devicePixelRatio : 1), /iP(hone|od|ad)/.test(e.navigator.userAgent) && (t.documentElement.classList.add("ios"), parseInt(e.navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/)[1], 10) >= 8 && t.documentElement.classList.add("hairline")), t.addEventListener && (e.addEventListener(i, a, !1), t.addEventListener("DOMContentLoaded", a, !1))
+        }(window);
+    </script>
 </head>
 
 <body>
-
+    <div id="app"></div>
 </body>
 <script src="vue.js"></script>
+<script src="../lib/mand-mobile.umd.js"></script>
 <script src="./vee2/vee-validate.js"></script>
+<script src="./index2.js"></script>
 
 </html>
