@@ -68,7 +68,6 @@ import FormSelect from './form-select';
 import FormDate from './form-date';
 import FormCity from './form-city';
 import FormItem from './form-item';
-import CreateFn from './form-input/CreateFn.js';
 /* @init<%import ${componentNameUpper} from './${componentName}'%> */
 
 // Totally importing reminder
@@ -173,7 +172,6 @@ const install = function(Vue) {
 
 if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
-    // window.$createSpecialFn = CreateFn;
 }
 
 // xport components
