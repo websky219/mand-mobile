@@ -1,1963 +1,2347 @@
-/**
-  * vee-validate v3.1.3
-  * (c) 2019 Abdelrahman Awad
-  * @license MIT
-  */
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('vue')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'vue'], factory) :
-    (global = global || self, factory(global.VeeValidate = {}, global.Vue));
-}(this, (function (exports, Vue) { 'use strict';
-
-    Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
-
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
-
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
-
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
-    ***************************************************************************** */
-
-    var __assign = function() {
-        __assign = Object.assign || function __assign(t) {
-            for (var s, i = 1, n = arguments.length; i < n; i++) {
-                s = arguments[i];
-                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-            }
-            return t;
-        };
-        return __assign.apply(this, arguments);
+!(function(e, r) {
+  'object' == typeof exports && 'undefined' != typeof module
+    ? r(exports, require('vue'))
+    : 'function' == typeof define && define.amd
+    ? define(['exports', 'vue'], r)
+    : r(((e = e || self).VeeValidate = {}), e.Vue);
+})(this, function(e, r) {
+  'use strict';
+  r = r && r.hasOwnProperty('default') ? r.default : r;
+  var t = {
+      code: 'en',
+      messages: {
+        alpha: 'The {_field_} field may only contain alphabetic characters',
+        alpha_num:
+          'The {_field_} field may only contain alpha-numeric characters',
+        alpha_dash:
+          'The {_field_} field may contain alpha-numeric characters as well as dashes and underscores',
+        alpha_spaces:
+          'The {_field_} field may only contain alphabetic characters as well as spaces',
+        between: 'The {_field_} field must be between {min} and {max}',
+        confirmed: 'The {_field_} field confirmation does not match',
+        digits:
+          'The {_field_} field must be numeric and exactly contain {length} digits',
+        dimensions:
+          'The {_field_} field must be {width} pixels by {height} pixels',
+        email: 'The {_field_} field must be a valid email',
+        excluded: 'The {_field_} field is not a valid value',
+        ext: 'The {_field_} field is not a valid file',
+        image: 'The {_field_} field must be an image',
+        integer: 'The {_field_} field must be an integer',
+        length: 'The {_field_} field must be {length} long',
+        max_value: 'The {_field_} field must be {max} or less',
+        max: 'The {_field_} field may not be greater than {length} characters',
+        mimes: 'The {_field_} field must have a valid file type',
+        min_value: 'The {_field_} field must be {min} or more',
+        min: 'The {_field_} field must be at least {length} characters',
+        numeric: 'The {_field_} field may only contain numeric characters',
+        oneOf: 'The {_field_} field is not a valid value',
+        regex: 'The {_field_} field format is invalid',
+        required_if: 'The {_field_} field is required',
+        required: 'The {_field_} field is required',
+        size: 'The {_field_} field size must be less than {size}KB',
+      },
+    },
+    i = {
+      en: /^[A-Z]*$/i,
+      cs: /^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]*$/i,
+      da: /^[A-ZÆØÅ]*$/i,
+      de: /^[A-ZÄÖÜß]*$/i,
+      es: /^[A-ZÁÉÍÑÓÚÜ]*$/i,
+      fr: /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ]*$/i,
+      it: /^[A-Z\xC0-\xFF]*$/i,
+      lt: /^[A-ZĄČĘĖĮŠŲŪŽ]*$/i,
+      nl: /^[A-ZÉËÏÓÖÜ]*$/i,
+      hu: /^[A-ZÁÉÍÓÖŐÚÜŰ]*$/i,
+      pl: /^[A-ZĄĆĘŚŁŃÓŻŹ]*$/i,
+      pt: /^[A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ]*$/i,
+      ru: /^[А-ЯЁ]*$/i,
+      sk: /^[A-ZÁÄČĎÉÍĹĽŇÓŔŠŤÚÝŽ]*$/i,
+      sr: /^[A-ZČĆŽŠĐ]*$/i,
+      sv: /^[A-ZÅÄÖ]*$/i,
+      tr: /^[A-ZÇĞİıÖŞÜ]*$/i,
+      uk: /^[А-ЩЬЮЯЄІЇҐ]*$/i,
+      ar: /^[ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]*$/,
+      az: /^[A-ZÇƏĞİıÖŞÜ]*$/i,
+    },
+    a = {
+      en: /^[A-Z\s]*$/i,
+      cs: /^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ\s]*$/i,
+      da: /^[A-ZÆØÅ\s]*$/i,
+      de: /^[A-ZÄÖÜß\s]*$/i,
+      es: /^[A-ZÁÉÍÑÓÚÜ\s]*$/i,
+      fr: /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ\s]*$/i,
+      it: /^[A-Z\xC0-\xFF\s]*$/i,
+      lt: /^[A-ZĄČĘĖĮŠŲŪŽ\s]*$/i,
+      nl: /^[A-ZÉËÏÓÖÜ\s]*$/i,
+      hu: /^[A-ZÁÉÍÓÖŐÚÜŰ\s]*$/i,
+      pl: /^[A-ZĄĆĘŚŁŃÓŻŹ\s]*$/i,
+      pt: /^[A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ\s]*$/i,
+      ru: /^[А-ЯЁ\s]*$/i,
+      sk: /^[A-ZÁÄČĎÉÍĹĽŇÓŔŠŤÚÝŽ\s]*$/i,
+      sr: /^[A-ZČĆŽŠĐ\s]*$/i,
+      sv: /^[A-ZÅÄÖ\s]*$/i,
+      tr: /^[A-ZÇĞİıÖŞÜ\s]*$/i,
+      uk: /^[А-ЩЬЮЯЄІЇҐ\s]*$/i,
+      ar: /^[ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ\s]*$/,
+      az: /^[A-ZÇƏĞİıÖŞÜ\s]*$/i,
+    },
+    s = {
+      en: /^[0-9A-Z]*$/i,
+      cs: /^[0-9A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]*$/i,
+      da: /^[0-9A-ZÆØÅ]$/i,
+      de: /^[0-9A-ZÄÖÜß]*$/i,
+      es: /^[0-9A-ZÁÉÍÑÓÚÜ]*$/i,
+      fr: /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ]*$/i,
+      it: /^[0-9A-Z\xC0-\xFF]*$/i,
+      lt: /^[0-9A-ZĄČĘĖĮŠŲŪŽ]*$/i,
+      hu: /^[0-9A-ZÁÉÍÓÖŐÚÜŰ]*$/i,
+      nl: /^[0-9A-ZÉËÏÓÖÜ]*$/i,
+      pl: /^[0-9A-ZĄĆĘŚŁŃÓŻŹ]*$/i,
+      pt: /^[0-9A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ]*$/i,
+      ru: /^[0-9А-ЯЁ]*$/i,
+      sk: /^[0-9A-ZÁÄČĎÉÍĹĽŇÓŔŠŤÚÝŽ]*$/i,
+      sr: /^[0-9A-ZČĆŽŠĐ]*$/i,
+      sv: /^[0-9A-ZÅÄÖ]*$/i,
+      tr: /^[0-9A-ZÇĞİıÖŞÜ]*$/i,
+      uk: /^[0-9А-ЩЬЮЯЄІЇҐ]*$/i,
+      ar: /^[٠١٢٣٤٥٦٧٨٩0-9ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]*$/,
+      az: /^[0-9A-ZÇƏĞİıÖŞÜ]*$/i,
+    },
+    u = {
+      en: /^[0-9A-Z_-]*$/i,
+      cs: /^[0-9A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ_-]*$/i,
+      da: /^[0-9A-ZÆØÅ_-]*$/i,
+      de: /^[0-9A-ZÄÖÜß_-]*$/i,
+      es: /^[0-9A-ZÁÉÍÑÓÚÜ_-]*$/i,
+      fr: /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ_-]*$/i,
+      it: /^[0-9A-Z\xC0-\xFF_-]*$/i,
+      lt: /^[0-9A-ZĄČĘĖĮŠŲŪŽ_-]*$/i,
+      nl: /^[0-9A-ZÉËÏÓÖÜ_-]*$/i,
+      hu: /^[0-9A-ZÁÉÍÓÖŐÚÜŰ_-]*$/i,
+      pl: /^[0-9A-ZĄĆĘŚŁŃÓŻŹ_-]*$/i,
+      pt: /^[0-9A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ_-]*$/i,
+      ru: /^[0-9А-ЯЁ_-]*$/i,
+      sk: /^[0-9A-ZÁÄČĎÉÍĹĽŇÓŔŠŤÚÝŽ_-]*$/i,
+      sr: /^[0-9A-ZČĆŽŠĐ_-]*$/i,
+      sv: /^[0-9A-ZÅÄÖ_-]*$/i,
+      tr: /^[0-9A-ZÇĞİıÖŞÜ_-]*$/i,
+      uk: /^[0-9А-ЩЬЮЯЄІЇҐ_-]*$/i,
+      ar: /^[٠١٢٣٤٥٦٧٨٩0-9ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ_-]*$/,
+      az: /^[0-9A-ZÇƏĞİıÖŞÜ_-]*$/i,
+    },
+    o = function(r, e) {
+      var t = (void 0 === e ? {} : e).locale,
+        n = void 0 === t ? '' : t;
+      return Array.isArray(r)
+        ? r.every(function(e) {
+            return o(e, { locale: n });
+          })
+        : n
+        ? (i[n] || i.en).test(r)
+        : Object.keys(i).some(function(e) {
+            return i[e].test(r);
+          });
+    },
+    n = { validate: o, params: [{ name: 'locale' }] },
+    l = function(r, e) {
+      var t = (void 0 === e ? {} : e).locale,
+        n = void 0 === t ? '' : t;
+      return Array.isArray(r)
+        ? r.every(function(e) {
+            return l(e, { locale: n });
+          })
+        : n
+        ? (u[n] || u.en).test(r)
+        : Object.keys(u).some(function(e) {
+            return u[e].test(r);
+          });
+    },
+    c = { validate: l, params: [{ name: 'locale' }] },
+    d = function(r, e) {
+      var t = (void 0 === e ? {} : e).locale,
+        n = void 0 === t ? '' : t;
+      return Array.isArray(r)
+        ? r.every(function(e) {
+            return d(e, { locale: n });
+          })
+        : n
+        ? (s[n] || s.en).test(r)
+        : Object.keys(s).some(function(e) {
+            return s[e].test(r);
+          });
+    },
+    f = { validate: d, params: [{ name: 'locale' }] },
+    v = function(r, e) {
+      var t = (void 0 === e ? {} : e).locale,
+        n = void 0 === t ? '' : t;
+      return Array.isArray(r)
+        ? r.every(function(e) {
+            return v(e, { locale: n });
+          })
+        : n
+        ? (a[n] || a.en).test(r)
+        : Object.keys(a).some(function(e) {
+            return a[e].test(r);
+          });
+    },
+    h = { validate: v, params: [{ name: 'locale' }] },
+    m = function(e, r) {
+      var t = void 0 === r ? {} : r,
+        n = t.min,
+        i = t.max;
+      return Array.isArray(e)
+        ? e.every(function(e) {
+            return !!m(e, { min: n, max: i });
+          })
+        : Number(n) <= e && Number(i) >= e;
+    },
+    p = { validate: m, params: [{ name: 'min' }, { name: 'max' }] },
+    g = {
+      validate: function(e, r) {
+        var t = r.target;
+        return String(e) === String(t);
+      },
+      params: [{ name: 'target', isTarget: !0 }],
+    },
+    y = function(e, r) {
+      var t = r.length;
+      if (Array.isArray(e))
+        return e.every(function(e) {
+          return y(e, { length: t });
+        });
+      var n = String(e);
+      return /^[0-9]*$/.test(n) && n.length === t;
+    },
+    b = {
+      validate: y,
+      params: [
+        {
+          name: 'length',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    _ = {
+      validate: function(e, r) {
+        var s = r.width,
+          u = r.height,
+          t = [];
+        e = Array.isArray(e) ? e : [e];
+        for (var n = 0; n < e.length; n++) {
+          if (!/\.(jpg|svg|jpeg|png|bmp|gif)$/i.test(e[n].name))
+            return Promise.resolve(!1);
+          t.push(e[n]);
+        }
+        return Promise.all(
+          t.map(function(e) {
+            return (
+              (t = e),
+              (n = s),
+              (i = u),
+              (a = window.URL || window.webkitURL),
+              new Promise(function(e) {
+                var r = new Image();
+                (r.onerror = function() {
+                  return e(!1);
+                }),
+                  (r.onload = function() {
+                    return e(r.width === n && r.height === i);
+                  }),
+                  (r.src = a.createObjectURL(t));
+              })
+            );
+            var t, n, i, a;
+          })
+        ).then(function(e) {
+          return e.every(function(e) {
+            return e;
+          });
+        });
+      },
+      params: [
+        {
+          name: 'width',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+        {
+          name: 'height',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    A = {
+      validate: function(e, r) {
+        var t = (void 0 === r ? {} : r).multiple,
+          n = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return (
+          t &&
+            !Array.isArray(e) &&
+            (e = String(e)
+              .split(',')
+              .map(function(e) {
+                return e.trim();
+              })),
+          Array.isArray(e)
+            ? e.every(function(e) {
+                return n.test(String(e));
+              })
+            : n.test(String(e))
+        );
+      },
+      params: [{ name: 'multiple', default: !1 }],
     };
-
-    function __awaiter(thisArg, _arguments, P, generator) {
-        return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-            function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-            step((generator = generator.apply(thisArg, _arguments || [])).next());
+  function $(e) {
+    return e != e;
+  }
+  function O(e) {
+    return null == e;
+  }
+  function x(e) {
+    return Array.isArray(e) && 0 === e.length;
+  }
+  var Z = function(e) {
+    return null !== e && e && 'object' == typeof e && !Array.isArray(e);
+  };
+  function R(r, t) {
+    if (r instanceof RegExp && t instanceof RegExp)
+      return R(r.source, t.source) && R(r.flags, t.flags);
+    if (Array.isArray(r) && Array.isArray(t)) {
+      if (r.length !== t.length) return !1;
+      for (var e = 0; e < r.length; e++) if (!R(r[e], t[e])) return !1;
+      return !0;
+    }
+    return Z(r) && Z(t)
+      ? Object.keys(r).every(function(e) {
+          return R(r[e], t[e]);
+        }) &&
+          Object.keys(t).every(function(e) {
+            return R(r[e], t[e]);
+          })
+      : !(!$(r) || !$(t)) || r === t;
+  }
+  function w(e) {
+    return '' !== e && !O(e);
+  }
+  function E(e) {
+    return 'function' == typeof e;
+  }
+  function k(e) {
+    return E(e) && !!e.__locatorRef;
+  }
+  function j(e, r) {
+    var t = Array.isArray(e) ? e : S(e);
+    if (E(t.findIndex)) return t.findIndex(r);
+    for (var n = 0; n < t.length; n++) if (r(t[n], n)) return n;
+    return -1;
+  }
+  function T(e, r) {
+    return -1 !== e.indexOf(r);
+  }
+  function S(e) {
+    return E(Array.from)
+      ? Array.from(e)
+      : (function(e) {
+          for (var r = [], t = e.length, n = 0; n < t; n++) r.push(e[n]);
+          return r;
+        })(e);
+  }
+  function z(r) {
+    return E(Object.values)
+      ? Object.values(r)
+      : Object.keys(r).map(function(e) {
+          return r[e];
         });
-    }
-
-    function __generator(thisArg, body) {
-        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-        function verb(n) { return function (v) { return step([n, v]); }; }
-        function step(op) {
-            if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-                if (y = 0, t) op = [op[0] & 2, t.value];
-                switch (op[0]) {
-                    case 0: case 1: t = op; break;
-                    case 4: _.label++; return { value: op[1], done: false };
-                    case 5: _.label++; y = op[1]; op = [0]; continue;
-                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                    default:
-                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                        if (t[2]) _.ops.pop();
-                        _.trys.pop(); continue;
-                }
-                op = body.call(thisArg, _);
-            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-        }
-    }
-
-    function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-        for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                r[k] = a[j];
-        return r;
-    }
-
-    function isNaN(value) {
-        // NaN is the one value that does not equal itself.
-        // eslint-disable-next-line
-        return value !== value;
-    }
-    function isNullOrUndefined(value) {
-        return value === null || value === undefined;
-    }
-    function isEmptyArray(arr) {
-        return Array.isArray(arr) && arr.length === 0;
-    }
-    var isObject = function (obj) {
-        return obj !== null && obj && typeof obj === 'object' && !Array.isArray(obj);
+  }
+  function q(r, t) {
+    return (
+      Object.keys(t).forEach(function(e) {
+        if (Z(t[e])) return r[e] || (r[e] = {}), void q(r[e], t[e]);
+        r[e] = t[e];
+      }),
+      r
+    );
+  }
+  function V() {
+    return {
+      untouched: !0,
+      touched: !1,
+      dirty: !1,
+      pristine: !0,
+      valid: !1,
+      invalid: !1,
+      validated: !1,
+      pending: !1,
+      required: !1,
+      changed: !1,
+      passed: !1,
+      failed: !1,
     };
-    /**
-     * Shallow object comparison.
-     */
-    function isEqual(lhs, rhs) {
-        if (lhs instanceof RegExp && rhs instanceof RegExp) {
-            return isEqual(lhs.source, rhs.source) && isEqual(lhs.flags, rhs.flags);
+  }
+  function N(e) {
+    return e;
+  }
+  function F(t, n, i) {
+    return (
+      void 0 === n && (n = 0),
+      void 0 === i && (i = { cancelled: !1 }),
+      0 === n
+        ? t
+        : function() {
+            for (var e = [], r = 0; r < arguments.length; r++)
+              e[r] = arguments[r];
+            clearTimeout(a),
+              (a = setTimeout(function() {
+                (a = void 0), i.cancelled || t.apply(void 0, e);
+              }, n));
+          }
+    );
+    var a;
+  }
+  function I(e, t) {
+    return e.replace(/{([^}]+)}/g, function(e, r) {
+      return r in t ? t[r] : '{' + r + '}';
+    });
+  }
+  function M(e) {
+    return x(e) || T([!1, null, void 0], e) || !String(e).trim().length;
+  }
+  var D = function(r, t) {
+      return Array.isArray(r)
+        ? r.every(function(e) {
+            return D(e, t);
+          })
+        : S(t).some(function(e) {
+            return e == r;
+          });
+    },
+    B = { validate: D },
+    P = {
+      validate: function(e, r) {
+        return !D(e, r);
+      },
+    },
+    C = {
+      validate: function(e, r) {
+        var t = new RegExp('.(' + r.join('|') + ')$', 'i');
+        return Array.isArray(e)
+          ? e.every(function(e) {
+              return t.test(e.name);
+            })
+          : t.test(e.name);
+      },
+    },
+    L = {
+      validate: function(e) {
+        var r = /\.(jpg|svg|jpeg|png|bmp|gif)$/i;
+        return Array.isArray(e)
+          ? e.every(function(e) {
+              return r.test(e.name);
+            })
+          : r.test(e.name);
+      },
+    },
+    W = {
+      validate: function(e) {
+        return Array.isArray(e)
+          ? e.every(function(e) {
+              return /^-?[0-9]+$/.test(String(e));
+            })
+          : /^-?[0-9]+$/.test(String(e));
+      },
+    },
+    H = {
+      validate: function(e, r) {
+        return e === r.other;
+      },
+      params: [{ name: 'other' }],
+    },
+    U = {
+      validate: function(e, r) {
+        return e !== r.other;
+      },
+      params: [{ name: 'other' }],
+    },
+    G = {
+      validate: function(e, r) {
+        var t = r.length;
+        return (
+          !O(e) &&
+          ('number' == typeof e && (e = String(e)),
+          e.length || (e = S(e)),
+          e.length === t)
+        );
+      },
+      params: [
+        {
+          name: 'length',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    K = function(e, r) {
+      var t = r.length;
+      return O(e)
+        ? 0 <= t
+        : Array.isArray(e)
+        ? e.every(function(e) {
+            return K(e, { length: t });
+          })
+        : String(e).length <= t;
+    },
+    Y = {
+      validate: K,
+      params: [
+        {
+          name: 'length',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    J = function(e, r) {
+      var t = r.max;
+      return (
+        !O(e) &&
+        '' !== e &&
+        (Array.isArray(e)
+          ? 0 < e.length &&
+            e.every(function(e) {
+              return J(e, { max: t });
+            })
+          : Number(e) <= t)
+      );
+    },
+    Q = {
+      validate: J,
+      params: [
+        {
+          name: 'max',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    X = {
+      validate: function(e, r) {
+        var t = new RegExp(r.join('|').replace('*', '.+') + '$', 'i');
+        return Array.isArray(e)
+          ? e.every(function(e) {
+              return t.test(e.type);
+            })
+          : t.test(e.type);
+      },
+    },
+    ee = function(e, r) {
+      var t = r.length;
+      return (
+        !O(e) &&
+        (Array.isArray(e)
+          ? e.every(function(e) {
+              return ee(e, { length: t });
+            })
+          : String(e).length >= t)
+      );
+    },
+    re = {
+      validate: ee,
+      params: [
+        {
+          name: 'length',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    te = function(e, r) {
+      var t = r.min;
+      return (
+        !O(e) &&
+        '' !== e &&
+        (Array.isArray(e)
+          ? 0 < e.length &&
+            e.every(function(e) {
+              return te(e, { min: t });
+            })
+          : Number(e) >= t)
+      );
+    },
+    ne = {
+      validate: te,
+      params: [
+        {
+          name: 'min',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    ie = /^[٠١٢٣٤٥٦٧٨٩]+$/,
+    ae = /^[0-9]+$/,
+    se = {
+      validate: function(e) {
+        function r(e) {
+          var r = String(e);
+          return ae.test(r) || ie.test(r);
         }
-        if (Array.isArray(lhs) && Array.isArray(rhs)) {
-            if (lhs.length !== rhs.length)
-                return false;
-            for (var i = 0; i < lhs.length; i++) {
-                if (!isEqual(lhs[i], rhs[i])) {
-                    return false;
-                }
+        return Array.isArray(e) ? e.every(r) : r(e);
+      },
+    },
+    ue = function(e, r) {
+      var t = r.regex;
+      return Array.isArray(e)
+        ? e.every(function(e) {
+            return ue(e, { regex: t });
+          })
+        : t.test(String(e));
+    },
+    oe = {
+      validate: ue,
+      params: [
+        {
+          name: 'regex',
+          cast: function(e) {
+            return 'string' == typeof e ? new RegExp(e) : e;
+          },
+        },
+      ],
+    },
+    le = {
+      validate: function(e, r) {
+        var t = (void 0 === r ? { allowFalse: !0 } : r).allowFalse,
+          n = { valid: !1, required: !0 };
+        return (
+          O(e) ||
+            x(e) ||
+            (!1 === e && !t) ||
+            (n.valid = !!String(e).trim().length),
+          n
+        );
+      },
+      params: [{ name: 'allowFalse', default: !0 }],
+      computesRequired: !0,
+    },
+    ce = {
+      validate: function(e, r) {
+        var t,
+          n = r.target,
+          i = r.values;
+        return (t =
+          i && i.length
+            ? (Array.isArray(i) || 'string' != typeof i || (i = [i]),
+              i.some(function(e) {
+                return e == String(n).trim();
+              }))
+            : !M(n))
+          ? { valid: !M(e), required: t }
+          : { valid: !0, required: t };
+      },
+      params: [{ name: 'target', isTarget: !0 }, { name: 'values' }],
+      computesRequired: !0,
+    },
+    de = {
+      validate: function(e, r) {
+        var t = r.size;
+        if (isNaN(t)) return !1;
+        var n = 1024 * t;
+        if (!Array.isArray(e)) return e.size <= n;
+        for (var i = 0; i < e.length; i++) if (e[i].size > n) return !1;
+        return !0;
+      },
+      params: [
+        {
+          name: 'size',
+          cast: function(e) {
+            return Number(e);
+          },
+        },
+      ],
+    },
+    fe = Object.freeze({
+      __proto__: null,
+      alpha_dash: c,
+      alpha_num: f,
+      alpha_spaces: h,
+      alpha: n,
+      between: p,
+      confirmed: g,
+      digits: b,
+      dimensions: _,
+      email: A,
+      ext: C,
+      image: L,
+      oneOf: B,
+      integer: W,
+      length: G,
+      is_not: U,
+      is: H,
+      max: Y,
+      max_value: Q,
+      mimes: X,
+      min: re,
+      min_value: ne,
+      excluded: P,
+      numeric: se,
+      regex: oe,
+      required: le,
+      required_if: ce,
+      size: de,
+    }),
+    ve = function() {
+      return (ve =
+        Object.assign ||
+        function(e) {
+          for (var r, t = 1, n = arguments.length; t < n; t++)
+            for (var i in (r = arguments[t]))
+              Object.prototype.hasOwnProperty.call(r, i) && (e[i] = r[i]);
+          return e;
+        }).apply(this, arguments);
+    };
+  function he(a, s, u, o) {
+    return new (u = u || Promise)(function(e, r) {
+      function t(e) {
+        try {
+          i(o.next(e));
+        } catch (e) {
+          r(e);
+        }
+      }
+      function n(e) {
+        try {
+          i(o.throw(e));
+        } catch (e) {
+          r(e);
+        }
+      }
+      function i(r) {
+        r.done
+          ? e(r.value)
+          : new u(function(e) {
+              e(r.value);
+            }).then(t, n);
+      }
+      i((o = o.apply(a, s || [])).next());
+    });
+  }
+  function me(t, n) {
+    var i,
+      a,
+      s,
+      e,
+      u = {
+        label: 0,
+        sent: function() {
+          if (1 & s[0]) throw s[1];
+          return s[1];
+        },
+        trys: [],
+        ops: [],
+      };
+    return (
+      (e = { next: r(0), throw: r(1), return: r(2) }),
+      'function' == typeof Symbol &&
+        (e[Symbol.iterator] = function() {
+          return this;
+        }),
+      e
+    );
+    function r(r) {
+      return function(e) {
+        return (function(r) {
+          if (i) throw new TypeError('Generator is already executing.');
+          for (; u; )
+            try {
+              if (
+                ((i = 1),
+                a &&
+                  (s =
+                    2 & r[0]
+                      ? a.return
+                      : r[0]
+                      ? a.throw || ((s = a.return) && s.call(a), 0)
+                      : a.next) &&
+                  !(s = s.call(a, r[1])).done)
+              )
+                return s;
+              switch (((a = 0), s && (r = [2 & r[0], s.value]), r[0])) {
+                case 0:
+                case 1:
+                  s = r;
+                  break;
+                case 4:
+                  return u.label++, { value: r[1], done: !1 };
+                case 5:
+                  u.label++, (a = r[1]), (r = [0]);
+                  continue;
+                case 7:
+                  (r = u.ops.pop()), u.trys.pop();
+                  continue;
+                default:
+                  if (
+                    !(s = 0 < (s = u.trys).length && s[s.length - 1]) &&
+                    (6 === r[0] || 2 === r[0])
+                  ) {
+                    u = 0;
+                    continue;
+                  }
+                  if (3 === r[0] && (!s || (r[1] > s[0] && r[1] < s[3]))) {
+                    u.label = r[1];
+                    break;
+                  }
+                  if (6 === r[0] && u.label < s[1]) {
+                    (u.label = s[1]), (s = r);
+                    break;
+                  }
+                  if (s && u.label < s[2]) {
+                    (u.label = s[2]), u.ops.push(r);
+                    break;
+                  }
+                  s[2] && u.ops.pop(), u.trys.pop();
+                  continue;
+              }
+              r = n.call(t, u);
+            } catch (e) {
+              (r = [6, e]), (a = 0);
+            } finally {
+              i = s = 0;
             }
-            return true;
-        }
-        // if both are objects, compare each key recursively.
-        if (isObject(lhs) && isObject(rhs)) {
-            return (Object.keys(lhs).every(function (key) {
-                return isEqual(lhs[key], rhs[key]);
-            }) &&
-                Object.keys(rhs).every(function (key) {
-                    return isEqual(lhs[key], rhs[key]);
-                }));
-        }
-        if (isNaN(lhs) && isNaN(rhs)) {
-            return true;
-        }
-        return lhs === rhs;
+          if (5 & r[0]) throw r[1];
+          return { value: r[0] ? r[1] : void 0, done: !0 };
+        })([r, e]);
+      };
     }
-    // Checks if a given value is not an empty string or null or undefined.
-    function isSpecified(val) {
-        if (val === '') {
-            return false;
-        }
-        return !isNullOrUndefined(val);
-    }
-    function isCallable(fn) {
-        return typeof fn === 'function';
-    }
-    function isLocator(value) {
-        return isCallable(value) && !!value.__locatorRef;
-    }
-
-    function findIndex(arrayLike, predicate) {
-        var array = Array.isArray(arrayLike) ? arrayLike : toArray(arrayLike);
-        if (isCallable(array.findIndex)) {
-            return array.findIndex(predicate);
-        }
-        /* istanbul ignore next */
-        for (var i = 0; i < array.length; i++) {
-            if (predicate(array[i], i)) {
-                return i;
-            }
-        }
-        /* istanbul ignore next */
-        return -1;
-    }
-    /**
-     * finds the first element that satisfies the predicate callback, polyfills array.find
-     */
-    function find(arrayLike, predicate) {
-        var array = Array.isArray(arrayLike) ? arrayLike : toArray(arrayLike);
-        var idx = findIndex(array, predicate);
-        return idx === -1 ? undefined : array[idx];
-    }
-    function includes(collection, item) {
-        return collection.indexOf(item) !== -1;
-    }
-    /**
-     * Converts an array-like object to array, provides a simple polyfill for Array.from
-     */
-    function toArray(arrayLike) {
-        if (isCallable(Array.from)) {
-            return Array.from(arrayLike);
-        }
-        /* istanbul ignore next */
-        return _copyArray(arrayLike);
-    }
-    /* istanbul ignore next */
-    function _copyArray(arrayLike) {
-        var array = [];
-        var length = arrayLike.length;
-        for (var i = 0; i < length; i++) {
-            array.push(arrayLike[i]);
-        }
-        return array;
-    }
-    function values(obj) {
-        if (isCallable(Object.values)) {
-            return Object.values(obj);
-        }
-        // fallback to keys()
-        /* istanbul ignore next */
-        return Object.keys(obj).map(function (k) { return obj[k]; });
-    }
-    function merge(target, source) {
-        Object.keys(source).forEach(function (key) {
-            if (isObject(source[key])) {
-                if (!target[key]) {
-                    target[key] = {};
-                }
-                merge(target[key], source[key]);
-                return;
-            }
-            target[key] = source[key];
-        });
-        return target;
-    }
-
-    function createFlags() {
-        return {
-            untouched: true,
-            touched: false,
-            dirty: false,
-            pristine: true,
-            valid: false,
-            invalid: false,
-            validated: false,
-            pending: false,
-            required: false,
-            changed: false,
-            passed: false,
-            failed: false
-        };
-    }
-
-    function identity(x) {
-        return x;
-    }
-    function debounce(fn, wait, token) {
-        if (wait === void 0) { wait = 0; }
-        if (token === void 0) { token = { cancelled: false }; }
-        if (wait === 0) {
-            return fn;
-        }
-        var timeout;
-        return function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            var later = function () {
-                timeout = undefined;
-                // check if the fn call was cancelled.
-                if (!token.cancelled)
-                    fn.apply(void 0, args);
-            };
-            // because we might want to use Node.js setTimout for SSR.
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    /**
-     * Emits a warning to the console
-     */
-    function warn(message) {
-        console.warn("[vee-validate] " + message);
-    }
-    /**
-     * Replaces placeholder values in a string with their actual values
-     */
-    function interpolate(template, values) {
-        return template.replace(/{([^}]+)}/g, function (_, p) {
-            return p in values ? values[p] : "{" + p + "}";
-        });
-    }
-
-    var RULES = {};
-    function normalizeSchema(schema) {
-        var _a;
-        if ((_a = schema.params) === null || _a === void 0 ? void 0 : _a.length) {
-            schema.params = schema.params.map(function (param) {
-                if (typeof param === 'string') {
-                    return { name: param };
-                }
-                return param;
-            });
-        }
-        return schema;
-    }
-    var RuleContainer = /** @class */ (function () {
-        function RuleContainer() {
-        }
-        RuleContainer.extend = function (name, schema) {
-            // if rule already exists, overwrite it.
-            var rule = normalizeSchema(schema);
-            if (RULES[name]) {
-                RULES[name] = merge(RULES[name], schema);
-                return;
-            }
-            RULES[name] = __assign({ lazy: false, computesRequired: false }, rule);
-        };
-        RuleContainer.iterate = function (fn) {
-            var keys = Object.keys(RULES);
-            var length = keys.length;
-            for (var i = 0; i < length; i++) {
-                fn(keys[i], RULES[keys[i]]);
-            }
-        };
-        RuleContainer.isLazy = function (name) {
-            var _a;
-            return !!((_a = RULES[name]) === null || _a === void 0 ? void 0 : _a.lazy);
-        };
-        RuleContainer.isRequireRule = function (name) {
-            var _a;
-            return !!((_a = RULES[name]) === null || _a === void 0 ? void 0 : _a.computesRequired);
-        };
-        RuleContainer.isTargetRule = function (name) {
-            var _a;
-            var definition = RuleContainer.getRuleDefinition(name);
-            if (!((_a = definition) === null || _a === void 0 ? void 0 : _a.params)) {
-                return false;
-            }
-            return definition.params.some(function (param) { return !!param.isTarget; });
-        };
-        RuleContainer.getRuleDefinition = function (ruleName) {
-            return RULES[ruleName];
-        };
-        return RuleContainer;
-    }());
-    /**
-     * Adds a custom validator to the list of validation rules.
-     */
-    function extend(name, schema) {
-        // makes sure new rules are properly formatted.
-        guardExtend(name, schema);
-        // Full schema object.
-        if (typeof schema === 'object') {
-            RuleContainer.extend(name, schema);
-            return;
-        }
-        RuleContainer.extend(name, {
-            validate: schema
-        });
-    }
-    /**
-     * Guards from extension violations.
-     */
-    function guardExtend(name, validator) {
-        if (isCallable(validator)) {
-            return;
-        }
-        if (isCallable(validator.validate)) {
-            return;
-        }
-        if (RuleContainer.getRuleDefinition(name)) {
-            return;
-        }
-        throw new Error("Extension Error: The validator '" + name + "' must be a function or have a 'validate' method.");
-    }
-
-    var DEFAULT_CONFIG = {
-        defaultMessage: "{_field_} is not valid.",
-        skipOptional: true,
+  }
+  function pe() {
+    for (var e = 0, r = 0, t = arguments.length; r < t; r++)
+      e += arguments[r].length;
+    var n = Array(e),
+      i = 0;
+    for (r = 0; r < t; r++)
+      for (var a = arguments[r], s = 0, u = a.length; s < u; s++, i++)
+        n[i] = a[s];
+    return n;
+  }
+  var ge = {};
+  var ye = ((be.extend = function(e, r) {
+    var t,
+      n,
+      i = ((null === (n = (t = r).params) || void 0 === n
+        ? void 0
+        : n.length) &&
+        (t.params = t.params.map(function(e) {
+          return 'string' == typeof e ? { name: e } : e;
+        })),
+      t);
+    ge[e]
+      ? (ge[e] = q(ge[e], r))
+      : (ge[e] = ve({ lazy: !1, computesRequired: !1 }, i));
+  }),
+  (be.iterate = function(e) {
+    for (var r = Object.keys(ge), t = r.length, n = 0; n < t; n++)
+      e(r[n], ge[r[n]]);
+  }),
+  (be.isLazy = function(e) {
+    var r;
+    return !!(null === (r = ge[e]) || void 0 === r ? void 0 : r.lazy);
+  }),
+  (be.isRequireRule = function(e) {
+    var r;
+    return !!(null === (r = ge[e]) || void 0 === r
+      ? void 0
+      : r.computesRequired);
+  }),
+  (be.isTargetRule = function(e) {
+    var r,
+      t = be.getRuleDefinition(e);
+    return (
+      !(null === (r = t) || void 0 === r || !r.params) &&
+      t.params.some(function(e) {
+        return !!e.isTarget;
+      })
+    );
+  }),
+  (be.getRuleDefinition = function(e) {
+    return ge[e];
+  }),
+  be);
+  function be() {}
+  function _e(e, r) {
+    !(function(e, r) {
+      if (E(r)) return;
+      if (E(r.validate)) return;
+      if (ye.getRuleDefinition(e)) return;
+      throw new Error(
+        "Extension Error: The validator '" +
+          e +
+          "' must be a function or have a 'validate' method."
+      );
+    })(e, r),
+      'object' != typeof r ? ye.extend(e, { validate: r }) : ye.extend(e, r);
+  }
+  function Ae(e) {
+    $e = ve(ve({}, $e), e);
+  }
+  var $e = ve(
+      {},
+      {
+        defaultMessage: '{_field_} is not valid.',
+        skipOptional: !0,
         classes: {
-            touched: 'touched',
-            untouched: 'untouched',
-            valid: 'valid',
-            invalid: 'invalid',
-            pristine: 'pristine',
-            dirty: 'dirty' // control has been interacted with
+          touched: 'touched',
+          untouched: 'untouched',
+          valid: 'valid',
+          invalid: 'invalid',
+          pristine: 'pristine',
+          dirty: 'dirty',
         },
-        bails: true,
+        bails: !0,
         mode: 'aggressive',
-        useConstraintAttrs: true
-    };
-    var currentConfig = __assign({}, DEFAULT_CONFIG);
-    var getConfig = function () { return currentConfig; };
-    var setConfig = function (newConf) {
-        currentConfig = __assign(__assign({}, currentConfig), newConf);
-    };
-    var configure = function (cfg) {
-        setConfig(cfg);
-    };
-
-    /**
-     * Normalizes the given rules expression.
-     */
-    function normalizeRules(rules) {
-        // if falsy value return an empty object.
-        var acc = {};
-        Object.defineProperty(acc, '_$$isNormalized', {
-            value: true,
-            writable: false,
-            enumerable: false,
-            configurable: false
-        });
-        if (!rules) {
-            return acc;
-        }
-        // Object is already normalized, skip.
-        if (isObject(rules) && rules._$$isNormalized) {
-            return rules;
-        }
-        if (isObject(rules)) {
-            return Object.keys(rules).reduce(function (prev, curr) {
-                var params = [];
-                if (rules[curr] === true) {
-                    params = [];
-                }
-                else if (Array.isArray(rules[curr])) {
-                    params = rules[curr];
-                }
-                else if (isObject(rules[curr])) {
-                    params = rules[curr];
-                }
-                else {
-                    params = [rules[curr]];
-                }
-                if (rules[curr] !== false) {
-                    prev[curr] = buildParams(curr, params);
-                }
-                return prev;
-            }, acc);
-        }
-        /* istanbul ignore if */
-        if (typeof rules !== 'string') {
-            warn('rules must be either a string or an object.');
-            return acc;
-        }
-        return rules.split('|').reduce(function (prev, rule) {
-            var parsedRule = parseRule(rule);
-            if (!parsedRule.name) {
-                return prev;
-            }
-            prev[parsedRule.name] = buildParams(parsedRule.name, parsedRule.params);
-            return prev;
-        }, acc);
+        useConstraintAttrs: !0,
+      }
+    ),
+    Oe = function() {
+      return $e;
+    },
+    xe = new r();
+  function Ze() {
+    xe.$emit('change:locale');
+  }
+  var Re,
+    we = ((Ee.prototype.resolve = function(e, r, t) {
+      return this.format(this.locale, e, r, t);
+    }),
+    (Ee.prototype.format = function(e, r, t, n) {
+      var i, a, s, u, o, l, c, d, f;
+      return (
+        (f =
+          (f =
+            (null ===
+              (s =
+                null ===
+                  (a =
+                    null === (i = this.container[e]) || void 0 === i
+                      ? void 0
+                      : i.fields) || void 0 === a
+                  ? void 0
+                  : a[r]) || void 0 === s
+              ? void 0
+              : s[t]) ||
+            (null ===
+              (o =
+                null === (u = this.container[e]) || void 0 === u
+                  ? void 0
+                  : u.messages) || void 0 === o
+              ? void 0
+              : o[t])) || Oe().defaultMessage),
+        (r =
+          null !=
+          (d =
+            null ===
+              (c =
+                null === (l = this.container[e]) || void 0 === l
+                  ? void 0
+                  : l.names) || void 0 === c
+              ? void 0
+              : c[r])
+            ? d
+            : r),
+        E(f) ? f(r, n) : I(f, ve(ve({}, n), { _field_: r }))
+      );
+    }),
+    (Ee.prototype.merge = function(e) {
+      q(this.container, e);
+    }),
+    (Ee.prototype.hasRule = function(e) {
+      var r, t;
+      return !!(null ===
+        (t =
+          null === (r = this.container[this.locale]) || void 0 === r
+            ? void 0
+            : r.messages) || void 0 === t
+        ? void 0
+        : t[e]);
+    }),
+    Ee);
+  function Ee(e, r) {
+    (this.container = {}), (this.locale = e), this.merge(r);
+  }
+  var ke = !1;
+  function je() {
+    ke ||
+      (ye.iterate(function(t, e) {
+        var r, n;
+        e.message &&
+          !Re.hasRule(t) &&
+          Re.merge(
+            (((r = {})[Re.locale] = {
+              messages: ((n = {}), (n[t] = e.message), n),
+            }),
+            r)
+          ),
+          _e(t, {
+            message: function(e, r) {
+              return Re.resolve(e, t, r || {});
+            },
+          });
+      }),
+      (ke = !0));
+  }
+  function Te(e, r) {
+    var t;
+    if (((Re = Re || new we('en', {})), 'string' == typeof e))
+      return (
+        (Re.locale = e), r && Re.merge((((t = {})[e] = r), t)), je(), void Ze()
+      );
+    Re.merge(e), je();
+  }
+  var Se = {
+    aggressive: function() {
+      return { on: ['input', 'blur'] };
+    },
+    eager: function(e) {
+      return e.errors.length
+        ? { on: ['input', 'change'] }
+        : { on: ['change', 'blur'] };
+    },
+    passive: function() {
+      return { on: [] };
+    },
+    lazy: function() {
+      return { on: ['change'] };
+    },
+  };
+  function ze(n) {
+    var e,
+      r = {};
+    return (
+      Object.defineProperty(r, '_$$isNormalized', {
+        value: !0,
+        writable: !1,
+        enumerable: !1,
+        configurable: !1,
+      }),
+      n
+        ? Z(n) && n._$$isNormalized
+          ? n
+          : Z(n)
+          ? Object.keys(n).reduce(function(e, r) {
+              var t = [];
+              return (
+                (t =
+                  !0 === n[r]
+                    ? []
+                    : Array.isArray(n[r])
+                    ? n[r]
+                    : Z(n[r])
+                    ? n[r]
+                    : [n[r]]),
+                !1 !== n[r] && (e[r] = qe(r, t)),
+                e
+              );
+            }, r)
+          : 'string' != typeof n
+          ? ((e = 'rules must be either a string or an object.'),
+            console.warn('[vee-validate] ' + e),
+            r)
+          : n.split('|').reduce(function(e, r) {
+              var t = Ve(r);
+              return t.name && (e[t.name] = qe(t.name, t.params)), e;
+            }, r)
+        : r
+    );
+  }
+  function qe(e, r) {
+    var i = ye.getRuleDefinition(e);
+    if (!i) return r;
+    var t,
+      a,
+      n = {};
+    if (!i.params && !Array.isArray(r))
+      throw new Error(
+        'You provided an object params to a rule that has no defined schema.'
+      );
+    if (Array.isArray(r) && !i.params) return r;
+    !i.params || (i.params.length < r.length && Array.isArray(r))
+      ? (t = r.map(function(e, r) {
+          var t,
+            n = null === (t = i.params) || void 0 === t ? void 0 : t[r];
+          return (a = n || a), (n = n || a);
+        }))
+      : (t = i.params);
+    for (var s = 0; s < t.length; s++) {
+      var u = t[s],
+        o = u.default;
+      Array.isArray(r)
+        ? s in r && (o = r[s])
+        : u.name in r
+        ? (o = r[u.name])
+        : 1 === t.length && (o = r),
+        u.isTarget && (o = Ne(o, u.cast)),
+        'string' == typeof o && '@' === o[0] && (o = Ne(o.slice(1), u.cast)),
+        !k(o) && u.cast && (o = u.cast(o)),
+        n[u.name]
+          ? ((n[u.name] = Array.isArray(n[u.name]) ? n[u.name] : [n[u.name]]),
+            n[u.name].push(o))
+          : (n[u.name] = o);
     }
-    function buildParams(ruleName, provided) {
-        var ruleSchema = RuleContainer.getRuleDefinition(ruleName);
-        if (!ruleSchema) {
-            return provided;
-        }
-        var params = {};
-        if (!ruleSchema.params && !Array.isArray(provided)) {
-            throw new Error('You provided an object params to a rule that has no defined schema.');
-        }
-        // Rule probably uses an array for their args, keep it as is.
-        if (Array.isArray(provided) && !ruleSchema.params) {
-            return provided;
-        }
-        var definedParams;
-        // collect the params schema.
-        if (!ruleSchema.params || (ruleSchema.params.length < provided.length && Array.isArray(provided))) {
-            var lastDefinedParam_1;
-            // collect any additional parameters in the last item.
-            definedParams = provided.map(function (_, idx) {
-                var _a;
-                var param = (_a = ruleSchema.params) === null || _a === void 0 ? void 0 : _a[idx];
-                lastDefinedParam_1 = param || lastDefinedParam_1;
-                if (!param) {
-                    param = lastDefinedParam_1;
-                }
-                return param;
-            });
-        }
-        else {
-            definedParams = ruleSchema.params;
-        }
-        // Match the provided array length with a temporary schema.
-        for (var i = 0; i < definedParams.length; i++) {
-            var options = definedParams[i];
-            var value = options.default;
-            // if the provided is an array, map element value.
-            if (Array.isArray(provided)) {
-                if (i in provided) {
-                    value = provided[i];
-                }
-            }
-            else {
-                // If the param exists in the provided object.
-                if (options.name in provided) {
-                    value = provided[options.name];
-                    // if the provided is the first param value.
-                }
-                else if (definedParams.length === 1) {
-                    value = provided;
-                }
-            }
-            // if the param is a target, resolve the target value.
-            if (options.isTarget) {
-                value = createLocator(value, options.cast);
-            }
-            // A target param using interpolation
-            if (typeof value === 'string' && value[0] === '@') {
-                value = createLocator(value.slice(1), options.cast);
-            }
-            // If there is a transformer defined.
-            if (!isLocator(value) && options.cast) {
-                value = options.cast(value);
-            }
-            // already been set, probably multiple values.
-            if (params[options.name]) {
-                params[options.name] = Array.isArray(params[options.name]) ? params[options.name] : [params[options.name]];
-                params[options.name].push(value);
-            }
-            else {
-                // set the value.
-                params[options.name] = value;
-            }
-        }
-        return params;
+    return n;
+  }
+  var Ve = function(e) {
+    var r = [],
+      t = e.split(':')[0];
+    return (
+      T(e, ':') &&
+        (r = e
+          .split(':')
+          .slice(1)
+          .join(':')
+          .split(',')),
+      { name: t, params: r }
+    );
+  };
+  function Ne(t, n) {
+    function e(e) {
+      var r = e[t];
+      return n ? n(r) : r;
     }
-    /**
-     * Parses a rule string expression.
-     */
-    var parseRule = function (rule) {
-        var params = [];
-        var name = rule.split(':')[0];
-        if (includes(rule, ':')) {
-            params = rule
-                .split(':')
-                .slice(1)
-                .join(':')
-                .split(',');
-        }
-        return { name: name, params: params };
-    };
-    function createLocator(value, castFn) {
-        var locator = function (crossTable) {
-            var val = crossTable[value];
-            return castFn ? castFn(val) : val;
-        };
-        locator.__locatorRef = value;
-        return locator;
-    }
-    function extractLocators(params) {
-        if (Array.isArray(params)) {
-            return params.filter(isLocator);
-        }
-        return Object.keys(params)
-            .filter(function (key) { return isLocator(params[key]); })
-            .map(function (key) { return params[key]; });
-    }
-
-    /**
-     * Validates a value against the rules.
-     */
-    function validate(value, rules, options) {
-        if (options === void 0) { options = {}; }
-        var _a, _b, _c, _d, _e, _f;
-        return __awaiter(this, void 0, void 0, function () {
-            var shouldBail, skipIfEmpty, field, result, errors, failedRules, regenerateMap;
-            return __generator(this, function (_g) {
-                switch (_g.label) {
-                    case 0:
-                        shouldBail = (_a = options) === null || _a === void 0 ? void 0 : _a.bails;
-                        skipIfEmpty = (_b = options) === null || _b === void 0 ? void 0 : _b.skipIfEmpty;
-                        field = {
-                            name: ((_c = options) === null || _c === void 0 ? void 0 : _c.name) || '{field}',
-                            rules: normalizeRules(rules),
-                            bails: (shouldBail !== null && shouldBail !== void 0 ? shouldBail : true),
-                            skipIfEmpty: (skipIfEmpty !== null && skipIfEmpty !== void 0 ? skipIfEmpty : true),
-                            forceRequired: false,
-                            crossTable: ((_d = options) === null || _d === void 0 ? void 0 : _d.values) || {},
-                            names: ((_e = options) === null || _e === void 0 ? void 0 : _e.names) || {},
-                            customMessages: ((_f = options) === null || _f === void 0 ? void 0 : _f.customMessages) || {}
-                        };
-                        return [4 /*yield*/, _validate(field, value, options)];
-                    case 1:
-                        result = _g.sent();
-                        errors = [];
-                        failedRules = {};
-                        regenerateMap = {};
-                        result.errors.forEach(function (e) {
-                            var msg = e.msg();
-                            errors.push(msg);
-                            failedRules[e.rule] = msg;
-                            regenerateMap[e.rule] = e.msg;
-                        });
-                        return [2 /*return*/, {
-                                valid: result.valid,
-                                errors: errors,
-                                failedRules: failedRules,
-                                regenerateMap: regenerateMap
-                            }];
-                }
-            });
-        });
-    }
-    /**
-     * Starts the validation process.
-     */
-    function _validate(field, value, _a) {
-        var _b = (_a === void 0 ? {} : _a).isInitial, isInitial = _b === void 0 ? false : _b;
-        return __awaiter(this, void 0, void 0, function () {
-            var _c, shouldSkip, errors, rules, length, i, rule, result;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
-                    case 0: return [4 /*yield*/, _shouldSkip(field, value)];
-                    case 1:
-                        _c = _d.sent(), shouldSkip = _c.shouldSkip, errors = _c.errors;
-                        if (shouldSkip) {
-                            return [2 /*return*/, {
-                                    valid: !errors.length,
-                                    errors: errors
-                                }];
+    return (e.__locatorRef = t), e;
+  }
+  function Fe(u, o, l) {
+    var c, d, f, v, h, m;
+    return (
+      void 0 === l && (l = {}),
+      he(this, void 0, void 0, function() {
+        var r, t, n, i, a, s;
+        return me(this, function(e) {
+          switch (e.label) {
+            case 0:
+              return (
+                (r = null === (c = l) || void 0 === c ? void 0 : c.bails),
+                (t = null === (d = l) || void 0 === d ? void 0 : d.skipIfEmpty),
+                [
+                  4,
+                  (function(l, c, e) {
+                    var r = (void 0 === e ? {} : e).isInitial,
+                      d = void 0 !== r && r;
+                    return he(this, void 0, void 0, function() {
+                      var r, t, n, i, a, s, u, o;
+                      return me(this, function(e) {
+                        switch (e.label) {
+                          case 0:
+                            return [
+                              4,
+                              (function(c, d) {
+                                return he(this, void 0, void 0, function() {
+                                  var r, t, n, i, a, s, u, o, l;
+                                  return me(this, function(e) {
+                                    switch (e.label) {
+                                      case 0:
+                                        (r = Object.keys(c.rules).filter(
+                                          ye.isRequireRule
+                                        )),
+                                          (t = r.length),
+                                          (n = []),
+                                          (i = O(d) || '' === d || x(d)),
+                                          (a = i && c.skipIfEmpty),
+                                          (s = !1),
+                                          (u = 0),
+                                          (e.label = 1);
+                                      case 1:
+                                        return u < t
+                                          ? ((o = r[u]),
+                                            [
+                                              4,
+                                              Ie(c, d, {
+                                                name: o,
+                                                params: c.rules[o],
+                                              }),
+                                            ])
+                                          : [3, 4];
+                                      case 2:
+                                        if (((l = e.sent()), !Z(l)))
+                                          throw new Error(
+                                            'Require rules has to return an object (see docs)'
+                                          );
+                                        if (
+                                          (l.required && (s = !0),
+                                          !l.valid &&
+                                            l.error &&
+                                            (n.push(l.error), c.bails))
+                                        )
+                                          return [
+                                            2,
+                                            { shouldSkip: !0, errors: n },
+                                          ];
+                                        e.label = 3;
+                                      case 3:
+                                        return u++, [3, 1];
+                                      case 4:
+                                        return (!i || s || c.skipIfEmpty) &&
+                                          (c.bails || a)
+                                          ? [
+                                              2,
+                                              {
+                                                shouldSkip: !s && i,
+                                                errors: n,
+                                              },
+                                            ]
+                                          : [2, { shouldSkip: !1, errors: n }];
+                                    }
+                                  });
+                                });
+                              })(l, c),
+                            ];
+                          case 1:
+                            if (
+                              ((r = e.sent()),
+                              (t = r.shouldSkip),
+                              (n = r.errors),
+                              t)
+                            )
+                              return [2, { valid: !n.length, errors: n }];
+                            (i = Object.keys(l.rules).filter(function(e) {
+                              return !ye.isRequireRule(e);
+                            })),
+                              (a = i.length),
+                              (s = 0),
+                              (e.label = 2);
+                          case 2:
+                            return s < a
+                              ? d && ye.isLazy(i[s])
+                                ? [3, 4]
+                                : ((u = i[s]),
+                                  [
+                                    4,
+                                    Ie(l, c, { name: u, params: l.rules[u] }),
+                                  ])
+                              : [3, 5];
+                          case 3:
+                            if (
+                              !(o = e.sent()).valid &&
+                              o.error &&
+                              (n.push(o.error), l.bails)
+                            )
+                              return [2, { valid: !1, errors: n }];
+                            e.label = 4;
+                          case 4:
+                            return s++, [3, 2];
+                          case 5:
+                            return [2, { valid: !n.length, errors: n }];
                         }
-                        rules = Object.keys(field.rules).filter(function (rule) { return !RuleContainer.isRequireRule(rule); });
-                        length = rules.length;
-                        i = 0;
-                        _d.label = 2;
-                    case 2:
-                        if (!(i < length)) return [3 /*break*/, 5];
-                        if (isInitial && RuleContainer.isLazy(rules[i])) {
-                            return [3 /*break*/, 4];
-                        }
-                        rule = rules[i];
-                        return [4 /*yield*/, _test(field, value, {
-                                name: rule,
-                                params: field.rules[rule]
-                            })];
-                    case 3:
-                        result = _d.sent();
-                        if (!result.valid && result.error) {
-                            errors.push(result.error);
-                            if (field.bails) {
-                                return [2 /*return*/, {
-                                        valid: false,
-                                        errors: errors
-                                    }];
-                            }
-                        }
-                        _d.label = 4;
-                    case 4:
-                        i++;
-                        return [3 /*break*/, 2];
-                    case 5: return [2 /*return*/, {
-                            valid: !errors.length,
-                            errors: errors
-                        }];
-                }
-            });
-        });
-    }
-    function _shouldSkip(field, value) {
-        return __awaiter(this, void 0, void 0, function () {
-            var requireRules, length, errors, isEmpty, isEmptyAndOptional, isRequired, i, rule, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        requireRules = Object.keys(field.rules).filter(RuleContainer.isRequireRule);
-                        length = requireRules.length;
-                        errors = [];
-                        isEmpty = isNullOrUndefined(value) || value === '' || isEmptyArray(value);
-                        isEmptyAndOptional = isEmpty && field.skipIfEmpty;
-                        isRequired = false;
-                        i = 0;
-                        _a.label = 1;
-                    case 1:
-                        if (!(i < length)) return [3 /*break*/, 4];
-                        rule = requireRules[i];
-                        return [4 /*yield*/, _test(field, value, {
-                                name: rule,
-                                params: field.rules[rule]
-                            })];
-                    case 2:
-                        result = _a.sent();
-                        if (!isObject(result)) {
-                            throw new Error('Require rules has to return an object (see docs)');
-                        }
-                        if (result.required) {
-                            isRequired = true;
-                        }
-                        if (!result.valid && result.error) {
-                            errors.push(result.error);
-                            // Exit early as the field is required and failed validation.
-                            if (field.bails) {
-                                return [2 /*return*/, {
-                                        shouldSkip: true,
-                                        errors: errors
-                                    }];
-                            }
-                        }
-                        _a.label = 3;
-                    case 3:
-                        i++;
-                        return [3 /*break*/, 1];
-                    case 4:
-                        if (isEmpty && !isRequired && !field.skipIfEmpty) {
-                            return [2 /*return*/, {
-                                    shouldSkip: false,
-                                    errors: errors
-                                }];
-                        }
-                        // field is configured to run through the pipeline regardless
-                        if (!field.bails && !isEmptyAndOptional) {
-                            return [2 /*return*/, {
-                                    shouldSkip: false,
-                                    errors: errors
-                                }];
-                        }
-                        // skip if the field is not required and has an empty value.
-                        return [2 /*return*/, {
-                                shouldSkip: !isRequired && isEmpty,
-                                errors: errors
-                            }];
-                }
-            });
-        });
-    }
-    /**
-     * Tests a single input value against a rule.
-     */
-    function _test(field, value, rule) {
-        return __awaiter(this, void 0, void 0, function () {
-            var ruleSchema, normalizedValue, params, result, values_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        ruleSchema = RuleContainer.getRuleDefinition(rule.name);
-                        if (!ruleSchema || !ruleSchema.validate) {
-                            throw new Error("No such validator '" + rule.name + "' exists.");
-                        }
-                        normalizedValue = ruleSchema.castValue ? ruleSchema.castValue(value) : value;
-                        params = fillTargetValues(rule.params, field.crossTable);
-                        return [4 /*yield*/, ruleSchema.validate(normalizedValue, params)];
-                    case 1:
-                        result = _a.sent();
-                        if (typeof result === 'string') {
-                            values_1 = __assign(__assign({}, (params || {})), { _field_: field.name, _value_: value, _rule_: rule.name });
-                            return [2 /*return*/, {
-                                    valid: false,
-                                    error: { rule: rule.name, msg: function () { return interpolate(result, values_1); } }
-                                }];
-                        }
-                        if (!isObject(result)) {
-                            result = { valid: result, data: {} };
-                        }
-                        return [2 /*return*/, {
-                                valid: result.valid,
-                                required: result.required,
-                                data: result.data || {},
-                                error: result.valid ? undefined : _generateFieldError(field, value, ruleSchema, rule.name, params, result.data)
-                            }];
-                }
-            });
-        });
-    }
-    /**
-     * Generates error messages.
-     */
-    function _generateFieldError(field, value, ruleSchema, ruleName, params, data) {
-        var message = field.customMessages[ruleName] || ruleSchema.message;
-        var ruleTargets = _getRuleTargets(field, ruleSchema, ruleName);
-        var _a = _getUserTargets(field, ruleSchema, ruleName, message), userTargets = _a.userTargets, userMessage = _a.userMessage;
-        var values = __assign(__assign(__assign(__assign(__assign({}, (params || {})), (data || {})), { _field_: field.name, _value_: value, _rule_: ruleName }), ruleTargets), userTargets);
-        return {
-            msg: function () { return _normalizeMessage(userMessage || getConfig().defaultMessage, field.name, values); },
-            rule: ruleName
-        };
-    }
-    function _getRuleTargets(field, ruleSchema, ruleName) {
-        var params = ruleSchema.params;
-        if (!params) {
-            return {};
-        }
-        var numTargets = params.filter(function (param) { return param.isTarget; }).length;
-        if (numTargets <= 0) {
-            return {};
-        }
-        var names = {};
-        var ruleConfig = field.rules[ruleName];
-        if (!Array.isArray(ruleConfig) && isObject(ruleConfig)) {
-            ruleConfig = params.map(function (param) {
-                return ruleConfig[param.name];
-            });
-        }
-        for (var index = 0; index < params.length; index++) {
-            var param = params[index];
-            if (!param.isTarget) {
-                continue;
-            }
-            var key = ruleConfig[index];
-            if (isLocator(key)) {
-                key = key.__locatorRef;
-            }
-            var name_1 = field.names[key] || key;
-            if (numTargets === 1) {
-                names._target_ = name_1;
-                break;
-            }
-            names["_" + param.name + "Target_"] = name_1;
-        }
-        return names;
-    }
-    function _getUserTargets(field, ruleSchema, ruleName, userMessage) {
-        var userTargets = {};
-        var rules = field.rules[ruleName];
-        var params = ruleSchema.params || [];
-        // early return if no rules
-        if (!rules) {
-            return {};
-        }
-        // check all rules to convert targets
-        Object.keys(rules).forEach(function (key, index) {
-            // get the rule
-            var rule = rules[key];
-            if (!isLocator(rule)) {
-                return {};
-            }
-            // get associated parameter
-            var param = params[index];
-            if (!param) {
-                return {};
-            }
-            // grab the name of the target
-            var name = rule.__locatorRef;
-            var placeholder = "_" + name + "Target_";
-            userTargets[placeholder] = field.names[name] || name;
-            userTargets[name] = field.names[name] || name;
-            // update template if it's a string
-            if (typeof userMessage === 'string') {
-                var rx = new RegExp("{" + param.name + "}", 'g');
-                userMessage = userMessage.replace(rx, "{" + placeholder + "}");
-            }
-        });
-        return {
-            userTargets: userTargets,
-            userMessage: userMessage
-        };
-    }
-    function _normalizeMessage(template, field, values) {
-        if (typeof template === 'function') {
-            return template(field, values);
-        }
-        return interpolate(template, __assign(__assign({}, values), { _field_: field }));
-    }
-    function fillTargetValues(params, crossTable) {
-        if (Array.isArray(params)) {
-            return params;
-        }
-        var values = {};
-        var normalize = function (value) {
-            if (isLocator(value)) {
-                return value(crossTable);
-            }
-            return value;
-        };
-        Object.keys(params).forEach(function (param) {
-            values[param] = normalize(params[param]);
-        });
-        return values;
-    }
-
-    var aggressive = function () { return ({
-        on: ['input', 'blur']
-    }); };
-    var lazy = function () { return ({
-        on: ['change']
-    }); };
-    var eager = function (_a) {
-        var errors = _a.errors;
-        if (errors.length) {
-            return {
-                on: ['input', 'change']
-            };
-        }
-        return {
-            on: ['change', 'blur']
-        };
-    };
-    var passive = function () { return ({
-        on: []
-    }); };
-    var modes = {
-        aggressive: aggressive,
-        eager: eager,
-        passive: passive,
-        lazy: lazy
-    };
-    var setInteractionMode = function (mode, implementation) {
-        setConfig({ mode: mode });
-        if (!implementation) {
-            return;
-        }
-        if (!isCallable(implementation)) {
-            throw new Error('A mode implementation must be a function');
-        }
-        modes[mode] = implementation;
-    };
-
-    var EVENT_BUS = new Vue();
-    function localeChanged() {
-        EVENT_BUS.$emit('change:locale');
-    }
-
-    var Dictionary = /** @class */ (function () {
-        function Dictionary(locale, dictionary) {
-            this.container = {};
-            this.locale = locale;
-            this.merge(dictionary);
-        }
-        Dictionary.prototype.resolve = function (field, rule, values) {
-            return this.format(this.locale, field, rule, values);
-        };
-        Dictionary.prototype.format = function (locale, field, rule, values) {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
-            var message;
-            // find if specific message for that field was specified.
-            message = ((_c = (_b = (_a = this.container[locale]) === null || _a === void 0 ? void 0 : _a.fields) === null || _b === void 0 ? void 0 : _b[field]) === null || _c === void 0 ? void 0 : _c[rule]) || ((_e = (_d = this.container[locale]) === null || _d === void 0 ? void 0 : _d.messages) === null || _e === void 0 ? void 0 : _e[rule]);
-            if (!message) {
-                message = getConfig().defaultMessage;
-            }
-            field = (_h = (_g = (_f = this.container[locale]) === null || _f === void 0 ? void 0 : _f.names) === null || _g === void 0 ? void 0 : _g[field], (_h !== null && _h !== void 0 ? _h : field));
-            return isCallable(message) ? message(field, values) : interpolate(message, __assign(__assign({}, values), { _field_: field }));
-        };
-        Dictionary.prototype.merge = function (dictionary) {
-            merge(this.container, dictionary);
-        };
-        Dictionary.prototype.hasRule = function (name) {
-            var _a, _b;
-            return !!((_b = (_a = this.container[this.locale]) === null || _a === void 0 ? void 0 : _a.messages) === null || _b === void 0 ? void 0 : _b[name]);
-        };
-        return Dictionary;
-    }());
-    var DICTIONARY;
-    var INSTALLED = false;
-    function updateRules() {
-        if (INSTALLED) {
-            return;
-        }
-        RuleContainer.iterate(function (name, schema) {
-            var _a, _b;
-            if (schema.message && !DICTIONARY.hasRule(name)) {
-                DICTIONARY.merge((_a = {},
-                    _a[DICTIONARY.locale] = {
-                        messages: (_b = {},
-                            _b[name] = schema.message,
-                            _b)
+                      });
+                    });
+                  })(
+                    {
+                      name:
+                        (null === (f = l) || void 0 === f ? void 0 : f.name) ||
+                        '{field}',
+                      rules: ze(o),
+                      bails: null == r || r,
+                      skipIfEmpty: null == t || t,
+                      forceRequired: !1,
+                      crossTable:
+                        (null === (v = l) || void 0 === v
+                          ? void 0
+                          : v.values) || {},
+                      names:
+                        (null === (h = l) || void 0 === h ? void 0 : h.names) ||
+                        {},
+                      customMessages:
+                        (null === (m = l) || void 0 === m
+                          ? void 0
+                          : m.customMessages) || {},
                     },
-                    _a));
-            }
-            extend(name, {
-                message: function (field, values) {
-                    return DICTIONARY.resolve(field, name, values || {});
-                }
-            });
+                    u,
+                    l
+                  ),
+                ]
+              );
+            case 1:
+              return (
+                (n = e.sent()),
+                (i = []),
+                (a = {}),
+                (s = {}),
+                n.errors.forEach(function(e) {
+                  var r = e.msg();
+                  i.push(r), (a[e.rule] = r), (s[e.rule] = e.msg);
+                }),
+                [
+                  2,
+                  {
+                    valid: n.valid,
+                    errors: i,
+                    failedRules: a,
+                    regenerateMap: s,
+                  },
+                ]
+              );
+          }
         });
-        INSTALLED = true;
+      })
+    );
+  }
+  function Ie(y, b, _) {
+    return he(this, void 0, void 0, function() {
+      var v, h, m, p, g;
+      return me(this, function(e) {
+        switch (e.label) {
+          case 0:
+            if (!(v = ye.getRuleDefinition(_.name)) || !v.validate)
+              throw new Error("No such validator '" + _.name + "' exists.");
+            return (
+              (h = v.castValue ? v.castValue(b) : b),
+              (m = (function(r, t) {
+                if (Array.isArray(r)) return r;
+                var n = {};
+                return (
+                  Object.keys(r).forEach(function(e) {
+                    n[e] = (function(e) {
+                      if (k(e)) {
+                        return e(t);
+                      }
+                      return e;
+                    })(r[e]);
+                  }),
+                  n
+                );
+              })(_.params, y.crossTable)),
+              [4, v.validate(h, m)]
+            );
+          case 1:
+            return 'string' == typeof (p = e.sent())
+              ? ((g = ve(ve({}, m || {}), {
+                  _field_: y.name,
+                  _value_: b,
+                  _rule_: _.name,
+                })),
+                [
+                  2,
+                  {
+                    valid: !1,
+                    error: {
+                      rule: _.name,
+                      msg: function() {
+                        return I(p, g);
+                      },
+                    },
+                  },
+                ])
+              : (Z(p) || (p = { valid: p, data: {} }),
+                [
+                  2,
+                  {
+                    valid: p.valid,
+                    required: p.required,
+                    data: p.data || {},
+                    error: p.valid
+                      ? void 0
+                      : ((n = y),
+                        (r = b),
+                        (t = v),
+                        (i = _.name),
+                        (a = m),
+                        (s = p.data),
+                        (u = n.customMessages[i] || t.message),
+                        (o = (function(e, r, t) {
+                          var n = r.params;
+                          if (!n) return {};
+                          var i = n.filter(function(e) {
+                            return e.isTarget;
+                          }).length;
+                          if (i <= 0) return {};
+                          var a = {},
+                            s = e.rules[t];
+                          !Array.isArray(s) &&
+                            Z(s) &&
+                            (s = n.map(function(e) {
+                              return s[e.name];
+                            }));
+                          for (var u = 0; u < n.length; u++) {
+                            var o = n[u];
+                            if (o.isTarget) {
+                              var l = s[u];
+                              k(l) && (l = l.__locatorRef);
+                              var c = e.names[l] || l;
+                              if (1 === i) {
+                                a._target_ = c;
+                                break;
+                              }
+                              a['_' + o.name + 'Target_'] = c;
+                            }
+                          }
+                          return a;
+                        })(n, t, i)),
+                        (l = (function(u, e, r, o) {
+                          var l = {},
+                            c = u.rules[r],
+                            d = e.params || [];
+                          return c
+                            ? (Object.keys(c).forEach(function(e, r) {
+                                var t = c[e];
+                                if (!k(t)) return {};
+                                var n = d[r];
+                                if (!n) return {};
+                                var i = t.__locatorRef,
+                                  a = '_' + i + 'Target_';
+                                if (
+                                  ((l[a] = u.names[i] || i),
+                                  (l[i] = u.names[i] || i),
+                                  'string' == typeof o)
+                                ) {
+                                  var s = new RegExp('{' + n.name + '}', 'g');
+                                  o = o.replace(s, '{' + a + '}');
+                                }
+                              }),
+                              { userTargets: l, userMessage: o })
+                            : {};
+                        })(n, t, i, u)),
+                        (c = l.userTargets),
+                        (d = l.userMessage),
+                        (f = ve(
+                          ve(
+                            ve(ve(ve({}, a || {}), s || {}), {
+                              _field_: n.name,
+                              _value_: r,
+                              _rule_: i,
+                            }),
+                            o
+                          ),
+                          c
+                        )),
+                        {
+                          msg: function() {
+                            return (
+                              (e = d || Oe().defaultMessage),
+                              (r = n.name),
+                              (t = f),
+                              'function' != typeof e
+                                ? I(e, ve(ve({}, t), { _field_: r }))
+                                : e(r, t)
+                            );
+                            var e, r, t;
+                          },
+                          rule: i,
+                        }),
+                  },
+                ]);
+        }
+        var n, r, t, i, a, s, u, o, l, c, d, f;
+      });
+    });
+  }
+  function Me(e) {
+    var r, t, n;
+    if (
+      !(n = e) ||
+      !(
+        ('undefined' != typeof Event && E(Event) && n instanceof Event) ||
+        (n && n.srcElement)
+      )
+    )
+      return e;
+    var i = e.target;
+    if ('file' === i.type && i.files) return S(i.files);
+    if (null === (r = i._vModifiers) || void 0 === r ? void 0 : r.number) {
+      var a = parseFloat(i.value);
+      return $(a) ? i.value : a;
     }
-    function localize(locale, dictionary) {
-        var _a;
-        if (!DICTIONARY) {
-            DICTIONARY = new Dictionary('en', {});
-        }
-        if (typeof locale === 'string') {
-            DICTIONARY.locale = locale;
-            if (dictionary) {
-                DICTIONARY.merge((_a = {}, _a[locale] = dictionary, _a));
-            }
-            updateRules();
-            localeChanged();
-            return;
-        }
-        DICTIONARY.merge(locale);
-        updateRules();
+    return (null === (t = i._vModifiers) || void 0 === t ? void 0 : t.trim) &&
+      'string' == typeof i.value
+      ? i.value.trim()
+      : i.value;
+  }
+  var De = function(e) {
+    var r,
+      t,
+      n = (null === (r = e.data) || void 0 === r ? void 0 : r.attrs) || e.elm;
+    return (
+      !('input' !== e.tag || (n && n.type)) ||
+      ('textarea' === e.tag ||
+        T(
+          ['text', 'password', 'search', 'email', 'tel', 'url', 'number'],
+          null === (t = n) || void 0 === t ? void 0 : t.type
+        ))
+    );
+  };
+  function Be(e) {
+    if (e.data) {
+      var r,
+        t,
+        n,
+        i,
+        a = e.data;
+      if ('model' in a) return a.model;
+      if (e.data.directives)
+        return (
+          (r = e.data.directives),
+          (t = function(e) {
+            return 'model' === e.name;
+          }),
+          (n = Array.isArray(r) ? r : S(r)),
+          -1 === (i = j(n, t)) ? void 0 : n[i]
+        );
     }
-
-    var isEvent = function (evt) {
-        if (!evt) {
-            return false;
-        }
-        if (typeof Event !== 'undefined' && isCallable(Event) && evt instanceof Event) {
-            return true;
-        }
-        // this is for IE
-        /* istanbul ignore next */
-        if (evt && evt.srcElement) {
-            return true;
-        }
-        return false;
-    };
-    function normalizeEventValue(value) {
-        var _a, _b;
-        if (!isEvent(value)) {
-            return value;
-        }
-        var input = value.target;
-        if (input.type === 'file' && input.files) {
-            return toArray(input.files);
-        }
-        // If the input has a `v-model.number` modifier applied.
-        if ((_a = input._vModifiers) === null || _a === void 0 ? void 0 : _a.number) {
-            // as per the spec the v-model.number uses parseFloat
-            var valueAsNumber = parseFloat(input.value);
-            if (isNaN(valueAsNumber)) {
-                return input.value;
-            }
-            return valueAsNumber;
-        }
-        if ((_b = input._vModifiers) === null || _b === void 0 ? void 0 : _b.trim) {
-            var trimmedValue = typeof input.value === 'string' ? input.value.trim() : input.value;
-            return trimmedValue;
-        }
-        return input.value;
+  }
+  function Pe(e) {
+    var r,
+      t,
+      n,
+      i = Be(e);
+    if (i) return { value: i.value };
+    var a = (null === (r = Le(e)) || void 0 === r ? void 0 : r.prop) || 'value';
+    return (null === (t = e.componentOptions) || void 0 === t
+      ? void 0
+      : t.propsData) && a in e.componentOptions.propsData
+      ? { value: e.componentOptions.propsData[a] }
+      : (null === (n = e.data) || void 0 === n ? void 0 : n.domProps) &&
+        'value' in e.data.domProps
+      ? { value: e.data.domProps.value }
+      : void 0;
+  }
+  function Ce(e) {
+    return Array.isArray(e) || void 0 === Pe(e)
+      ? ((r = e),
+        Array.isArray(r)
+          ? r
+          : Array.isArray(r.children)
+          ? r.children
+          : r.componentOptions && Array.isArray(r.componentOptions.children)
+          ? r.componentOptions.children
+          : []).reduce(function(e, r) {
+          var t = Ce(r);
+          return t.length && e.push.apply(e, t), e;
+        }, [])
+      : [e];
+    var r;
+  }
+  function Le(e) {
+    return e.componentOptions ? e.componentOptions.Ctor.options.model : null;
+  }
+  function We(e, r, t) {
+    if (O(e[r])) e[r] = [t];
+    else {
+      if (E(e[r]) && e[r].fns) {
+        var n = e[r];
+        return (
+          (n.fns = Array.isArray(n.fns) ? n.fns : [n.fns]),
+          void (T(n.fns, t) || n.fns.push(t))
+        );
+      }
+      if (E(e[r])) {
+        var i = e[r];
+        e[r] = [i];
+      }
+      Array.isArray(e[r]) && !T(e[r], t) && e[r].push(t);
     }
-
-    var isTextInput = function (vnode) {
-        var _a, _b;
-        var attrs = ((_a = vnode.data) === null || _a === void 0 ? void 0 : _a.attrs) || vnode.elm;
-        // it will fallback to being a text input per browsers spec.
-        if (vnode.tag === 'input' && (!attrs || !attrs.type)) {
-            return true;
-        }
-        if (vnode.tag === 'textarea') {
-            return true;
-        }
-        return includes(['text', 'password', 'search', 'email', 'tel', 'url', 'number'], (_b = attrs) === null || _b === void 0 ? void 0 : _b.type);
-    };
-    // export const isCheckboxOrRadioInput = (vnode: VNode): boolean => {
-    //   const attrs = (vnode.data && vnode.data.attrs) || vnode.elm;
-    //   return includes(['radio', 'checkbox'], attrs && attrs.type);
-    // };
-    // Gets the model object on the vnode.
-    function findModel(vnode) {
-        if (!vnode.data) {
-            return undefined;
-        }
-        // Component Model
-        // THIS IS NOT TYPED IN OFFICIAL VUE TYPINGS
-        // eslint-disable-next-line
-        var nonStandardVNodeData = vnode.data;
-        if ('model' in nonStandardVNodeData) {
-            return nonStandardVNodeData.model;
-        }
-        if (!vnode.data.directives) {
-            return undefined;
-        }
-        return find(vnode.data.directives, function (d) { return d.name === 'model'; });
-    }
-    function findValue(vnode) {
-        var _a, _b, _c;
-        var model = findModel(vnode);
-        if (model) {
-            return { value: model.value };
-        }
-        var config = findModelConfig(vnode);
-        var prop = ((_a = config) === null || _a === void 0 ? void 0 : _a.prop) || 'value';
-        if (((_b = vnode.componentOptions) === null || _b === void 0 ? void 0 : _b.propsData) && prop in vnode.componentOptions.propsData) {
-            var propsDataWithValue = vnode.componentOptions.propsData;
-            return { value: propsDataWithValue[prop] };
-        }
-        if (((_c = vnode.data) === null || _c === void 0 ? void 0 : _c.domProps) && 'value' in vnode.data.domProps) {
-            return { value: vnode.data.domProps.value };
-        }
-        return undefined;
-    }
-    function extractChildren(vnode) {
-        if (Array.isArray(vnode)) {
-            return vnode;
-        }
-        if (Array.isArray(vnode.children)) {
-            return vnode.children;
-        }
-        /* istanbul ignore next */
-        if (vnode.componentOptions && Array.isArray(vnode.componentOptions.children)) {
-            return vnode.componentOptions.children;
-        }
-        return [];
-    }
-    function extractVNodes(vnode) {
-        if (!Array.isArray(vnode) && findValue(vnode) !== undefined) {
-            return [vnode];
-        }
-        var children = extractChildren(vnode);
-        return children.reduce(function (nodes, node) {
-            var candidates = extractVNodes(node);
-            if (candidates.length) {
-                nodes.push.apply(nodes, candidates);
-            }
-            return nodes;
+  }
+  function He(e, r, t) {
+    if (e.componentOptions)
+      return (
+        (i = r),
+        (a = t),
+        void (
+          (n = e).componentOptions &&
+          (n.componentOptions.listeners || (n.componentOptions.listeners = {}),
+          We(n.componentOptions.listeners, i, a))
+        )
+      );
+    var n, i, a, s, u, o;
+    (u = r),
+      (o = t),
+      (s = e).data || (s.data = {}),
+      O(s.data.on) && (s.data.on = {}),
+      We(s.data.on, u, o);
+  }
+  function Ue(e, r) {
+    var t, n;
+    return e.componentOptions
+      ? (Le(e) || { event: 'input' }).event
+      : (null ===
+          (n = null === (t = r) || void 0 === t ? void 0 : t.modifiers) ||
+        void 0 === n
+        ? void 0
+        : n.lazy)
+      ? 'change'
+      : De(e)
+      ? 'input'
+      : 'change';
+  }
+  function Ge(e) {
+    var r,
+      t = null === (r = e.data) || void 0 === r ? void 0 : r.attrs;
+    if (!T(['input', 'select'], e.tag) || !t) return {};
+    var n,
+      i,
+      a,
+      s = {};
+    return (
+      'required' in t &&
+        !1 !== t.required &&
+        (s.required = 'checkbox' !== t.type || [!0]),
+      De(e)
+        ? ze(
+            ve(
+              ve({}, s),
+              ((i = null === (n = e.data) || void 0 === n ? void 0 : n.attrs),
+              (a = {}),
+              i &&
+                ('email' === i.type && (a.email = ['multiple' in i]),
+                i.pattern && (a.regex = i.pattern),
+                0 <= i.maxlength && (a.max = i.maxlength),
+                0 <= i.minlength && (a.min = i.minlength),
+                'number' === i.type &&
+                  (w(i.min) && (a.min_value = Number(i.min)),
+                  w(i.max) && (a.max_value = Number(i.max)))),
+              a)
+            )
+          )
+        : ze(s)
+    );
+  }
+  function Ke(e, r) {
+    return e.$scopedSlots.default
+      ? e.$scopedSlots.default(r) || []
+      : e.$slots.default || [];
+  }
+  function Ye(t) {
+    return ve(ve({}, t.flags), {
+      errors: t.errors,
+      classes: t.classes,
+      failedRules: t.failedRules,
+      reset: function() {
+        return t.reset();
+      },
+      validate: function() {
+        for (var e = [], r = 0; r < arguments.length; r++) e[r] = arguments[r];
+        return t.validate.apply(t, e);
+      },
+      ariaInput: {
+        'aria-invalid': t.flags.invalid ? 'true' : 'false',
+        'aria-required': t.isRequired ? 'true' : 'false',
+        'aria-errormessage': 'vee_' + t.id,
+      },
+      ariaMsg: {
+        id: 'vee_' + t.id,
+        'aria-live': t.errors.length ? 'assertive' : 'off',
+      },
+    });
+  }
+  function Je(e, r) {
+    e.initialized || (e.initialValue = r);
+    var t,
+      n,
+      i = ((n = r),
+      !((t = e)._ignoreImmediate || !t.immediate) ||
+        !(t.value === n || !t.normalizedEvents.length) ||
+        !!t._needsValidation ||
+        (!t.initialized && void 0 === n));
+    (e._needsValidation = !1),
+      (e.value = r),
+      (e._ignoreImmediate = !0),
+      i &&
+        e
+          .validateSilent()
+          .then(e.immediate || e.flags.validated ? e.applyResult : N);
+  }
+  function Qe(e) {
+    return (E(e.mode) ? e.mode : Se[e.mode])(e);
+  }
+  function Xe(t) {
+    t.$veeOnInput ||
+      (t.$veeOnInput = function(e) {
+        t.syncValue(e), t.setFlags({ dirty: !0, pristine: !1 });
+      });
+    var e = t.$veeOnInput;
+    t.$veeOnBlur ||
+      (t.$veeOnBlur = function() {
+        t.setFlags({ touched: !0, untouched: !1 });
+      });
+    var r = t.$veeOnBlur,
+      n = t.$veeHandler,
+      i = Qe(t);
+    return (
+      (n && t.$veeDebounce === t.debounce) ||
+        ((n = F(function() {
+          t.$nextTick(function() {
+            var r = t.validateSilent();
+            (t._pendingValidation = r).then(function(e) {
+              r === t._pendingValidation &&
+                (t.applyResult(e), (t._pendingValidation = void 0));
+            });
+          });
+        }, i.debounce || t.debounce)),
+        (t.$veeHandler = n),
+        (t.$veeDebounce = t.debounce)),
+      { onInput: e, onBlur: r, onValidate: n }
+    );
+  }
+  var er = 0;
+  var rr = r.extend({
+    inject: {
+      $_veeObserver: {
+        from: '$_veeObserver',
+        default: function() {
+          return (
+            this.$vnode.context.$_veeObserver ||
+              (this.$vnode.context.$_veeObserver = {
+                refs: {},
+                subscribe: function(e) {
+                  this.refs[e.id] = e;
+                },
+                unsubscribe: function(e) {
+                  delete this.refs[e];
+                },
+              }),
+            this.$vnode.context.$_veeObserver
+          );
+        },
+      },
+    },
+    props: {
+      vid: { type: String, default: '' },
+      name: { type: String, default: null },
+      mode: {
+        type: [String, Function],
+        default: function() {
+          return Oe().mode;
+        },
+      },
+      rules: { type: [Object, String], default: null },
+      immediate: { type: Boolean, default: !1 },
+      bails: {
+        type: Boolean,
+        default: function() {
+          return Oe().bails;
+        },
+      },
+      skipIfEmpty: {
+        type: Boolean,
+        default: function() {
+          return Oe().skipOptional;
+        },
+      },
+      debounce: { type: Number, default: 0 },
+      tag: { type: String, default: 'span' },
+      slim: { type: Boolean, default: !1 },
+      disabled: { type: Boolean, default: !1 },
+      customMessages: {
+        type: Object,
+        default: function() {
+          return {};
+        },
+      },
+    },
+    watch: {
+      rules: {
+        deep: !0,
+        handler: function(e, r) {
+          this._needsValidation = !R(e, r);
+        },
+      },
+    },
+    data: function() {
+      return {
+        errors: [],
+        value: void 0,
+        initialized: !1,
+        initialValue: void 0,
+        flags: V(),
+        failedRules: {},
+        isActive: !0,
+        id: '',
+      };
+    },
+    computed: {
+      fieldDeps: function() {
+        var i = this;
+        return Object.keys(this.normalizedRules).reduce(function(e, r) {
+          var t,
+            n = ((t = i.normalizedRules[r]),
+            Array.isArray(t)
+              ? t.filter(k)
+              : Object.keys(t)
+                  .filter(function(e) {
+                    return k(t[e]);
+                  })
+                  .map(function(e) {
+                    return t[e];
+                  })).map(function(e) {
+              return e.__locatorRef;
+            });
+          return (
+            e.push.apply(e, n),
+            n.forEach(function(e) {
+              !(function e(r, t, n) {
+                void 0 === n && (n = !0);
+                var i = r.$_veeObserver.refs;
+                r._veeWatchers || (r._veeWatchers = {});
+                if (!i[t] && n)
+                  return r.$once('hook:mounted', function() {
+                    e(r, t, !1);
+                  });
+                !E(r._veeWatchers[t]) &&
+                  i[t] &&
+                  (r._veeWatchers[t] = i[t].$watch('value', function() {
+                    r.flags.validated &&
+                      ((r._needsValidation = !0), r.validate());
+                  }));
+              })(i, e);
+            }),
+            e
+          );
         }, []);
-    }
-    // Resolves v-model config if exists.
-    function findModelConfig(vnode) {
-        /* istanbul ignore next */
-        if (!vnode.componentOptions)
-            return null;
-        // This is also not typed in the standard Vue TS.
-        return vnode.componentOptions.Ctor.options.model;
-    }
-    // Adds a listener to vnode listener object.
-    function mergeVNodeListeners(obj, eventName, handler) {
-        // no listener at all.
-        if (isNullOrUndefined(obj[eventName])) {
-            obj[eventName] = [handler];
-            return;
-        }
-        // Is an invoker.
-        if (isCallable(obj[eventName]) && obj[eventName].fns) {
-            var invoker = obj[eventName];
-            invoker.fns = Array.isArray(invoker.fns) ? invoker.fns : [invoker.fns];
-            if (!includes(invoker.fns, handler)) {
-                invoker.fns.push(handler);
-            }
-            return;
-        }
-        if (isCallable(obj[eventName])) {
-            var prev = obj[eventName];
-            obj[eventName] = [prev];
-        }
-        if (Array.isArray(obj[eventName]) && !includes(obj[eventName], handler)) {
-            obj[eventName].push(handler);
-        }
-    }
-    // Adds a listener to a native HTML vnode.
-    function addNativeNodeListener(node, eventName, handler) {
-        /* istanbul ignore next */
-        if (!node.data) {
-            node.data = {};
-        }
-        if (isNullOrUndefined(node.data.on)) {
-            node.data.on = {};
-        }
-        mergeVNodeListeners(node.data.on, eventName, handler);
-    }
-    // Adds a listener to a Vue component vnode.
-    function addComponentNodeListener(node, eventName, handler) {
-        /* istanbul ignore next */
-        if (!node.componentOptions) {
-            return;
-        }
-        /* istanbul ignore next */
-        if (!node.componentOptions.listeners) {
-            node.componentOptions.listeners = {};
-        }
-        mergeVNodeListeners(node.componentOptions.listeners, eventName, handler);
-    }
-    function addVNodeListener(vnode, eventName, handler) {
-        if (vnode.componentOptions) {
-            addComponentNodeListener(vnode, eventName, handler);
-            return;
-        }
-        addNativeNodeListener(vnode, eventName, handler);
-    }
-    // Determines if `change` should be used over `input` for listeners.
-    function getInputEventName(vnode, model) {
-        var _a, _b;
-        // Is a component.
-        if (vnode.componentOptions) {
-            var event_1 = (findModelConfig(vnode) || { event: 'input' }).event;
-            return event_1;
-        }
-        // Lazy Models typically use change event
-        if ((_b = (_a = model) === null || _a === void 0 ? void 0 : _a.modifiers) === null || _b === void 0 ? void 0 : _b.lazy) {
-            return 'change';
-        }
-        // is a textual-type input.
-        if (isTextInput(vnode)) {
-            return 'input';
-        }
-        return 'change';
-    }
-    // TODO: Type this one properly.
-    function normalizeSlots(slots, ctx) {
-        var acc = [];
-        return Object.keys(slots).reduce(function (arr, key) {
-            slots[key].forEach(function (vnode) {
-                if (!vnode.context) {
-                    slots[key].context = ctx;
-                    if (!vnode.data) {
-                        vnode.data = {};
-                    }
-                    vnode.data.slot = key;
-                }
-            });
-            return arr.concat(slots[key]);
-        }, acc);
-    }
-    function resolveTextualRules(vnode) {
-        var _a;
-        var attrs = (_a = vnode.data) === null || _a === void 0 ? void 0 : _a.attrs;
-        var rules = {};
-        if (!attrs)
-            return rules;
-        if (attrs.type === 'email') {
-            rules.email = ['multiple' in attrs];
-        }
-        if (attrs.pattern) {
-            rules.regex = attrs.pattern;
-        }
-        if (attrs.maxlength >= 0) {
-            rules.max = attrs.maxlength;
-        }
-        if (attrs.minlength >= 0) {
-            rules.min = attrs.minlength;
-        }
-        if (attrs.type === 'number') {
-            if (isSpecified(attrs.min)) {
-                rules.min_value = Number(attrs.min);
-            }
-            if (isSpecified(attrs.max)) {
-                rules.max_value = Number(attrs.max);
-            }
-        }
-        return rules;
-    }
-    function resolveRules(vnode) {
-        var _a;
-        var htmlTags = ['input', 'select'];
-        var attrs = (_a = vnode.data) === null || _a === void 0 ? void 0 : _a.attrs;
-        if (!includes(htmlTags, vnode.tag) || !attrs) {
-            return {};
-        }
-        var rules = {};
-        if ('required' in attrs && attrs.required !== false) {
-            rules.required = attrs.type === 'checkbox' ? [true] : true;
-        }
-        if (isTextInput(vnode)) {
-            return normalizeRules(__assign(__assign({}, rules), resolveTextualRules(vnode)));
-        }
-        return normalizeRules(rules);
-    }
-    function normalizeChildren(context, slotProps) {
-        if (context.$scopedSlots.default) {
-            return context.$scopedSlots.default(slotProps) || [];
-        }
-        return context.$slots.default || [];
-    }
-
-    /**
-     * Determines if a provider needs to run validation.
-     */
-    function shouldValidate(ctx, value) {
-        // when an immediate/initial validation is needed and wasn't done before.
-        if (!ctx._ignoreImmediate && ctx.immediate) {
-            return true;
-        }
-        // when the value changes for whatever reason.
-        if (ctx.value !== value && ctx.normalizedEvents.length) {
-            return true;
-        }
-        // when it needs validation due to props/cross-fields changes.
-        if (ctx._needsValidation) {
-            return true;
-        }
-        // when the initial value is undefined and the field wasn't rendered yet.
-        if (!ctx.initialized && value === undefined) {
-            return true;
-        }
-        return false;
-    }
-    function createValidationCtx(ctx) {
-        return __assign(__assign({}, ctx.flags), { errors: ctx.errors, classes: ctx.classes, failedRules: ctx.failedRules, reset: function () { return ctx.reset(); }, validate: function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                return ctx.validate.apply(ctx, args);
-            }, ariaInput: {
-                'aria-invalid': ctx.flags.invalid ? 'true' : 'false',
-                'aria-required': ctx.isRequired ? 'true' : 'false',
-                'aria-errormessage': "vee_" + ctx.id
-            }, ariaMsg: {
-                id: "vee_" + ctx.id,
-                'aria-live': ctx.errors.length ? 'assertive' : 'off'
-            } });
-    }
-    function onRenderUpdate(vm, value) {
-        if (!vm.initialized) {
-            vm.initialValue = value;
-        }
-        var validateNow = shouldValidate(vm, value);
-        vm._needsValidation = false;
-        vm.value = value;
-        vm._ignoreImmediate = true;
-        if (!validateNow) {
-            return;
-        }
-        vm.validateSilent().then(vm.immediate || vm.flags.validated ? vm.applyResult : identity);
-    }
-    function computeModeSetting(ctx) {
-        var compute = (isCallable(ctx.mode) ? ctx.mode : modes[ctx.mode]);
-        return compute(ctx);
-    }
-    // Creates the common handlers for a validatable context.
-    function createCommonHandlers(vm) {
-        if (!vm.$veeOnInput) {
-            vm.$veeOnInput = function (e) {
-                vm.syncValue(e); // track and keep the value updated.
-                vm.setFlags({ dirty: true, pristine: false });
-            };
-        }
-        var onInput = vm.$veeOnInput;
-        if (!vm.$veeOnBlur) {
-            vm.$veeOnBlur = function () {
-                vm.setFlags({ touched: true, untouched: false });
-            };
-        }
-        // Blur event listener.
-        var onBlur = vm.$veeOnBlur;
-        var onValidate = vm.$veeHandler;
-        var mode = computeModeSetting(vm);
-        // Handle debounce changes.
-        if (!onValidate || vm.$veeDebounce !== vm.debounce) {
-            onValidate = debounce(function () {
-                vm.$nextTick(function () {
-                    var pendingPromise = vm.validateSilent();
-                    // avoids race conditions between successive validations.
-                    vm._pendingValidation = pendingPromise;
-                    pendingPromise.then(function (result) {
-                        if (pendingPromise === vm._pendingValidation) {
-                            vm.applyResult(result);
-                            vm._pendingValidation = undefined;
-                        }
-                    });
-                });
-            }, mode.debounce || vm.debounce);
-            // Cache the handler so we don't create it each time.
-            vm.$veeHandler = onValidate;
-            // cache the debounce value so we detect if it was changed.
-            vm.$veeDebounce = vm.debounce;
-        }
-        return { onInput: onInput, onBlur: onBlur, onValidate: onValidate };
-    }
-    // Adds all plugin listeners to the vnode.
-    function addListeners(vm, node) {
-        var _a;
-        var value = findValue(node);
-        // cache the input eventName.
-        vm._inputEventName = vm._inputEventName || getInputEventName(node, findModel(node));
-        onRenderUpdate(vm, (_a = value) === null || _a === void 0 ? void 0 : _a.value);
-        var _b = createCommonHandlers(vm), onInput = _b.onInput, onBlur = _b.onBlur, onValidate = _b.onValidate;
-        addVNodeListener(node, vm._inputEventName, onInput);
-        addVNodeListener(node, 'blur', onBlur);
-        // add the validation listeners.
-        vm.normalizedEvents.forEach(function (evt) {
-            addVNodeListener(node, evt, onValidate);
+      },
+      normalizedEvents: function() {
+        var r = this;
+        return (Qe(this).on || []).map(function(e) {
+          return 'input' === e ? r._inputEventName : e;
         });
-        vm.initialized = true;
-    }
-
-    var PROVIDER_COUNTER = 0;
-    function data() {
-        var errors = [];
-        var defaultValues = {
-            errors: errors,
-            value: undefined,
-            initialized: false,
-            initialValue: undefined,
-            flags: createFlags(),
-            failedRules: {},
-            isActive: true,
-            id: ''
-        };
-        return defaultValues;
-    }
-    var ValidationProvider = Vue.extend({
-        inject: {
-            $_veeObserver: {
-                from: '$_veeObserver',
-                default: function () {
-                    if (!this.$vnode.context.$_veeObserver) {
-                        this.$vnode.context.$_veeObserver = createObserver();
-                    }
-                    return this.$vnode.context.$_veeObserver;
-                }
+      },
+      isRequired: function() {
+        var e = ve(ve({}, this._resolvedRules), this.normalizedRules),
+          r = Object.keys(e).some(ye.isRequireRule);
+        return (this.flags.required = !!r), r;
+      },
+      classes: function() {
+        return (function(i, a) {
+          for (
+            var s = {},
+              u = Object.keys(a),
+              e = u.length,
+              r = function(e) {
+                var r = u[e],
+                  t = (i && i[r]) || r,
+                  n = a[r];
+                return O(n)
+                  ? 'continue'
+                  : ('valid' !== r && 'invalid' !== r) || a.validated
+                  ? void ('string' == typeof t
+                      ? (s[t] = n)
+                      : Array.isArray(t) &&
+                        t.forEach(function(e) {
+                          s[e] = n;
+                        }))
+                  : 'continue';
+              },
+              t = 0;
+            t < e;
+            t++
+          )
+            r(t);
+          return s;
+        })(Oe().classes, this.flags);
+      },
+      normalizedRules: function() {
+        return ze(this.rules);
+      },
+    },
+    created: function() {
+      function e() {
+        if (r.flags.validated) {
+          var t = r._regenerateMap;
+          if (t) {
+            var n = [],
+              i = {};
+            return (
+              Object.keys(t).forEach(function(e) {
+                var r = t[e]();
+                n.push(r), (i[e] = r);
+              }),
+              void r.applyResult({
+                errors: n,
+                failedRules: i,
+                regenerateMap: t,
+              })
+            );
+          }
+          r.validate();
+        }
+      }
+      var r = this;
+      xe.$on('change:locale', e),
+        this.$on('hook:beforeDestroy', function() {
+          xe.$off('change:locale', e);
+        });
+    },
+    render: function(e) {
+      var t = this;
+      this.registerField();
+      var r = Ke(this, Ye(this));
+      return (
+        Ce(r).forEach(function(e) {
+          var r = Oe().useConstraintAttrs ? Ge(e) : {};
+          R(t._resolvedRules, r) || (t._needsValidation = !0),
+            (t._resolvedRules = r),
+            (function(e, r) {
+              var t,
+                n = Pe(r);
+              (e._inputEventName = e._inputEventName || Ue(r, Be(r))),
+                Je(e, null === (t = n) || void 0 === t ? void 0 : t.value);
+              var i = Xe(e),
+                a = i.onInput,
+                s = i.onBlur,
+                u = i.onValidate;
+              He(r, e._inputEventName, a),
+                He(r, 'blur', s),
+                e.normalizedEvents.forEach(function(e) {
+                  He(r, e, u);
+                }),
+                (e.initialized = !0);
+            })(t, e);
+        }),
+        this.slim && r.length <= 1 ? r[0] : e(this.tag, r)
+      );
+    },
+    beforeDestroy: function() {
+      this.$_veeObserver.unsubscribe(this.id);
+    },
+    activated: function() {
+      this.isActive = !0;
+    },
+    deactivated: function() {
+      this.isActive = !1;
+    },
+    methods: {
+      setFlags: function(r) {
+        var t = this;
+        Object.keys(r).forEach(function(e) {
+          t.flags[e] = r[e];
+        });
+      },
+      syncValue: function(e) {
+        var r = Me(e);
+        (this.value = r), (this.flags.changed = this.initialValue !== r);
+      },
+      reset: function() {
+        (this.errors = []), (this.initialValue = this.value);
+        var e = V();
+        (e.required = this.isRequired), this.setFlags(e), this.validateSilent();
+      },
+      validate: function() {
+        for (var t = [], e = 0; e < arguments.length; e++) t[e] = arguments[e];
+        return he(this, void 0, void 0, function() {
+          var r;
+          return me(this, function(e) {
+            switch (e.label) {
+              case 0:
+                return (
+                  0 < t.length && this.syncValue(t[0]),
+                  [4, this.validateSilent()]
+                );
+              case 1:
+                return (r = e.sent()), this.applyResult(r), [2, r];
             }
-        },
-        props: {
-            vid: {
-                type: String,
-                default: ''
-            },
-            name: {
-                type: String,
-                default: null
-            },
-            mode: {
-                type: [String, Function],
-                default: function () {
-                    return getConfig().mode;
-                }
-            },
-            rules: {
-                type: [Object, String],
-                default: null
-            },
-            immediate: {
-                type: Boolean,
-                default: false
-            },
-            bails: {
-                type: Boolean,
-                default: function () { return getConfig().bails; }
-            },
-            skipIfEmpty: {
-                type: Boolean,
-                default: function () { return getConfig().skipOptional; }
-            },
-            debounce: {
-                type: Number,
-                default: 0
-            },
-            tag: {
-                type: String,
-                default: 'span'
-            },
-            slim: {
-                type: Boolean,
-                default: false
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            },
-            customMessages: {
-                type: Object,
-                default: function () {
-                    return {};
-                }
+          });
+        });
+      },
+      validateSilent: function() {
+        return he(this, void 0, void 0, function() {
+          var n, i;
+          return me(this, function(e) {
+            switch (e.label) {
+              case 0:
+                return (
+                  this.setFlags({ pending: !0 }),
+                  (n = ve(ve({}, this._resolvedRules), this.normalizedRules)),
+                  Object.defineProperty(n, '_$$isNormalized', {
+                    value: !0,
+                    writable: !1,
+                    enumerable: !1,
+                    configurable: !1,
+                  }),
+                  [
+                    4,
+                    Fe(
+                      this.value,
+                      n,
+                      ve(
+                        ve(
+                          { name: this.name },
+                          ((r = this),
+                          (t = r.$_veeObserver.refs),
+                          r.fieldDeps.reduce(
+                            function(e, r) {
+                              return (
+                                t[r] &&
+                                  ((e.values[r] = t[r].value),
+                                  (e.names[r] = t[r].name)),
+                                e
+                              );
+                            },
+                            { names: {}, values: {} }
+                          ))
+                        ),
+                        {
+                          bails: this.bails,
+                          skipIfEmpty: this.skipIfEmpty,
+                          isInitial: !this.initialized,
+                          customMessages: this.customMessages,
+                        }
+                      )
+                    ),
+                  ]
+                );
+              case 1:
+                return (
+                  (i = e.sent()),
+                  this.setFlags({
+                    pending: !1,
+                    valid: i.valid,
+                    invalid: !i.valid,
+                  }),
+                  [2, i]
+                );
             }
+            var r, t;
+          });
+        });
+      },
+      setErrors: function(e) {
+        this.applyResult({ errors: e, failedRules: {} });
+      },
+      applyResult: function(e) {
+        var r = e.errors,
+          t = e.failedRules,
+          n = e.regenerateMap;
+        (this.errors = r),
+          (this._regenerateMap = n),
+          (this.failedRules = ve({}, t || {})),
+          this.setFlags({
+            valid: !r.length,
+            passed: !r.length,
+            invalid: !!r.length,
+            failed: !!r.length,
+            validated: !0,
+            changed: this.value !== this.initialValue,
+          });
+      },
+      registerField: function() {
+        !(function(e) {
+          var r = (function(e) {
+              if (e.vid) return e.vid;
+              if (e.name) return e.name;
+              if (e.id) return e.id;
+              return '_vee_' + ++er;
+            })(e),
+            t = e.id;
+          if (!e.isActive || (t === r && e.$_veeObserver.refs[t])) return;
+          t !== r &&
+            e.$_veeObserver.refs[t] === e &&
+            e.$_veeObserver.unsubscribe(t);
+          (e.id = r), e.$_veeObserver.subscribe(e);
+        })(this);
+      },
+    },
+  });
+  var tr = [
+      ['pristine', 'every'],
+      ['dirty', 'some'],
+      ['touched', 'some'],
+      ['untouched', 'every'],
+      ['valid', 'every'],
+      ['invalid', 'some'],
+      ['pending', 'some'],
+      ['validated', 'every'],
+      ['changed', 'some'],
+      ['passed', 'every'],
+      ['failed', 'some'],
+    ],
+    nr = 0;
+  var ir = r.extend({
+    name: 'ValidationObserver',
+    provide: function() {
+      return { $_veeObserver: this };
+    },
+    inject: {
+      $_veeObserver: {
+        from: '$_veeObserver',
+        default: function() {
+          return this.$vnode.context.$_veeObserver
+            ? this.$vnode.context.$_veeObserver
+            : null;
         },
-        watch: {
-            rules: {
-                deep: true,
-                handler: function (val, oldVal) {
-                    this._needsValidation = !isEqual(val, oldVal);
-                }
-            }
+      },
+    },
+    props: {
+      tag: { type: String, default: 'span' },
+      vid: {
+        type: String,
+        default: function() {
+          return 'obs_' + nr++;
         },
-        data: data,
-        computed: {
-            fieldDeps: function () {
-                var _this = this;
-                return Object.keys(this.normalizedRules).reduce(function (acc, rule) {
-                    var deps = extractLocators(_this.normalizedRules[rule]).map(function (dep) { return dep.__locatorRef; });
-                    acc.push.apply(acc, deps);
-                    deps.forEach(function (depName) {
-                        watchCrossFieldDep(_this, depName);
-                    });
-                    return acc;
-                }, []);
-            },
-            normalizedEvents: function () {
-                var _this = this;
-                var on = computeModeSetting(this).on;
-                return (on || []).map(function (e) {
-                    if (e === 'input') {
-                        return _this._inputEventName;
-                    }
+      },
+      slim: { type: Boolean, default: !1 },
+      disabled: { type: Boolean, default: !1 },
+    },
+    data: function() {
+      return { id: '', refs: {}, observers: [], errors: {}, flags: {} };
+    },
+    created: function() {
+      var s = this;
+      (this.id = this.vid), sr(this);
+      var e = F(function(e) {
+        var r = e.errors,
+          t = e.flags;
+        (s.errors = r), (s.flags = t);
+      }, 16);
+      this.$watch(function() {
+        for (
+          var n = pe(z(s.refs), s.observers),
+            e = {},
+            i = {},
+            r = n.length,
+            t = 0;
+          t < r;
+          t++
+        ) {
+          var a = n[t];
+          e[a.id] = a.errors;
+        }
+        return (
+          tr.forEach(function(e) {
+            var r = e[0],
+              t = e[1];
+            i[r] = n[t](function(e) {
+              return e.flags[r];
+            });
+          }),
+          { errors: e, flags: i }
+        );
+      }, e);
+    },
+    activated: function() {
+      sr(this);
+    },
+    deactivated: function() {
+      ar(this);
+    },
+    beforeDestroy: function() {
+      ar(this);
+    },
+    render: function(e) {
+      var r,
+        t = Ke(
+          this,
+          ve(ve({}, (r = this).flags), {
+            errors: r.errors,
+            validate: r.validate,
+            passes: r.handleSubmit,
+            handleSubmit: r.handleSubmit,
+            reset: r.reset,
+          })
+        );
+      return this.slim && t.length <= 1
+        ? t[0]
+        : e(this.tag, { on: this.$listeners }, t);
+    },
+    methods: {
+      subscribe: function(e, r) {
+        var t;
+        void 0 === r && (r = 'provider'),
+          'observer' !== r
+            ? (this.refs = ve(ve({}, this.refs), (((t = {})[e.id] = e), t)))
+            : this.observers.push(e);
+      },
+      unsubscribe: function(r, e) {
+        if ((void 0 === e && (e = 'provider'), 'provider' !== e)) {
+          var t = j(this.observers, function(e) {
+            return e.id === r;
+          });
+          -1 !== t && this.observers.splice(t, 1);
+        } else {
+          if (!this.refs[r]) return;
+          this.$delete(this.refs, r);
+        }
+      },
+      validate: function(e) {
+        var r = (void 0 === e ? {} : e).silent,
+          t = void 0 !== r && r;
+        return he(this, void 0, void 0, function() {
+          return me(this, function(e) {
+            switch (e.label) {
+              case 0:
+                return [
+                  4,
+                  Promise.all(
+                    pe(
+                      z(this.refs)
+                        .filter(function(e) {
+                          return !e.disabled;
+                        })
+                        .map(function(e) {
+                          return e[t ? 'validateSilent' : 'validate']().then(
+                            function(e) {
+                              return e.valid;
+                            }
+                          );
+                        }),
+                      this.observers
+                        .filter(function(e) {
+                          return !e.disabled;
+                        })
+                        .map(function(e) {
+                          return e.validate({ silent: t });
+                        })
+                    )
+                  ),
+                ];
+              case 1:
+                return [
+                  2,
+                  e.sent().every(function(e) {
                     return e;
-                });
-            },
-            isRequired: function () {
-                var rules = __assign(__assign({}, this._resolvedRules), this.normalizedRules);
-                var isRequired = Object.keys(rules).some(RuleContainer.isRequireRule);
-                this.flags.required = !!isRequired;
-                return isRequired;
-            },
-            classes: function () {
-                var names = getConfig().classes;
-                return computeClassObj(names, this.flags);
-            },
-            normalizedRules: function () {
-                return normalizeRules(this.rules);
+                  }),
+                ];
             }
+          });
+        });
+      },
+      handleSubmit: function(r) {
+        return he(this, void 0, void 0, function() {
+          return me(this, function(e) {
+            switch (e.label) {
+              case 0:
+                return [4, this.validate()];
+              case 1:
+                return e.sent() && r ? [2, r()] : [2];
+            }
+          });
+        });
+      },
+      reset: function() {
+        return pe(z(this.refs), this.observers).forEach(function(e) {
+          return e.reset();
+        });
+      },
+      setErrors: function(t) {
+        var n = this;
+        Object.keys(t).forEach(function(e) {
+          var r = n.refs[e];
+          r && r.setErrors(t[e] || []);
+        }),
+          this.observers.forEach(function(e) {
+            e.setErrors(t);
+          });
+      },
+    },
+  });
+  function ar(e) {
+    e.$_veeObserver && e.$_veeObserver.unsubscribe(e.id, 'observer');
+  }
+  function sr(e) {
+    e.$_veeObserver && e.$_veeObserver.subscribe(e, 'observer');
+  }
+  Object.keys(fe)
+    .map(function(e) {
+      return { schema: fe[e], name: e };
+    })
+    .forEach(function(e) {
+      _e(e.name, e.schema);
+    }),
+    Te('en', t),
+    (e.Rules = fe),
+    (e.ValidationObserver = ir),
+    (e.ValidationProvider = rr),
+    (e.configure = function(e) {
+      Ae(e);
+    }),
+    (e.extend = _e),
+    (e.localeChanged = Ze),
+    (e.localize = Te),
+    (e.normalizeRules = ze),
+    (e.setInteractionMode = function(e, r) {
+      if ((Ae({ mode: e }), r)) {
+        if (!E(r)) throw new Error('A mode implementation must be a function');
+        Se[e] = r;
+      }
+    }),
+    (e.validate = Fe),
+    (e.version = '3.1.3'),
+    (e.withValidation = function(e, m) {
+      var r, t;
+      void 0 === m && (m = N);
+      var p = 'options' in e ? e.options : e,
+        n = rr.options,
+        i = {
+          name: (p.name || 'AnonymousHoc') + 'WithValidation',
+          props: ve({}, n.props),
+          data: n.data,
+          computed: ve({}, n.computed),
+          methods: ve({}, n.methods),
+          beforeDestroy: n.beforeDestroy,
+          inject: n.inject,
         },
-        created: function () {
-            var _this = this;
-            var onLocaleChanged = function () {
-                if (!_this.flags.validated) {
-                    return;
-                }
-                var regenerateMap = _this._regenerateMap;
-                if (regenerateMap) {
-                    var errors_1 = [];
-                    var failedRules_1 = {};
-                    Object.keys(regenerateMap).forEach(function (rule) {
-                        var msg = regenerateMap[rule]();
-                        errors_1.push(msg);
-                        failedRules_1[rule] = msg;
-                    });
-                    _this.applyResult({ errors: errors_1, failedRules: failedRules_1, regenerateMap: regenerateMap });
-                    return;
-                }
-                _this.validate();
-            };
-            EVENT_BUS.$on('change:locale', onLocaleChanged);
-            this.$on('hook:beforeDestroy', function () {
-                EVENT_BUS.$off('change:locale', onLocaleChanged);
+        g =
+          (null === (t = null === (r = p) || void 0 === r ? void 0 : r.model) ||
+          void 0 === t
+            ? void 0
+            : t.event) || 'input';
+      return (
+        (i.render = function(e) {
+          var r, t, n;
+          this.registerField();
+          var i = Ye(this),
+            a = ve({}, this.$listeners),
+            s = Be(this.$vnode);
+          (this._inputEventName = this._inputEventName || Ue(this.$vnode, s)),
+            Je(
+              this,
+              null === (t = Pe(this.$vnode)) || void 0 === t ? void 0 : t.value
+            );
+          var u = Xe(this),
+            o = u.onInput,
+            l = u.onBlur,
+            c = u.onValidate;
+          We(a, g, o),
+            We(a, 'blur', l),
+            this.normalizedEvents.forEach(function(e) {
+              We(a, e, c);
             });
-        },
-        render: function (h) {
-            var _this = this;
-            this.registerField();
-            var ctx = createValidationCtx(this);
-            var children = normalizeChildren(this, ctx);
-            // Handle single-root slot.
-            extractVNodes(children).forEach(function (input) {
-                // resolved rules are not reactive because it has a new reference each time.
-                // causing infinite render-loops.
-                // So we are comparing them manually to decide if we need to validate or not.
-                var resolved = getConfig().useConstraintAttrs ? resolveRules(input) : {};
-                if (!isEqual(_this._resolvedRules, resolved)) {
-                    _this._needsValidation = true;
-                }
-                _this._resolvedRules = resolved;
-                addListeners(_this, input);
-            });
-            return this.slim && children.length <= 1 ? children[0] : h(this.tag, children);
-        },
-        beforeDestroy: function () {
-            // cleanup reference.
-            this.$_veeObserver.unsubscribe(this.id);
-        },
-        activated: function () {
-            this.isActive = true;
-        },
-        deactivated: function () {
-            this.isActive = false;
-        },
-        methods: {
-            setFlags: function (flags) {
-                var _this = this;
-                Object.keys(flags).forEach(function (flag) {
-                    _this.flags[flag] = flags[flag];
-                });
-            },
-            syncValue: function (v) {
-                var value = normalizeEventValue(v);
-                this.value = value;
-                this.flags.changed = this.initialValue !== value;
-            },
-            reset: function () {
-                this.errors = [];
-                this.initialValue = this.value;
-                var flags = createFlags();
-                flags.required = this.isRequired;
-                this.setFlags(flags);
-                this.validateSilent();
-            },
-            validate: function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                return __awaiter(this, void 0, void 0, function () {
-                    var result;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                if (args.length > 0) {
-                                    this.syncValue(args[0]);
-                                }
-                                return [4 /*yield*/, this.validateSilent()];
-                            case 1:
-                                result = _a.sent();
-                                this.applyResult(result);
-                                return [2 /*return*/, result];
-                        }
-                    });
-                });
-            },
-            validateSilent: function () {
-                return __awaiter(this, void 0, void 0, function () {
-                    var rules, result;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                this.setFlags({ pending: true });
-                                rules = __assign(__assign({}, this._resolvedRules), this.normalizedRules);
-                                Object.defineProperty(rules, '_$$isNormalized', {
-                                    value: true,
-                                    writable: false,
-                                    enumerable: false,
-                                    configurable: false
-                                });
-                                return [4 /*yield*/, validate(this.value, rules, __assign(__assign({ name: this.name }, createLookup(this)), { bails: this.bails, skipIfEmpty: this.skipIfEmpty, isInitial: !this.initialized, customMessages: this.customMessages }))];
-                            case 1:
-                                result = _a.sent();
-                                this.setFlags({
-                                    pending: false,
-                                    valid: result.valid,
-                                    invalid: !result.valid
-                                });
-                                return [2 /*return*/, result];
-                        }
-                    });
-                });
-            },
-            setErrors: function (errors) {
-                this.applyResult({ errors: errors, failedRules: {} });
-            },
-            applyResult: function (_a) {
-                var errors = _a.errors, failedRules = _a.failedRules, regenerateMap = _a.regenerateMap;
-                this.errors = errors;
-                this._regenerateMap = regenerateMap;
-                this.failedRules = __assign({}, (failedRules || {}));
-                this.setFlags({
-                    valid: !errors.length,
-                    passed: !errors.length,
-                    invalid: !!errors.length,
-                    failed: !!errors.length,
-                    validated: true,
-                    changed: this.value !== this.initialValue
-                });
-            },
-            registerField: function () {
-                updateRenderingContextRefs(this);
-            }
-        }
-    });
-    function computeClassObj(names, flags) {
-        var acc = {};
-        var keys = Object.keys(flags);
-        var length = keys.length;
-        var _loop_1 = function (i) {
-            var flag = keys[i];
-            var className = (names && names[flag]) || flag;
-            var value = flags[flag];
-            if (isNullOrUndefined(value)) {
-                return "continue";
-            }
-            if ((flag === 'valid' || flag === 'invalid') && !flags.validated) {
-                return "continue";
-            }
-            if (typeof className === 'string') {
-                acc[className] = value;
-            }
-            else if (Array.isArray(className)) {
-                className.forEach(function (cls) {
-                    acc[cls] = value;
-                });
-            }
-        };
-        for (var i = 0; i < length; i++) {
-            _loop_1(i);
-        }
-        return acc;
-    }
-    function createLookup(vm) {
-        var providers = vm.$_veeObserver.refs;
-        var reduced = {
-            names: {},
-            values: {}
-        };
-        return vm.fieldDeps.reduce(function (acc, depName) {
-            if (!providers[depName]) {
-                return acc;
-            }
-            acc.values[depName] = providers[depName].value;
-            acc.names[depName] = providers[depName].name;
-            return acc;
-        }, reduced);
-    }
-    function extractId(vm) {
-        if (vm.vid) {
-            return vm.vid;
-        }
-        if (vm.name) {
-            return vm.name;
-        }
-        if (vm.id) {
-            return vm.id;
-        }
-        PROVIDER_COUNTER++;
-        return "_vee_" + PROVIDER_COUNTER;
-    }
-    function updateRenderingContextRefs(vm) {
-        var providedId = extractId(vm);
-        var id = vm.id;
-        // Nothing has changed.
-        if (!vm.isActive || (id === providedId && vm.$_veeObserver.refs[id])) {
-            return;
-        }
-        // vid was changed.
-        if (id !== providedId && vm.$_veeObserver.refs[id] === vm) {
-            vm.$_veeObserver.unsubscribe(id);
-        }
-        vm.id = providedId;
-        vm.$_veeObserver.subscribe(vm);
-    }
-    function createObserver() {
-        return {
-            refs: {},
-            subscribe: function (vm) {
-                this.refs[vm.id] = vm;
-            },
-            unsubscribe: function (id) {
-                delete this.refs[id];
-            }
-        };
-    }
-    function watchCrossFieldDep(ctx, depName, withHooks) {
-        if (withHooks === void 0) { withHooks = true; }
-        var providers = ctx.$_veeObserver.refs;
-        if (!ctx._veeWatchers) {
-            ctx._veeWatchers = {};
-        }
-        if (!providers[depName] && withHooks) {
-            return ctx.$once('hook:mounted', function () {
-                watchCrossFieldDep(ctx, depName, false);
-            });
-        }
-        if (!isCallable(ctx._veeWatchers[depName]) && providers[depName]) {
-            ctx._veeWatchers[depName] = providers[depName].$watch('value', function () {
-                if (ctx.flags.validated) {
-                    ctx._needsValidation = true;
-                    ctx.validate();
-                }
-            });
-        }
-    }
-
-    var FLAGS_STRATEGIES = [
-        ['pristine', 'every'],
-        ['dirty', 'some'],
-        ['touched', 'some'],
-        ['untouched', 'every'],
-        ['valid', 'every'],
-        ['invalid', 'some'],
-        ['pending', 'some'],
-        ['validated', 'every'],
-        ['changed', 'some'],
-        ['passed', 'every'],
-        ['failed', 'some']
-    ];
-    var OBSERVER_COUNTER = 0;
-    function data$1() {
-        var refs = {};
-        var errors = {};
-        var flags = {};
-        // FIXME: Not sure of this one can be typed, circular type reference.
-        var observers = [];
-        return {
-            id: '',
-            refs: refs,
-            observers: observers,
-            errors: errors,
-            flags: flags
-        };
-    }
-    function provideSelf() {
-        return {
-            $_veeObserver: this
-        };
-    }
-    var ValidationObserver = Vue.extend({
-        name: 'ValidationObserver',
-        provide: provideSelf,
-        inject: {
-            $_veeObserver: {
-                from: '$_veeObserver',
-                default: function () {
-                    if (!this.$vnode.context.$_veeObserver) {
-                        return null;
-                    }
-                    return this.$vnode.context.$_veeObserver;
-                }
-            }
-        },
-        props: {
-            tag: {
-                type: String,
-                default: 'span'
-            },
-            vid: {
-                type: String,
-                default: function () {
-                    return "obs_" + OBSERVER_COUNTER++;
-                }
-            },
-            slim: {
-                type: Boolean,
-                default: false
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            }
-        },
-        data: data$1,
-        created: function () {
-            var _this = this;
-            this.id = this.vid;
-            register(this);
-            var onChange = debounce(function (_a) {
-                var errors = _a.errors, flags = _a.flags;
-                _this.errors = errors;
-                _this.flags = flags;
-            }, 16);
-            this.$watch(function () {
-                var vms = __spreadArrays(values(_this.refs), _this.observers);
-                var errors = {};
-                var flags = {};
-                var length = vms.length;
-                for (var i = 0; i < length; i++) {
-                    var vm = vms[i];
-                    errors[vm.id] = vm.errors;
-                }
-                FLAGS_STRATEGIES.forEach(function (_a) {
-                    var flag = _a[0], method = _a[1];
-                    flags[flag] = vms[method](function (vm) { return vm.flags[flag]; });
-                });
-                return { errors: errors, flags: flags };
-            }, onChange);
-        },
-        activated: function () {
-            register(this);
-        },
-        deactivated: function () {
-            unregister(this);
-        },
-        beforeDestroy: function () {
-            unregister(this);
-        },
-        render: function (h) {
-            var children = normalizeChildren(this, prepareSlotProps(this));
-            return this.slim && children.length <= 1 ? children[0] : h(this.tag, { on: this.$listeners }, children);
-        },
-        methods: {
-            subscribe: function (subscriber, kind) {
-                var _a;
-                if (kind === void 0) { kind = 'provider'; }
-                if (kind === 'observer') {
-                    this.observers.push(subscriber);
-                    return;
-                }
-                this.refs = __assign(__assign({}, this.refs), (_a = {}, _a[subscriber.id] = subscriber, _a));
-            },
-            unsubscribe: function (id, kind) {
-                if (kind === void 0) { kind = 'provider'; }
-                if (kind === 'provider') {
-                    var provider = this.refs[id];
-                    if (!provider) {
-                        return;
-                    }
-                    this.$delete(this.refs, id);
-                    return;
-                }
-                var idx = findIndex(this.observers, function (o) { return o.id === id; });
-                if (idx !== -1) {
-                    this.observers.splice(idx, 1);
-                }
-            },
-            validate: function (_a) {
-                var _b = (_a === void 0 ? {} : _a).silent, silent = _b === void 0 ? false : _b;
-                return __awaiter(this, void 0, void 0, function () {
-                    var results;
-                    return __generator(this, function (_c) {
-                        switch (_c.label) {
-                            case 0: return [4 /*yield*/, Promise.all(__spreadArrays(values(this.refs)
-                                    .filter(function (r) { return !r.disabled; })
-                                    .map(function (ref) { return ref[silent ? 'validateSilent' : 'validate']().then(function (r) { return r.valid; }); }), this.observers.filter(function (o) { return !o.disabled; }).map(function (obs) { return obs.validate({ silent: silent }); })))];
-                            case 1:
-                                results = _c.sent();
-                                return [2 /*return*/, results.every(function (r) { return r; })];
-                        }
-                    });
-                });
-            },
-            handleSubmit: function (cb) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var isValid;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.validate()];
-                            case 1:
-                                isValid = _a.sent();
-                                if (!isValid || !cb) {
-                                    return [2 /*return*/];
-                                }
-                                return [2 /*return*/, cb()];
-                        }
-                    });
-                });
-            },
-            reset: function () {
-                return __spreadArrays(values(this.refs), this.observers).forEach(function (ref) { return ref.reset(); });
-            },
-            setErrors: function (errors) {
-                var _this = this;
-                Object.keys(errors).forEach(function (key) {
-                    var provider = _this.refs[key];
-                    if (!provider)
-                        return;
-                    provider.setErrors(errors[key] || []);
-                });
-                this.observers.forEach(function (observer) {
-                    observer.setErrors(errors);
-                });
-            }
-        }
-    });
-    function unregister(vm) {
-        if (vm.$_veeObserver) {
-            vm.$_veeObserver.unsubscribe(vm.id, 'observer');
-        }
-    }
-    function register(vm) {
-        if (vm.$_veeObserver) {
-            vm.$_veeObserver.subscribe(vm, 'observer');
-        }
-    }
-    function prepareSlotProps(vm) {
-        return __assign(__assign({}, vm.flags), { errors: vm.errors, validate: vm.validate, passes: vm.handleSubmit, handleSubmit: vm.handleSubmit, reset: vm.reset });
-    }
-
-    function withValidation(component, mapProps) {
-        if (mapProps === void 0) { mapProps = identity; }
-        var _a, _b;
-        var options = 'options' in component ? component.options : component;
-        var providerOpts = ValidationProvider.options;
-        var hoc = {
-            name: (options.name || 'AnonymousHoc') + "WithValidation",
-            props: __assign({}, providerOpts.props),
-            data: providerOpts.data,
-            computed: __assign({}, providerOpts.computed),
-            methods: __assign({}, providerOpts.methods),
-            beforeDestroy: providerOpts.beforeDestroy,
-            inject: providerOpts.inject
-        };
-        var eventName = ((_b = (_a = options) === null || _a === void 0 ? void 0 : _a.model) === null || _b === void 0 ? void 0 : _b.event) || 'input';
-        hoc.render = function (h) {
-            var _a;
-            var _b, _c;
-            this.registerField();
-            var vctx = createValidationCtx(this);
-            var listeners = __assign({}, this.$listeners);
-            var model = findModel(this.$vnode);
-            this._inputEventName = this._inputEventName || getInputEventName(this.$vnode, model);
-            var value = findValue(this.$vnode);
-            onRenderUpdate(this, (_b = value) === null || _b === void 0 ? void 0 : _b.value);
-            var _d = createCommonHandlers(this), onInput = _d.onInput, onBlur = _d.onBlur, onValidate = _d.onValidate;
-            mergeVNodeListeners(listeners, eventName, onInput);
-            mergeVNodeListeners(listeners, 'blur', onBlur);
-            this.normalizedEvents.forEach(function (evt) {
-                mergeVNodeListeners(listeners, evt, onValidate);
-            });
-            // Props are any attrs not associated with ValidationProvider Plus the model prop.
-            // WARNING: Accidental prop overwrite will probably happen.
-            var prop = (findModelConfig(this.$vnode) || { prop: 'value' }).prop;
-            var props = __assign(__assign(__assign({}, this.$attrs), (_a = {}, _a[prop] = (_c = model) === null || _c === void 0 ? void 0 : _c.value, _a)), mapProps(vctx));
-            return h(options, {
-                attrs: this.$attrs,
-                props: props,
-                on: listeners
-            }, normalizeSlots(this.$slots, this.$vnode.context));
-        };
-        return hoc;
-    }
-
-    var version = '3.1.3';
-
-    exports.ValidationObserver = ValidationObserver;
-    exports.ValidationProvider = ValidationProvider;
-    exports.configure = configure;
-    exports.extend = extend;
-    exports.localeChanged = localeChanged;
-    exports.localize = localize;
-    exports.normalizeRules = normalizeRules;
-    exports.setInteractionMode = setInteractionMode;
-    exports.validate = validate;
-    exports.version = version;
-    exports.withValidation = withValidation;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+          var d,
+            f,
+            v = (Le(this.$vnode) || { prop: 'value' }).prop,
+            h = ve(
+              ve(
+                ve({}, this.$attrs),
+                (((r = {})[v] =
+                  null === (n = s) || void 0 === n ? void 0 : n.value),
+                r)
+              ),
+              m(i)
+            );
+          return e(
+            p,
+            { attrs: this.$attrs, props: h, on: a },
+            ((d = this.$slots),
+            (f = this.$vnode.context),
+            Object.keys(d).reduce(function(e, r) {
+              return (
+                d[r].forEach(function(e) {
+                  e.context ||
+                    ((d[r].context = f),
+                    e.data || (e.data = {}),
+                    (e.data.slot = r));
+                }),
+                e.concat(d[r])
+              );
+            }, []))
+          );
+        }),
+        i
+      );
+    }),
+    Object.defineProperty(e, '__esModule', { value: !0 });
+});

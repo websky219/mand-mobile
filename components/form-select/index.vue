@@ -110,7 +110,9 @@ export default {
     onSelectorChoose(obj) {
       this.selectText = obj.text;
       this.selectValue = obj.value;
-      this.rootObj.current = obj;
+      if (this.rootObj) {
+        this.rootObj.current = obj;
+      }
     },
   },
 };

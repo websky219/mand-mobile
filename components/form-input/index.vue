@@ -1,14 +1,17 @@
 <template>
-  <md-field>
-    <md-form-item
-      ref="item"
-      v-for="(obj, index) of dataArr"
-      :special="obj"
-      :key="index + obj.key"
-      :objkey="obj.key"
-      :index="index"
-    ></md-form-item>
-  </md-field>
+  <component :is="vObserver">
+    <md-field>
+      <md-form-item
+        ref="item"
+        v-for="(obj, index) of dataArr"
+        :special="obj"
+        :key="index + obj.key"
+        :objkey="obj.key"
+        :index="index"
+        :componentName="vProvider"
+      ></md-form-item>
+    </md-field>
+  </component>
 </template>
 
 <script>
@@ -26,9 +29,15 @@ export default {
       dataArr: [],
       keyList: {},
       spe: this.special,
+      vProvider: 'div',
+      vObserver: 'div',
     };
   },
   props: {
+    usevee: {
+      type: Boolean,
+      default: true,
+    },
     special: {},
     objkey: {
       default: '',
@@ -43,6 +52,10 @@ export default {
     },
   },
   created() {
+    if (this.usevee) {
+      this.vObserver = 'validation-observer';
+      this.vProvider = 'validation-provider';
+    }
     console.log('createdspecial' + this.objkey);
     this.updateData();
   },

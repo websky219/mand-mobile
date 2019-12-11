@@ -1,5 +1,11 @@
 <template>
-  <component :is="componentName" v-show="spe.show" class="md-form-item">
+  <component
+    :is="componentName"
+    v-show="spe.show"
+    class="md-form-item"
+    v-slot="{ errors }"
+    v-bind="spe.cprop"
+  >
     <md-input-item
       v-if="spe.inputType == 'input' || !spe.inputType"
       solid
@@ -20,6 +26,11 @@
         </span>
         <span class="md-form-item-text">{{ spe.label }}</span>
       </div>
+      <span
+        slot="error"
+        v-if="errors && errors.length > 0"
+        v-text="errors[0]"
+      ></span>
       <span slot="right" v-if="spe.suffix">
         {{ spe.suffix }}
       </span>
