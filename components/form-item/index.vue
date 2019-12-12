@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="componentName"
+    :is="cName"
     v-show="spe.show"
     class="md-form-item"
     v-slot="{ errors }"
@@ -42,13 +42,10 @@
       :list="spe.list"
       :readonly="spe.readonly"
       :select-list="spe.selectList"
+      :root="spe"
+      :required="spe.required"
+      :label="spe.label"
     >
-      <div slot="left" class="md-form-item-left">
-        <span class="md-form-item-required" v-if="spe.required">
-          *
-        </span>
-        <span class="md-form-item-text">{{ spe.label }}</span>
-      </div>
       <span slot="right" v-if="spe.suffix">
         {{ spe.suffix }}
       </span>
@@ -61,25 +58,23 @@
       v-model="spe.value"
       :suffix="spe.suffix"
       :readonly="spe.readonly"
+      :label="spe.label"
+      :required="spe.required"
     >
-      <div slot="left" class="md-form-item-left">
-        <span class="md-form-item-required" v-if="spe.required">
-          *
-        </span>
-        <span class="md-form-item-text">{{ spe.label }}</span>
-      </div>
     </md-form-date>
     <md-form-city
       v-else-if="spe.inputType == 'addressInput'"
       v-model="spe.value"
       :root="spe"
       :plabel="spe.plabel"
+      :label="spe.label"
       :hasinput="spe.hasinput"
       :list="spe.list"
       :preadonly="spe.preadonly"
       :pvalue="spe.pvalue"
       :ivalue="spe.ivalue"
       :placeholder="spe.placeholder"
+      :required="spe.required"
       :readonly="spe.readonly"
     >
       <div slot="left" class="md-form-item-left">
@@ -112,6 +107,7 @@ export default {
       spe: this.special,
     };
   },
+  inject: ['usevee', 'module', 'parentShow'],
   methods: {
     selectTrack(spe) {
       if (spe.track) {
@@ -123,8 +119,29 @@ export default {
         };
       }
     },
+    isHidden(el) {
+      return el.offsetParent === null;
+    },
+  },
+  computed: {
+    cName() {
+      let tag = 'div';
+      console.log('item-show', this.spe.show, this.parentShow);
+      if (!this.spe.show || !this.parentShow) {
+        tag = 'div';
+      } else if (this.usevee) {
+        tag = 'validation-provider';
+      } else {
+        tag = 'div';
+      }
+      return tag;
+    },
   },
   props: {
+    usevee: {
+      type: Boolean,
+      default: true,
+    },
     componentName: {
       type: String,
       default: 'div',
@@ -132,10 +149,6 @@ export default {
     index: [Number, String],
     special: {},
     objkey: {
-      default: '',
-    },
-    module: {
-      type: String,
       default: '',
     },
   },

@@ -31,6 +31,10 @@ export default {
             type: String,
             default: '',
         },
+        required: {
+            type: Boolean,
+            default: false,
+        },
     },
     methods: {
         showSelector() {

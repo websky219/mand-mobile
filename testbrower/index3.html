@@ -12,9 +12,17 @@
 
 <body>
     <div id="app">
-        <md-form-input :special="form">
-
-        </md-form-input>
+        <validation-observer ref="form">
+            <md-form-input :show="formShow" :special="form">
+            </md-form-input>
+            <md-form-input :special="form">
+            </md-form-input>
+        </validation-observer>
+        <div class="md-example-section">
+            <md-button type="primary" icon="edit" @click="validate($event)" inline>验证</md-button>
+            <md-button type="primary" inline plain @click="heide1($event)">隐藏</md-button>
+            <md-button type="primary" inline plain @click="hideForm($event)">隐藏表单</md-button>
+        </div>
     </div>
 </body>
 <script src="./vue.js"></script>

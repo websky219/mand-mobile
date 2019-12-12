@@ -1,12 +1,14 @@
 <template>
-  <md-field-item
-    class="md-input-item"
-    :title="label"
-    :solid="solid"
-    :disabled="readonly"
-  >
+  <md-field-item class="md-input-item" :solid="solid" :disabled="readonly">
     <template slot="left">
-      <slot name="left"></slot>
+      <slot name="left">
+        <div class="md-form-item-left">
+          <span class="md-form-item-required" v-if="required">
+            *
+          </span>
+          <span class="md-form-item-text">{{ label }}</span>
+        </div>
+      </slot>
     </template>
     <p class="md-form-content" @click="showSelector" v-if="selectValue">
       {{ selectValue }}

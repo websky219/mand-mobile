@@ -1,14 +1,14 @@
 <template>
-  <component :is="vObserver">
+  <component :is="vObserver" v-show="show" tag="div" ref="form-group">
     <md-field>
       <md-form-item
-        ref="item"
         v-for="(obj, index) of dataArr"
         :special="obj"
         :key="index + obj.key"
         :objkey="obj.key"
         :index="index"
         :componentName="vProvider"
+        :usevee="usevee"
       ></md-form-item>
     </md-field>
   </component>
@@ -33,7 +33,22 @@ export default {
       vObserver: 'div',
     };
   },
+  provide() {
+    return {
+      usevee: this.usevee,
+      module: this.module,
+      parentShow: this.show,
+    };
+  },
   props: {
+    show: {
+      type: Boolean,
+      default: true,
+    },
+    module: {
+      type: String,
+      default: '',
+    },
     usevee: {
       type: Boolean,
       default: true,
@@ -60,6 +75,15 @@ export default {
     this.updateData();
   },
   watch: {
+    show(val) {
+      if (!val) {
+        this.vObserver = 'div';
+        this.vProvider = 'div';
+      } else if (this.usevee) {
+        this.vObserver = 'validation-observer';
+        this.vProvider = 'validation-provider';
+      }
+    },
     special(val) {
       console.log('wacspecial' + this.objkey, val);
       this.spe = val;

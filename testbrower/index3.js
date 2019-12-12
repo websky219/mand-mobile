@@ -5,6 +5,21 @@ var vm = new Vue({
     data() {
         return {
             form: base,
+            formShow: true,
         };
+    },
+    methods: {
+        validate($event) {
+            this.$refs.form.validate().then(re => {
+                console.log('验证结果', re);
+            });
+        },
+        heide1($event) {
+            this.form.applicant.certificationNo2.show = !this.form.applicant
+                .certificationNo2.show;
+        },
+        hideForm($event) {
+            this.formShow = !this.formShow;
+        },
     },
 });

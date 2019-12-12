@@ -30,7 +30,7 @@
         "create": "node build/component-init.js",
         "cz": "npx git-cz",
         "clean": "rm -rf ./lib && rm -rf ./lib-vw && rm -rf ./docs/examples",
-        "build": "npm run clean && npm run build:components && npm run build:mand-mobile && npm run build:responsive && grunt",
+        "build": "npm run clean && npm run build:components && npm run build:mand-mobile && npm run build:responsive",
         "build:site": "cd site && npm run generate && npm run build",
         "build:example": "cross-env NODE_ENV=production BUILD_TYPE=example node build/rollup/build-example.rollup",
         "build:mand-mobile": "npm run build:mand-mobile-esm && npm run build:mand-mobile-variables && grunt",

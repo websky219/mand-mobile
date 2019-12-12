@@ -2,7 +2,7 @@ let base = {
     applicant: {
         certificationNo: {
             cprop: {
-                rules: 'email',
+                rules: 'confirmed:card2',
                 tag: 'div',
                 name: '证件号码',
             },
@@ -17,6 +17,11 @@ let base = {
             suffix: '',
         },
         certificationNo2: {
+            cprop: {
+                vid: 'card2',
+                rules: 'required',
+                name: '证件号码2',
+            },
             show: true,
             inputType: 'input',
             path: 'certificationNo',

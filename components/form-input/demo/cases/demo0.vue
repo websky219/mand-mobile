@@ -1,7 +1,11 @@
 <template>
   <div class="md-example-child md-example-child-single-component">
     <md-field>
-      <md-form-input v-bind="{ objkey: 2131 }" :special="form"></md-form-input>
+      <md-form-input
+        :usevee="false"
+        v-bind="{ objkey: 2131 }"
+        :special="form"
+      ></md-form-input>
     </md-field>
   </div>
 </template>

@@ -42,7 +42,7 @@
       v-model="inputValue"
     >
       <template slot="left">
-        <slot name="left"></slot>
+        <slot name="left"> </slot>
       </template>
       <template slot="error">
         <div v-if="isInputError()" class="md-input-item-msg">
