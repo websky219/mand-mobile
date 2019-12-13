@@ -68,7 +68,8 @@ import FormSelect from './form-select';
 import FormDate from './form-date';
 import FormCity from './form-city';
 import FormItem from './form-item';
-/* @init<%import ${componentNameUpper} from './${componentName}'%> */
+import FormFn from './form-fn/index.js';
+import ItemWapper from './item-wapper'/* @init<%import ${componentNameUpper} from './${componentName}'%> */
 
 // Totally importing reminder
 warn(
@@ -145,7 +146,8 @@ export const components = {
     FormDate,
     FormCity,
     FormItem,
-    /* @init<%${componentNameUpper},%> */
+    FormFn,
+    ItemWapper,/* @init<%${componentNameUpper},%> */
 };
 
 // Define plugin installation method
@@ -243,7 +245,8 @@ export {
     FormDate,
     FormCity,
     FormItem,
-    /* @init<%${componentNameUpper},%> */
+    FormFn,
+    ItemWapper,/* @init<%${componentNameUpper},%> */
 };
 
 export default {

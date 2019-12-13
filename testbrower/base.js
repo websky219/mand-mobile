@@ -1,6 +1,6 @@
 let base = {
     applicant: {
-        certificationNo: {
+        name: {
             cprop: {
                 rules: 'confirmed:card2',
                 tag: 'div',
@@ -8,8 +8,8 @@ let base = {
             },
             show: true,
             inputType: 'input',
-            path: 'certificationNo',
-            label: '证件号码',
+            path: 'personName',
+            label: '姓名',
             value: '',
             readonly: false,
             placeholder: '',
@@ -25,7 +25,7 @@ let base = {
             show: true,
             inputType: 'input',
             path: 'certificationNo',
-            label: '证件号码',
+            label: '证件号码2',
             value: '',
             readonly: false,
             placeholder: '',

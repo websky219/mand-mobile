@@ -1,12 +1,6 @@
 <template>
   <div class="md-example-child md-example-child-single-component">
-    <md-field>
-      <md-form-input
-        :usevee="false"
-        v-bind="{ objkey: 2131 }"
-        :special="form"
-      ></md-form-input>
-    </md-field>
+    <md-form-input :usevee="false" :special="form"></md-form-input>
   </div>
 </template>
 
@@ -26,6 +20,7 @@ export default {
       form: {
         applicant: {
           personName: {
+            cprop: {},
             event: {
               name: 'blur',
               method: function(arg) {
@@ -48,7 +43,7 @@ export default {
             show: true,
             readonly: false,
             inputType: 'select',
-            value: '',
+            value: '1',
             list: [
               {
                 value: '1',
@@ -63,17 +58,6 @@ export default {
                 text: '护照',
               },
             ],
-          },
-          certificationNo: {
-            inputType: 'cardNoInput',
-            show: true,
-            label: '证件号码',
-            readonly: false,
-            rule: '',
-            length: '18',
-            required: true,
-            placeholder: '请输入投保人证件号码',
-            value: '',
           },
           passCode: {
             inputType: 'input',
@@ -90,15 +74,15 @@ export default {
           personBirthDate: {
             inputType: 'datetime',
             show: true,
-            label: '出生日期',
+            label: '出生日期1',
             rule: '',
             readonly: false,
             start: '',
             end: '',
             length: '20',
             required: true,
-            placeholder: '请输入投保人生日',
-            value: '',
+            placeholder: '请输1入投保人生日',
+            value: '2019-10-21',
           },
           mobilePhone: {
             inputType: 'input',
@@ -135,16 +119,8 @@ export default {
             placeholder: '请输入被保人姓名',
             value: '',
           },
-          certificationType: {
-            label: '证件类型',
-            show: true,
-            readonly: false,
-            inputType: 'cardTypeSelect',
-            value: '',
-            options: [],
-          },
           certificationNo: {
-            inputType: 'cardNoInput',
+            inputType: 'select',
             show: true,
             label: '证件号码',
             readonly: false,
@@ -167,7 +143,7 @@ export default {
             value: '',
           },
           personBirthDate: {
-            inputType: 'birthDay',
+            inputType: 'datetime',
             show: true,
             label: '出生日期',
             rule: '',

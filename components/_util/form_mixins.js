@@ -2,8 +2,8 @@ export default {
     data() {
         return {
             show: false,
-            selectValue: '',
-            selectText: '',
+            selectValue: null,
+            selectText: null,
         };
     },
     props: {

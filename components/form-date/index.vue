@@ -135,6 +135,7 @@ export default {
     this.$_initMin('minDate', this.min, -100);
     this.$_initMin('maxDate', this.max, 0);
     this.dfvalue = this.maxDate;
+    this.selectValue = this.value;
   },
   methods: {
     $_initMin(data, prop, num) {

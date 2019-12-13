@@ -53,24 +53,66 @@ function $createSpecialFn(
                 dataArr: [],
                 keyList: {},
                 spe: this.special,
-                [this.name]: this.special,
+                vProvider: 'md-item-wapper',
+                vObserver: 'div',
             };
         },
-        render: function(createElement) {
-            return createElement(
-                parentTag,
-                this._l(this.dataArr, function(t, e) {
-                    return createElement(itemTag, {
-                        key: e + t.key,
-                        ref: 'item',
-                        refInFor: !0,
-                        attrs: { special: t, objkey: t.key, index: e },
-                    });
-                }),
+        render: function(h) {
+            return h(
+                vObserver, {
+                    directives: [{
+                        name: 'show',
+                        rawName: 'v-show',
+                        value: show,
+                        expression: 'show',
+                    }, ],
+                    ref: 'form-group',
+                    tag: 'component',
+                    staticClass: 'md-form-group',
+                    attrs: {
+                        tag: 'div',
+                    },
+                }, [
+                    h(
+                        'md-field',
+                        this._l(dataArr, function(obj, index) {
+                            return h('md-form-item', {
+                                key: index + obj.key,
+                                attrs: {
+                                    special: obj,
+                                    objkey: obj.key,
+                                    index: index,
+                                    componentName: vProvider,
+                                    usevee: usevee,
+                                },
+                            });
+                        }),
+                        1
+                    ),
+                ],
                 1
             );
         },
+        provide() {
+            return {
+                usevee: this.usevee,
+                module: this.module,
+                parentShow: this.show,
+            };
+        },
         props: {
+            show: {
+                type: Boolean,
+                default: true,
+            },
+            module: {
+                type: String,
+                default: '',
+            },
+            usevee: {
+                type: Boolean,
+                default: true,
+            },
             special: {},
             objkey: {
                 default: '',
@@ -83,14 +125,25 @@ function $createSpecialFn(
                 type: String,
                 default: 'extend',
             },
-            index: { type: Number, default: -1 },
-            module: { type: String, default: '被保人' },
         },
         created() {
+            if (this.usevee) {
+                this.vObserver = 'validation-observer';
+                this.vProvider = 'validation-provider';
+            }
             console.log('createdspecial' + this.objkey);
             this.updateData();
         },
         watch: {
+            show(val) {
+                if (!val) {
+                    this.vObserver = 'div';
+                    this.vProvider = 'div';
+                } else if (this.usevee) {
+                    this.vObserver = 'validation-observer';
+                    this.vProvider = 'validation-provider';
+                }
+            },
             special(val) {
                 console.log('wacspecial' + this.objkey, val);
                 this.spe = val;

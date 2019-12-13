@@ -16,7 +16,7 @@
       </slot>
     </template>
     <template>
-      <p class="md-form-content" @click="showSelector" v-if="selectValue">
+      <p class="md-form-content" @click="showSelector" v-if="selectText">
         {{ selectText }}
       </p>
       <p class="md-form-content" @click="showSelector" v-else>
@@ -99,6 +99,7 @@ export default {
       for (const i of this.options) {
         if (i.value === this.value) {
           this.selectText = i.text;
+          console.log('s-text', this.selectText);
           break;
         }
       }
@@ -125,6 +126,8 @@ export default {
 </script>
 
 <style lang="stylus">
+.md-form-content
+  width 100%
 .md-form-select
   color color-gray-1
   -webkit-font-smoothing antialiased
@@ -132,4 +135,15 @@ export default {
   text-align center
   span
     font-style italic
+.md-form-item-left {
+  flex-shrink: 0;
+  width: 1.6rem;
+  display: flex;
+
+  .md-form-item-required {
+    color: red;
+    display: flex;
+    align-items: center;
+  }
+}
 </style>

@@ -1,5 +1,11 @@
 <template>
-  <component :is="vObserver" v-show="show" tag="div" ref="form-group">
+  <component
+    class="md-form-group"
+    :is="vObserver"
+    v-show="show"
+    tag="div"
+    ref="form-group"
+  >
     <md-field>
       <md-form-item
         v-for="(obj, index) of dataArr"
@@ -133,3 +139,11 @@ export default {
   },
 };
 </script>
+<style lang="stylus">
+.md-form-group
+  .md-field-item
+    .md-field-item-control
+      font-weight 500
+  .md-input-item-msg
+    text-align end
+</style>

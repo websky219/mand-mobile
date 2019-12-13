@@ -19,6 +19,7 @@ var vm = new Vue({
                 .certificationNo2.show;
         },
         hideForm($event) {
+            console.log('tag-this', this);
             this.formShow = !this.formShow;
         },
     },

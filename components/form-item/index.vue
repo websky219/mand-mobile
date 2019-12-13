@@ -84,6 +84,11 @@
         <span class="md-form-item-text">{{ spe.label }}</span>
       </div>
     </md-form-city>
+    <md-form-fn
+      v-else-if="spe.render"
+      :errors="errors"
+      v-bind="spe"
+    ></md-form-fn>
   </component>
 </template>
 
@@ -93,6 +98,9 @@ import InputItem from '../input-item';
 import FormCity from '../form-city';
 import FormDate from '../form-date';
 import FieldSelect from '../form-select';
+import FormFn from '../form-fn/index.js';
+import ItemWapper from '../item-wapper';
+
 export default {
   name: 'md-form-item',
   components: {
@@ -101,6 +109,8 @@ export default {
     [FormCity.name]: FormCity,
     [FormDate.name]: FormDate,
     [FieldSelect.name]: FieldSelect,
+    [FormFn.name]: FormFn,
+    [ItemWapper.name]: ItemWapper,
   },
   data() {
     return {
@@ -125,14 +135,14 @@ export default {
   },
   computed: {
     cName() {
-      let tag = 'div';
+      let tag = 'md-item-wapper';
       console.log('item-show', this.spe.show, this.parentShow);
       if (!this.spe.show || !this.parentShow) {
-        tag = 'div';
+        tag = 'md-item-wapper';
       } else if (this.usevee) {
         tag = 'validation-provider';
       } else {
-        tag = 'div';
+        tag = 'md-item-wapper';
       }
       return tag;
     },
