@@ -1,5 +1,6 @@
 Vue.component('validation-provider', VeeValidate.ValidationProvider);
 Vue.component('validation-observer', VeeValidate.ValidationObserver);
+$createSpecialFn('md-form-per', mixinsArr);
 var vm = new Vue({
     el: '#app',
     data() {
