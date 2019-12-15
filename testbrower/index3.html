@@ -13,10 +13,15 @@
 <body>
     <div id="app">
         <validation-observer ref="form">
-            <md-form-input :show="formShow" :usevee="false" :special="form">
+            <!-- <md-form-input :show="formShow" :usevee="false" :special="form">
             </md-form-input>
             <md-form-input :special="form">
-            </md-form-input>
+            </md-form-input> -->
+
+            <h5>表单</h5>
+            <md-form-per :special="form.applicant">
+
+            </md-form-per>
         </validation-observer>
         <div class="md-example-section">
             <md-button type="primary" icon="edit" @click="validate($event)" inline>验证</md-button>

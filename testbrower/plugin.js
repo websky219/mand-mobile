@@ -59,11 +59,11 @@ function $createSpecialFn(
         },
         render: function(h) {
             return h(
-                vObserver, {
+                this.vObserver, {
                     directives: [{
                         name: 'show',
                         rawName: 'v-show',
-                        value: show,
+                        value: this.show,
                         expression: 'show',
                     }, ],
                     ref: 'form-group',
@@ -75,15 +75,15 @@ function $createSpecialFn(
                 }, [
                     h(
                         'md-field',
-                        this._l(dataArr, function(obj, index) {
+                        this._l(this.dataArr, function(obj, index) {
                             return h('md-form-item', {
                                 key: index + obj.key,
                                 attrs: {
                                     special: obj,
                                     objkey: obj.key,
                                     index: index,
-                                    componentName: vProvider,
-                                    usevee: usevee,
+                                    componentName: this.vProvider,
+                                    usevee: this.usevee,
                                 },
                             });
                         }),
