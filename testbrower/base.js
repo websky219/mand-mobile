@@ -1,8 +1,9 @@
 let base = {
+    sameTB: false,
     applicant: {
         name: {
             cprop: {
-                rules: 'confirmed:card2',
+                rules: '',
                 tag: 'div',
                 name: '证件号码',
             },
@@ -18,14 +19,46 @@ let base = {
         },
         card: {
             cprop: {
-                vid: 'card2',
-                rules: 'required',
+                rules: 'calper:@card,@birthday,@shebao,@parent',
                 name: '证件号码',
+                vid: 'card',
             },
             show: true,
             inputType: 'input',
             path: 'certificationNo',
             label: '证件号码',
+            value: '',
+            readonly: false,
+            placeholder: '',
+            required: true,
+            suffix: '',
+        },
+        birthday: {
+            cprop: {
+                rules: 'calper:@card,@birthday,@shebao,@parent',
+                name: '出生日期',
+                vid: 'birthday',
+            },
+            show: true,
+            inputType: 'datetime',
+            path: 'certificationNo',
+            label: '出生日期',
+            value: '',
+            readonly: false,
+            placeholder: '',
+            required: true,
+            suffix: '',
+        },
+        shebao: {
+            cprop: {
+                rules: 'calper:@card,@birthday,@shebao,@parent',
+                name: '社保',
+                vid: 'shebao',
+            },
+            show: true,
+            inputType: 'input',
+            path: 'certificationNo',
+            label: '社保',
             value: '',
             readonly: false,
             placeholder: '',
@@ -78,7 +111,7 @@ let base = {
     insured: [{
             name: {
                 cprop: {
-                    rules: 'confirmed:card2',
+                    rules: '',
                     tag: 'div',
                     name: '证件号码',
                 },

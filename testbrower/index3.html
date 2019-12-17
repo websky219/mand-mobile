@@ -6,35 +6,68 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./reset.css">
-    <link rel="stylesheet" href="../lib/mand-mobile.rem.css">
+    <link rel="stylesheet" href="../dest/mand-mobile.rem.css">
     <script src="./flexible.debug.js"></script>
 </head>
 
 <body>
     <div id="app">
         <validation-observer ref="form">
-            <!-- <md-form-input :show="formShow" :usevee="false" :special="form">
-            </md-form-input>
-            <md-form-input :special="form">
-            </md-form-input> -->
+            <md-field>
+                <md-cell-item>
+                    <div style="display: flex;" class="md-edit-left" slot="left">
+                        <md-icon name="edit"></md-icon>
+                    </div>
+                    <span> <strong>投保人信息</strong></span>
+                </md-cell-item>
+                <md-form-per :special="form.applicant">
 
-            <h5>表单</h5>
-            <md-form-per :special="form.applicant">
+                </md-form-per>
+                <md-cell-item>
+                    <div style="display: flex;" class="md-edit-left" slot="left">
+                        <md-icon name="edit"></md-icon>
+                    </div>
 
-            </md-form-per>
+                    <span> <strong>被保人信息</strong></span>
+                </md-cell-item>
+                <md-cell-item title="同投保人">
+                    <md-switch slot="right" v-model="form.sameTB" />
+                </md-cell-item>
+                <div v-show="isShow(index)" v-for="(item,index) of form.insured" :key="index">
+                    <md-cell-item :title="'被保人'+(index+1)">
+                        <md-icon @click="removePerson(index,form.insured)" color="red" v-if="index>0" slot="right" name='delete' />
+                    </md-cell-item>
+                    <md-form-per :show="isShow(index)" :special="item">
+                    </md-form-per>
+                </div>
+                <div>
+                    <md-button type="primary" icon='edit' plain>添加被保人</md-button>
+                </div>
+                <!-- <div class="md-example-section">
+                    <md-button type="primary" icon="edit" @click="validate($event)" inline>验证</md-button>
+                    <md-button type="primary" inline plain @click="heide1($event)">隐藏</md-button>
+                    <md-button type="primary" inline plain @click="hideForm($event)">隐藏表单</md-button>
+                </div> -->
+                <div style="height: 100px;"></div>
+                <md-action-bar :actions="data" @click="validate($event)">
+                    <span class="price" style="font-size:0.5rem">
+                        &yen;128.00<small>起</small>
+                    </span>
+                </md-action-bar>
+            </md-field>
         </validation-observer>
-        <div class="md-example-section">
-            <md-button type="primary" icon="edit" @click="validate($event)" inline>验证</md-button>
-            <md-button type="primary" inline plain @click="heide1($event)">隐藏</md-button>
-            <md-button type="primary" inline plain @click="hideForm($event)">隐藏表单</md-button>
-        </div>
+
     </div>
 </body>
 <script src="./vue.js"></script>
-<script src="../lib/mand-mobile.umd.js"></script>
+<script src="../dest/mand-mobile.umd.js"></script>
+
+<script src="./vee3/vee-validate.js"></script>
+<script src="./vee3/rules.js"></script>
+<script src="./vee3/zh_CN.msg.js"></script>
+<!-- <script src="./vee3/vee-validate.full.js"></script> -->
 <script src="./plugin.js"></script>
 <script src="./perMixins.js"></script>
-<script src="./vee3/vee-validate.js"></script>
 <script src="./base.js"></script>
 <script src="./index3.js"></script>
 

@@ -41,6 +41,7 @@ module.exports = function(grunt) {
     'use strict';
 
     grunt.loadNpmTasks('grunt-postcss');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     // Project configuration.
     grunt.initConfig({
         postcss: {
@@ -65,6 +66,20 @@ module.exports = function(grunt) {
                 dest: './lib/mand-mobile.rem.css',
             },
         },
+        copy: {
+            main: {
+                files: [
+                    // makes all src relative to cwd
+                    {
+                        expand: true,
+                        cwd: './lib/',
+                        src: ['mand-mobile*'],
+                        dest: 'dest/',
+                        filter: 'isFile',
+                    },
+                ],
+            },
+        },
     });
-    grunt.registerTask('default', ['postcss']);
+    grunt.registerTask('default', ['postcss', 'copy']);
 };

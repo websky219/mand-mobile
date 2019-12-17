@@ -6,28 +6,27 @@
     tag="div"
     ref="form-group"
   >
-    <md-field>
-      <md-form-item
-        v-for="(obj, index) of dataArr"
-        :special="obj"
-        :key="index + obj.key"
-        :objkey="obj.key"
-        :index="index"
-        :componentName="vProvider"
-        :usevee="usevee"
-      ></md-form-item>
-    </md-field>
+    <md-form-item
+      v-for="(obj, index) of dataArr"
+      :special="obj"
+      :key="index + obj.key"
+      :objkey="obj.key"
+      :index="index"
+      :componentName="vProvider"
+      :usevee="usevee"
+    ></md-form-item>
+    <component style="display:none" :is="vProvider" rules="" vid="parent">
+      <input type="text" v-model="spe" />
+    </component>
   </component>
 </template>
 
 <script>
-import Field from '../field';
 import FormItem from '../form-item';
 import { sortBy } from '../_util/lang';
 export default {
   name: 'md-form-input',
   components: {
-    [Field.name]: Field,
     [FormItem.name]: FormItem,
   },
   data() {

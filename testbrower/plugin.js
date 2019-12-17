@@ -58,40 +58,71 @@ function $createSpecialFn(
             };
         },
         render: function(h) {
-            return h(
-                this.vObserver, {
-                    directives: [{
-                        name: 'show',
-                        rawName: 'v-show',
-                        value: this.show,
-                        expression: 'show',
-                    }, ],
-                    ref: 'form-group',
-                    tag: 'component',
-                    staticClass: 'md-form-group',
-                    attrs: {
-                        tag: 'div',
-                    },
-                }, [
-                    h(
-                        'md-field',
-                        this._l(this.dataArr, function(obj, index) {
-                            return h('md-form-item', {
+            with(this) {
+                return _c(
+                    vObserver, {
+                        directives: [{
+                            name: 'show',
+                            rawName: 'v-show',
+                            value: show,
+                            expression: 'show',
+                        }, ],
+                        ref: 'form-group',
+                        tag: 'component',
+                        staticClass: 'md-form-group',
+                        attrs: {
+                            tag: 'div',
+                        },
+                    }, [
+                        _l(dataArr, function(obj, index) {
+                            return _c('md-form-item', {
                                 key: index + obj.key,
                                 attrs: {
                                     special: obj,
                                     objkey: obj.key,
                                     index: index,
-                                    componentName: this.vProvider,
-                                    usevee: this.usevee,
+                                    componentName: vProvider,
+                                    usevee: usevee,
                                 },
                             });
                         }),
-                        1
-                    ),
-                ],
-                1
-            );
+                        _c(
+                            vProvider, {
+                                tag: 'component',
+                                staticStyle: {
+                                    display: 'none',
+                                },
+                                attrs: {
+                                    rules: '',
+                                    vid: 'parent',
+                                },
+                            }, [
+                                _c('input', {
+                                    directives: [{
+                                        name: 'model',
+                                        rawName: 'v-model',
+                                        value: spe,
+                                        expression: 'spe',
+                                    }, ],
+                                    attrs: {
+                                        type: 'text',
+                                    },
+                                    domProps: {
+                                        value: spe,
+                                    },
+                                    on: {
+                                        input: function($event) {
+                                            if ($event.target.composing) return;
+                                            spe = $event.target.value;
+                                        },
+                                    },
+                                }),
+                            ]
+                        ),
+                    ],
+                    2
+                );
+            }
         },
         provide() {
             return {

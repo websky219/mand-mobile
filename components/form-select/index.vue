@@ -99,6 +99,7 @@ export default {
       for (const i of this.options) {
         if (i.value === this.value) {
           this.selectText = i.text;
+          this.selectValue = this.value;
           console.log('s-text', this.selectText);
           break;
         }

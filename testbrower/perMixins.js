@@ -4,6 +4,11 @@ var perMixins = {
             console.log('type::', val);
         },
     },
+    methods: {
+        calper() {
+            console.log('calper::', this);
+        },
+    },
 };
 var mixinsArr = [];
 mixinsArr.push(perMixins);
