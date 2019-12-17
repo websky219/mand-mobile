@@ -45,7 +45,12 @@ var vm = new Vue({
             return !(index == 0 && this.form.sameTB);
         },
         removePerson(index, list) {
-            list.splice(index, 1);
+            this.$dialog.confirm({
+                title: '确认',
+                content: `请确认是否删除被保人${index + 1}`,
+                confirmText: '确定',
+                onConfirm: () => list.splice(index, 1),
+            });
         },
         addIns() {
             let copy = deepcopy(this.form.insured[0]);
