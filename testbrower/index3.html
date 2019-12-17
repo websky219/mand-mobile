@@ -34,14 +34,18 @@
                     <md-switch slot="right" v-model="form.sameTB" />
                 </md-cell-item>
                 <div v-show="isShow(index)" v-for="(item,index) of form.insured" :key="index">
-                    <md-cell-item :title="'被保人'+(index+1)">
+                    <md-cell-item class="ins-item">
+                        <div style="display: flex;" class="md-edit-left" slot="left">
+                            <md-icon name="id-card"></md-icon>
+                        </div>
+                        <span>{{'被保人'+(index+1)}}</span>
                         <md-icon @click="removePerson(index,form.insured)" color="red" v-if="index>0" slot="right" name='delete' />
                     </md-cell-item>
                     <md-form-per :show="isShow(index)" :special="item">
                     </md-form-per>
                 </div>
                 <div>
-                    <md-button type="primary" icon='edit' plain>添加被保人</md-button>
+                    <md-button type="primary" @click="addIns" icon='edit' plain>添加被保人</md-button>
                 </div>
                 <!-- <div class="md-example-section">
                     <md-button type="primary" icon="edit" @click="validate($event)" inline>验证</md-button>
@@ -59,6 +63,7 @@
 
     </div>
 </body>
+<script src="./deepcopy.js"></script>
 <script src="./vue.js"></script>
 <script src="../dest/mand-mobile.umd.js"></script>
 

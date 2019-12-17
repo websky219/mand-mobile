@@ -47,5 +47,17 @@ var vm = new Vue({
         removePerson(index, list) {
             list.splice(index, 1);
         },
+        addIns() {
+            let copy = deepcopy(this.form.insured[0]);
+            for (const key in copy) {
+                if (copy.hasOwnProperty(key)) {
+                    const element = copy[key];
+                    if (element['inputType'] && element['inputType'] == 'input') {
+                        element.value = '';
+                    }
+                }
+            }
+            this.form.insured.push(copy);
+        },
     },
 });

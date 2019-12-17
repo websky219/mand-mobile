@@ -19,7 +19,9 @@ let base = {
         },
         card: {
             cprop: {
-                rules: 'calper:@card,@birthday,@shebao,@parent',
+                rules: {
+                    calper: ['@card', '@birthday', '@shebao', '@parent'],
+                },
                 name: '证件号码',
                 vid: 'card',
             },
