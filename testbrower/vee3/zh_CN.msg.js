@@ -9,7 +9,7 @@ let zh_CN_MSG = {
         confirmed: '{_field_}不能和{target}匹配',
         digits: '{_field_}必须是数字，且精确到{length}位数',
         dimensions: '{_field_}必须在{width}像素与{height}像素之间',
-        email: '{_field_}不是一个有效的邮箱',
+        email: '请输入正确的邮箱地址',
         excluded: '{_field_}不是一个有效值',
         ext: '{_field_}不是一个有效的文件',
         image: '{_field_}不是一张有效的图片',
