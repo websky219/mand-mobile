@@ -34,7 +34,7 @@
                     <md-switch slot="right" v-model="form.sameTB" />
                 </md-cell-item>
                 <div v-show="isShow(index)" v-for="(item,index) of form.insured" :key="index">
-                    <md-cell-item class="ins-item">
+                    <md-cell-item v-if="form.insured.length>1" class="ins-item">
                         <div style="display: flex;" class="md-edit-left" slot="left">
                             <md-icon name="id-card"></md-icon>
                         </div>
