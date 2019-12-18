@@ -20,9 +20,13 @@
                     </div>
                     <span> <strong>投保人信息</strong></span>
                 </md-cell-item>
+
+
                 <md-form-per :special="form.applicant">
 
                 </md-form-per>
+
+
                 <md-cell-item>
                     <div style="display: flex;" class="md-edit-left" slot="left">
                         <md-icon name="edit"></md-icon>
@@ -30,9 +34,13 @@
 
                     <span> <strong>被保人信息</strong></span>
                 </md-cell-item>
+
+
                 <md-cell-item title="同投保人">
                     <md-switch slot="right" v-model="form.sameTB" />
                 </md-cell-item>
+
+
                 <div v-show="isShow(index)" v-for="(item,index) of form.insured" :key="index">
                     <md-cell-item v-if="form.insured.length>1" class="ins-item">
                         <div style="display: flex;" class="md-edit-left" slot="left">

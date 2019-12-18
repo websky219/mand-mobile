@@ -9,7 +9,9 @@ VeeValidate.extend('calper', {
     params: ['card', 'birthday', 'shebao', 'parent'],
     validate(value, par) {
         console.log('tag', value, par);
-        par.parent.card.value = 'test';
+        if (par.card == 11) {
+            par.card = 'pass';
+        }
         return true;
     },
     message: '',
