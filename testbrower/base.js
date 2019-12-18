@@ -3,9 +3,9 @@ let base = {
     applicant: {
         name: {
             cprop: {
-                rules: '',
+                rules: 'confirmed:@card',
                 tag: 'div',
-                name: '证件号码',
+                name: '姓名',
             },
             show: true,
             inputType: 'input',

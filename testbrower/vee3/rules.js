@@ -36,35 +36,35 @@
     };
 
     /**
-           * 1 身份证 10|港澳台居民居住证
-           * 2  护照
-           * 4  组织机构代码
-           * 20 社会统一信用代码
-           * 5  对应
-           *  	    1、营业执照5
-           *          2、事业单位法人证书18
-           *          3、社会团体法人登记证书19
-           *          4、统一社会信用代码证书且法人客户类型=政府机关20,21
-           * 7 对应    
-           *          7|军官证
-                      8|军官退休证
-                      9|居民户口簿
-                      A|士兵证
-                      B|学生证
-                      C|驾驶证
-                      D|台胞证
-                      E|少儿证
-                      F|香港居民身份证
-                      J|澳门居民身份证
-                      g|外国人永久居留身份证
-                      11异常身份证
-                      12|港澳通行证
-                      13|台湾通行证
-                      14|回乡证
-                      15|外国护照
-                      16|旅行证
-                      17|居留证件
-           */
+                 * 1 身份证 10|港澳台居民居住证
+                 * 2  护照
+                 * 4  组织机构代码
+                 * 20 社会统一信用代码
+                 * 5  对应
+                 *  	    1、营业执照5
+                 *          2、事业单位法人证书18
+                 *          3、社会团体法人登记证书19
+                 *          4、统一社会信用代码证书且法人客户类型=政府机关20,21
+                 * 7 对应    
+                 *          7|军官证
+                            8|军官退休证
+                            9|居民户口簿
+                            A|士兵证
+                            B|学生证
+                            C|驾驶证
+                            D|台胞证
+                            E|少儿证
+                            F|香港居民身份证
+                            J|澳门居民身份证
+                            g|外国人永久居留身份证
+                            11异常身份证
+                            12|港澳通行证
+                            13|台湾通行证
+                            14|回乡证
+                            15|外国护照
+                            16|旅行证
+                            17|居留证件
+                 */
     var cardRules = {
         type1: /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/,
         type2: /(^[EeKkGgDdSsPpHh]\d{8}$)|(^(([Ee][a-fA-F])|([DdSsPp][Ee])|([Kk][Jj])|([Mm][Aa])|(1[45]))\d{7}$)/,
@@ -72,6 +72,30 @@
         type20: /^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/,
         type5: /^[0-9a-zA-Z]{2}[0-9]{6}[0-9a-zA-Z]{10}$/,
         type7: alphanumeric.en,
+    };
+
+    var validate$card = function(value, _a) {
+        var _b = (_a === void 0 ? {} : _a).locale,
+            locale = _b === void 0 ? '' : _b;
+        if (Array.isArray(value)) {
+            return value.every(function(val) {
+                return validate$3(val, { locale: locale });
+            });
+        }
+        // Match at least one locale.
+        if (!locale) {
+            return Object.keys(alphaSpaces).some(function(loc) {
+                return alphaSpaces[loc].test(value);
+            });
+        }
+        return (alphaSpaces[locale] || alphaSpaces.en).test(value);
+    };
+    var params$card = [{
+        cardType: 'cardType',
+    }, ];
+    var cardNo = {
+        validate: validate$card,
+        params: params$card,
     };
 
     var platenumber = function(value) {
