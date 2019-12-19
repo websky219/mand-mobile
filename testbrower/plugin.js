@@ -55,6 +55,7 @@ function $createSpecialFn(
                 spe: this.special,
                 vProvider: 'md-item-wapper',
                 vObserver: 'div',
+                [this.field]: this.special,
             };
         },
         render: function(h) {
@@ -119,6 +120,41 @@ function $createSpecialFn(
                                 }),
                             ]
                         ),
+                        rootdata ?
+                        _c(
+                            vProvider, {
+                                tag: 'component',
+                                staticStyle: {
+                                    display: 'none',
+                                },
+                                attrs: {
+                                    rules: '',
+                                    vid: 'rootData',
+                                },
+                            }, [
+                                _c('input', {
+                                    directives: [{
+                                        name: 'model',
+                                        rawName: 'v-model',
+                                        value: rootdata,
+                                        expression: 'rootdata',
+                                    }, ],
+                                    attrs: {
+                                        type: 'text',
+                                    },
+                                    domProps: {
+                                        value: rootdata,
+                                    },
+                                    on: {
+                                        input: function($event) {
+                                            if ($event.target.composing) return;
+                                            rootdata = $event.target.value;
+                                        },
+                                    },
+                                }),
+                            ]
+                        ) :
+                        _e(),
                     ],
                     2
                 );
@@ -132,6 +168,10 @@ function $createSpecialFn(
             };
         },
         props: {
+            field: {
+                type: String,
+                default: 'field',
+            },
             show: {
                 type: Boolean,
                 default: true,
@@ -156,6 +196,7 @@ function $createSpecialFn(
                 type: String,
                 default: 'extend',
             },
+            rootdata: [Object, Array],
         },
         created() {
             if (this.usevee) {
@@ -178,6 +219,7 @@ function $createSpecialFn(
             special(val) {
                 console.log('wacspecial' + this.objkey, val);
                 this.spe = val;
+                this[this.field] = val;
                 this.updateData();
             },
         },

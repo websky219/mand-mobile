@@ -26,5 +26,6 @@ let zh_CN_MSG = {
         required: '请输入{_field_}',
         required_if: '请输入{_field_}',
         size: '{_field_}必须小于{size}KB',
+        cardNo: '请输入正确的{_field_}',
     },
 };

@@ -18,6 +18,15 @@
     <component style="display:none" :is="vProvider" rules="" vid="parent">
       <input type="text" v-model="spe" />
     </component>
+    <component
+      v-if="rootdata"
+      style="display:none"
+      :is="vProvider"
+      rules=""
+      vid="rootData"
+    >
+      <input type="text" v-model="rootdata" />
+    </component>
   </component>
 </template>
 
@@ -36,6 +45,7 @@ export default {
       spe: this.special,
       vProvider: 'div',
       vObserver: 'div',
+      [this.field]: this.special,
     };
   },
   provide() {
@@ -46,6 +56,10 @@ export default {
     };
   },
   props: {
+    field: {
+      type: String,
+      default: 'field',
+    },
     show: {
       type: Boolean,
       default: true,
@@ -70,6 +84,7 @@ export default {
       type: String,
       default: 'extend',
     },
+    rootdata: [Object, Array],
   },
   created() {
     if (this.usevee) {
@@ -92,6 +107,7 @@ export default {
     special(val) {
       console.log('wacspecial' + this.objkey, val);
       this.spe = val;
+      this[this.field] = val;
       this.updateData();
     },
   },

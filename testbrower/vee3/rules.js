@@ -36,35 +36,35 @@
     };
 
     /**
-                 * 1 身份证 10|港澳台居民居住证
-                 * 2  护照
-                 * 4  组织机构代码
-                 * 20 社会统一信用代码
-                 * 5  对应
-                 *  	    1、营业执照5
-                 *          2、事业单位法人证书18
-                 *          3、社会团体法人登记证书19
-                 *          4、统一社会信用代码证书且法人客户类型=政府机关20,21
-                 * 7 对应    
-                 *          7|军官证
-                            8|军官退休证
-                            9|居民户口簿
-                            A|士兵证
-                            B|学生证
-                            C|驾驶证
-                            D|台胞证
-                            E|少儿证
-                            F|香港居民身份证
-                            J|澳门居民身份证
-                            g|外国人永久居留身份证
-                            11异常身份证
-                            12|港澳通行证
-                            13|台湾通行证
-                            14|回乡证
-                            15|外国护照
-                            16|旅行证
-                            17|居留证件
-                 */
+                                   * 1 身份证 10|港澳台居民居住证
+                                   * 2  护照
+                                   * 4  组织机构代码
+                                   * 20 社会统一信用代码
+                                   * 5  对应
+                                   *  	    1、营业执照5
+                                   *          2、事业单位法人证书18
+                                   *          3、社会团体法人登记证书19
+                                   *          4、统一社会信用代码证书且法人客户类型=政府机关20,21
+                                   * 7 对应    
+                                   *          7|军官证
+                                              8|军官退休证
+                                              9|居民户口簿
+                                              A|士兵证
+                                              B|学生证
+                                              C|驾驶证
+                                              D|台胞证
+                                              E|少儿证
+                                              F|香港居民身份证
+                                              J|澳门居民身份证
+                                              g|外国人永久居留身份证
+                                              11异常身份证
+                                              12|港澳通行证
+                                              13|台湾通行证
+                                              14|回乡证
+                                              15|外国护照
+                                              16|旅行证
+                                              17|居留证件
+                                   */
     var cardRules = {
         type1: /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/,
         type2: /(^[EeKkGgDdSsPpHh]\d{8}$)|(^(([Ee][a-fA-F])|([DdSsPp][Ee])|([Kk][Jj])|([Mm][Aa])|(1[45]))\d{7}$)/,
@@ -75,27 +75,48 @@
     };
 
     var validate$card = function(value, _a) {
-        var _b = (_a === void 0 ? {} : _a).locale,
-            locale = _b === void 0 ? '' : _b;
-        if (Array.isArray(value)) {
-            return value.every(function(val) {
-                return validate$3(val, { locale: locale });
-            });
+        var cardType = _a.cardType;
+        var r;
+        if (
+            [
+                '7',
+                '8',
+                '9',
+                'A',
+                'B',
+                'C',
+                'D',
+                'E',
+                'F',
+                'J',
+                'g',
+                '11',
+                '12',
+                '13',
+                '14',
+                '15',
+                '16',
+                '17',
+            ].indexOf(cardType) > -1
+        ) {
+            r = cardRules.type7;
+        } else if (['5', '18', '19', '20', '21', '22']) {
+            r = cardRules.type5;
+        } else {
+            r = cardRules['type' + cardType];
         }
-        // Match at least one locale.
-        if (!locale) {
-            return Object.keys(alphaSpaces).some(function(loc) {
-                return alphaSpaces[loc].test(value);
-            });
+        if (r == '' || r == undefined) {
+            r = alphanumeric.en;
         }
-        return (alphaSpaces[locale] || alphaSpaces.en).test(value);
+        return r.test(value);
     };
-    var params$card = [{
-        cardType: 'cardType',
-    }, ];
+    // var params$card = [{
+    //     name: 'cardType,parent',
+    //     isTarget: true,
+    // }, ];
     var cardNo = {
         validate: validate$card,
-        params: params$card,
+        params: ['cardType', 'parent'],
     };
 
     var platenumber = function(value) {
@@ -757,5 +778,6 @@
     exports.required = required;
     exports.required_if = required_if;
     exports.size = size;
+    exports.cardNo = cardNo;
     Object.defineProperty(exports, '__esModule', { value: true });
 });

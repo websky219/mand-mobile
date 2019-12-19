@@ -3,9 +3,12 @@ let base = {
     applicant: {
         name: {
             cprop: {
-                rules: 'confirmed:@card',
-                tag: 'div',
+                rules: {
+                    cardNo: ['@cardType', '@parent'],
+                    // alpha: true,
+                },
                 name: '姓名',
+                vid: 'name',
             },
             show: true,
             inputType: 'input',
@@ -20,7 +23,8 @@ let base = {
         card: {
             cprop: {
                 rules: {
-                    calper: ['@card', '@birthday', '@shebao', '@parent'],
+                    required: true,
+                    cardNo: ['@cardType', '@parent'],
                 },
                 name: '证件号码',
                 vid: 'card',
@@ -68,6 +72,9 @@ let base = {
             suffix: '',
         },
         ctype: {
+            cprop: {
+                vid: 'cardType',
+            },
             show: true,
             inputType: 'select',
             path: 'certificationType',
@@ -92,6 +99,7 @@ let base = {
             inputType: 'input',
             path: 'certificationNo',
             label: '手机号',
+            type: 'phone',
             value: '',
             readonly: false,
             placeholder: '',
@@ -113,7 +121,10 @@ let base = {
     insured: [{
             name: {
                 cprop: {
-                    rules: '',
+                    rules: {
+                        required: true,
+                        cardNo: ['@cardType', '@parent'],
+                    },
                     tag: 'div',
                     name: '证件号码',
                 },
@@ -189,7 +200,10 @@ let base = {
         {
             name: {
                 cprop: {
-                    rules: 'confirmed:card2',
+                    rules: {
+                        required: true,
+                        cardNo: ['@cardType', '@parent'],
+                    },
                     tag: 'div',
                     name: '证件号码',
                 },

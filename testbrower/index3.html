@@ -11,8 +11,8 @@
 </head>
 
 <body>
-    <div id="app">
-        <validation-observer ref="form">
+    <div id="app" v-cloak>
+        <validation-observer ref="form" v-cloak>
             <md-field>
                 <md-cell-item>
                     <div style="display: flex;" class="md-edit-left" slot="left">
@@ -22,7 +22,7 @@
                 </md-cell-item>
 
 
-                <md-form-per :special="form.applicant">
+                <md-form-per field="per" :special="form.applicant">
 
                 </md-form-per>
 
@@ -49,17 +49,12 @@
                         <span>{{'被保人'+(index+1)}}</span>
                         <md-icon @click="removePerson(index,form.insured)" color="red" v-if="index>0" slot="right" name='delete' />
                     </md-cell-item>
-                    <md-form-per :show="isShow(index)" :special="item">
+                    <md-form-per field="per" :show="isShow(index)" :special="item">
                     </md-form-per>
                 </div>
                 <div>
                     <md-button type="primary" @click.native="addIns" icon='edit' plain>添加被保人</md-button>
                 </div>
-                <!-- <div class="md-example-section">
-                    <md-button type="primary" icon="edit" @click="validate($event)" inline>验证</md-button>
-                    <md-button type="primary" inline plain @click="heide1($event)">隐藏</md-button>
-                    <md-button type="primary" inline plain @click="hideForm($event)">隐藏表单</md-button>
-                </div> -->
                 <div style="height: 100px;"></div>
                 <md-action-bar :actions="data" @click="validate($event)">
                     <span class="price" style="font-size:0.5rem">

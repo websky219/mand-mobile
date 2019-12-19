@@ -1,6 +1,7 @@
 Vue.component('validation-provider', VeeValidate.ValidationProvider);
 Vue.component('validation-observer', VeeValidate.ValidationObserver);
 Object.keys(VeeValidateRules).forEach(rule => {
+    console.log('注册规则', rule);
     VeeValidate.extend(rule, VeeValidateRules[rule]);
 });
 VeeValidate.localize('zh_CN', zh_CN_MSG);
