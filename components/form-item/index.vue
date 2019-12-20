@@ -6,6 +6,7 @@
     v-slot="{ errors }"
     v-bind="spe.cprop"
   >
+    <template slot="rowLeft" :data="spe"> </template>
     <md-input-item
       v-if="spe.inputType == 'input' || !spe.inputType"
       solid
@@ -89,6 +90,7 @@
       :errors="errors"
       v-bind="spe"
     ></md-form-fn>
+    <template slot="rowRight" :data="spe"> </template>
   </component>
 </template>
 
