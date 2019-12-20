@@ -27,5 +27,7 @@ let zh_CN_MSG = {
         required_if: '请输入{_field_}',
         size: '{_field_}必须小于{size}KB',
         cardNo: '请输入正确的{_field_}',
+        chineseName: '请输入{min}-{max}位中文',
+        checkPhoneNo: '请输入正确的手机号',
     },
 };
