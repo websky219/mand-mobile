@@ -14,7 +14,14 @@
       :index="index"
       :componentName="vProvider"
       :usevee="usevee"
-    ></md-form-item>
+    >
+      <template v-slot:rowleft="{ data }">
+        <slot name="rowleft" :data="data"></slot>
+      </template>
+      <template v-slot:rowright="{ data }">
+        <slot name="rowright" :data="data"></slot>
+      </template>
+    </md-form-item>
     <component style="display:none" :is="vProvider" rules="" vid="parent">
       <input type="text" v-model="spe" />
     </component>
@@ -120,6 +127,10 @@ export default {
     console.log('updated', this.special);
   },
   methods: {
+    isSlot(name) {
+      console.log('tagp', this.$scopedSlots[name]);
+      return this.$scopedSlots[name] ? true : false;
+    },
     updateData() {
       this.dataArr = [];
       this.coverData(this.spe);

@@ -6,7 +6,9 @@
     v-slot="{ errors }"
     v-bind="spe.cprop"
   >
-    <template slot="rowLeft" :data="spe"> </template>
+    <template>
+      <slot name="rowleft" :data="spe"></slot>
+    </template>
     <md-input-item
       v-if="spe.inputType == 'input' || !spe.inputType"
       solid
@@ -90,7 +92,9 @@
       :errors="errors"
       v-bind="spe"
     ></md-form-fn>
-    <template slot="rowRight" :data="spe"> </template>
+    <template>
+      <slot name="rowright" :data="spe"></slot
+    ></template>
   </component>
 </template>
 
@@ -134,6 +138,20 @@ export default {
     isHidden(el) {
       return el.offsetParent === null;
     },
+    hasSlot(name) {
+      return this.$scopedSlots[name] ||
+        (this.$parent && this.$parent.$scopedSlots[name]) ||
+        (this.$parent &&
+          this.$parent.$parent &&
+          this.$parent.$parent.$scopedSlots[name])
+        ? true
+        : false;
+    },
+  },
+  mounted() {
+    console.log('scopedSlots', this.$scopedSlots);
+    console.log('p', this.$parent);
+    console.log('ppp', this.$parent.$parent);
   },
   computed: {
     cName() {

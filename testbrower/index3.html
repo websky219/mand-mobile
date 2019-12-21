@@ -14,6 +14,15 @@
     <div id="app" v-cloak>
         <validation-observer ref="form" v-cloak>
             <md-field>
+
+                <md-form-input field="per" :special="form.applicant">
+                    <!-- <template v-slot:rowleft="{item}">
+                        <div>{{item}}</div>
+                    </template>
+                    <template v-slot:rowright="{item}">
+                        <div>234234</div>
+                    </template> -->
+                </md-form-input>
                 <md-cell-item>
                     <div style="display: flex;" class="md-edit-left" slot="left">
                         <md-icon name="edit"></md-icon>
