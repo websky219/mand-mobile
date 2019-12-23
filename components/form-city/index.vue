@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <div class="md-input-item">
     <md-field-item
       class="md-input-item"
-      :title="plabel"
       :solid="solid"
       :disabled="readonly"
       :arrow="arrow"
     >
+      <div slot="left" class="md-form-item-left">
+        <span class="md-form-item-text">{{ plabel }}</span>
+      </div>
       <p class="md-form-content" @click="showSelector" v-if="selectValue">
         {{ selectValue }}
       </p>
-      <p class="md-form-content" @click="showSelector" v-else>
+      <p class="md-form-content-placeholder" @click="showSelector" v-else>
         {{ '请选择' + plabel }}
       </p>
       <template slot="right">
@@ -34,7 +36,6 @@
     </md-field-item>
     <md-input-item
       v-if="hasinput"
-      :title="label"
       :placeholder="placeholder"
       :maxlength="maxlength"
       :clearable="!readonly"
@@ -99,8 +100,14 @@ export default {
       default: false,
     },
     placeholder: String,
-    pvalue: String,
-    ivalue: String,
+    pvalue: {
+      type: String,
+      default: '',
+    },
+    ivalue: {
+      type: String,
+      default: '',
+    },
   },
   created() {
     this.selectValue = this.pvalue;
@@ -109,6 +116,9 @@ export default {
   },
   watch: {
     inputValue(val) {
+      if (this.selectValue == '') {
+        this.error = '请选择省市区';
+      }
       this.$_emitValue(val);
     },
   },
@@ -126,6 +136,7 @@ export default {
     handleChange(data) {
       console.log('change', data);
       this.selectValue = data.options.map(item => item.label).join(' ');
+      this.error = '';
       this.$_emitValue();
       this.$emit('on-change', {
         branch: data.options[1].c,

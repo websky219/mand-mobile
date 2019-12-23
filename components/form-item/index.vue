@@ -1,7 +1,7 @@
 <template>
   <component
     :is="cName"
-    v-show="spe.show"
+    v-show="spe.show == undefined || spe.show"
     class="md-form-item"
     v-slot="{ errors }"
     v-bind="spe.cprop"
@@ -70,7 +70,6 @@
       v-model="spe.value"
       :root="spe"
       :plabel="spe.plabel"
-      :label="spe.label"
       :hasinput="spe.hasinput"
       :list="spe.list"
       :preadonly="spe.preadonly"

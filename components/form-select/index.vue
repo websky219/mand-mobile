@@ -19,7 +19,7 @@
       <p class="md-form-content" @click="showSelector" v-if="selectText">
         {{ selectText }}
       </p>
-      <p class="md-form-content" @click="showSelector" v-else>
+      <p class="md-form-content-placeholder" @click="showSelector" v-else>
         {{ '请选择' + label }}
       </p>
     </template>

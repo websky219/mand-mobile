@@ -13,7 +13,7 @@
     <p class="md-form-content" @click="showSelector" v-if="selectValue">
       {{ selectValue }}
     </p>
-    <p class="md-form-content" @click="showSelector" v-else>
+    <p class="md-form-content-placeholder" @click="showSelector" v-else>
       {{ '请选择' + label }}
     </p>
     <template @click="showSelector" slot="right">
@@ -170,4 +170,6 @@ export default {
     font-style italic
 .md-form-date-suffix
   font-size field-item-font-size
+.md-form-content-placeholder
+  color color-text-caption
 </style>
