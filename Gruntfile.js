@@ -40,26 +40,39 @@
 module.exports = function(grunt) {
     'use strict';
 
+    let option1 = {
+        include: null,
+        exclude: null,
+        rootValue: 100,
+        unitPrecision: 5,
+        propList: ['*'],
+        selectorBlackList: [],
+        replace: true,
+        mediaQuery: false,
+        minPixelValue: 1,
+        rules: [],
+    };
+
+    let option2 = {
+        include: null,
+        exclude: null,
+        rootValue: 35,
+        unitPrecision: 2,
+        propList: ['*'],
+        selectorBlackList: [],
+        replace: true,
+        mediaQuery: false,
+        minPixelValue: 1,
+        rules: [],
+    };
+
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-contrib-copy');
     // Project configuration.
     grunt.initConfig({
         postcss: {
             options: {
-                processors: [
-                    require('postcss-pxtorem-multi')({
-                        include: null,
-                        exclude: null,
-                        rootValue: 100,
-                        unitPrecision: 5,
-                        propList: ['*'],
-                        selectorBlackList: [],
-                        replace: true,
-                        mediaQuery: false,
-                        minPixelValue: 1,
-                        rules: [],
-                    }),
-                ],
+                processors: [require('postcss-pxtorem-multi')(option2)],
             },
             dist: {
                 src: './lib/mand-mobile.css',
@@ -91,9 +104,20 @@ module.exports = function(grunt) {
                         dest: '../form-generate/public/rem/',
                         filter: 'isFile',
                     },
+
+                    {
+                        expand: true,
+                        cwd: './lib/',
+                        src: ['mand-mobile*'],
+                        dest: '../vue-element-admin-master/src/assets/lib/rem/',
+                        filter: 'isFile',
+                    },
                 ],
             },
         },
     });
     grunt.registerTask('default', ['postcss', 'copy']);
+    grunt.registerTask('rem', ['postcss', 'copy'], function() {
+        console.log('tag', this);
+    });
 };

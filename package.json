@@ -52,6 +52,7 @@
         "test:lib": "TEST_TYPE=lib jest --no-cache --runInBand --verbose --silent",
         "test:lib-vw": "TEST_TYPE=lib-vw jest --no-cache --runInBand --verbose --silent",
         "grunt": "grunt default",
+        "grunt:rem": "grunt rem",
         "dev:lib": "cd testlib && npm run serve",
         "build:testlib": "cd testlib && npm run build"
     },
