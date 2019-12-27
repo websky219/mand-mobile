@@ -51,8 +51,9 @@
         "test": "jest --no-cache --runInBand --verbose --silent",
         "test:lib": "TEST_TYPE=lib jest --no-cache --runInBand --verbose --silent",
         "test:lib-vw": "TEST_TYPE=lib-vw jest --no-cache --runInBand --verbose --silent",
-        "grunt": "grunt default",
-        "grunt:rem": "grunt rem",
+        "grunt": "npm run grunt:A && npm run grunt:M",
+        "grunt:A": "grunt --gruntfile ./GruntfileA.js",
+        "grunt:M": "grunt --gruntfile ./GruntfileM.js",
         "dev:lib": "cd testlib && npm run serve",
         "build:testlib": "cd testlib && npm run build"
     },

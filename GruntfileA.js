@@ -39,20 +39,6 @@
 /* jshint node: true */
 module.exports = function(grunt) {
     'use strict';
-
-    let option1 = {
-        include: null,
-        exclude: null,
-        rootValue: 100,
-        unitPrecision: 5,
-        propList: ['*'],
-        selectorBlackList: [],
-        replace: true,
-        mediaQuery: false,
-        minPixelValue: 1,
-        rules: [],
-    };
-
     let option2 = {
         include: null,
         exclude: null,
@@ -94,22 +80,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: './lib/',
                         src: ['mand-mobile*'],
-                        dest: './testlib/src/assets/',
-                        filter: 'isFile',
-                    },
-                    {
-                        expand: true,
-                        cwd: './lib/',
-                        src: ['mand-mobile*'],
-                        dest: '../form-generate/public/rem/',
-                        filter: 'isFile',
-                    },
-
-                    {
-                        expand: true,
-                        cwd: './lib/',
-                        src: ['mand-mobile*'],
-                        dest: '../vue-element-admin-master/src/assets/lib/rem/',
+                        dest: '../vue-element-admin-master/src/assets/lib/rem/admin/',
                         filter: 'isFile',
                     },
                 ],
@@ -117,7 +88,4 @@ module.exports = function(grunt) {
         },
     });
     grunt.registerTask('default', ['postcss', 'copy']);
-    grunt.registerTask('rem', ['postcss', 'copy'], function() {
-        console.log('tag', this);
-    });
 };
