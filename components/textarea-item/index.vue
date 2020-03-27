@@ -122,7 +122,9 @@ export default {
   watch: {
     value(val) {
       this.inputValue = val
-      this.resizeTextarea()
+      this.$nextTick(() => {
+        this.resizeTextarea()
+      })
     },
     inputValue(val) {
       this.$emit('input', val)
@@ -172,6 +174,11 @@ export default {
       textarea.style.height = 'auto'
 
       let scrollHeight = textarea.scrollHeight
+      // if textarea-item is not displayed, avoid height calculations
+      if (scrollHeight === 0) {
+        return
+      }
+
       if (this.maxHeightInner && scrollHeight > this.maxHeightInner) {
         scrollHeight = this.maxHeightInner
       }

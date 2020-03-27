@@ -422,6 +422,7 @@ export default {
 
       if (isInvalid || activeItemIndex === this.activedIndexs[index]) {
         isInvalid && this.$_scrollToValidIndex(scroller, index, activeItemIndex)
+        activeItemIndex === this.activedIndexs[index] && this.$_scrollToIndex(scroller, index, activeItemIndex)
         return false
       }
 
@@ -517,7 +518,6 @@ export default {
   position relative
   width 100%
   padding 0 picker-padding-h
-  padding-bottom constant(safe-area-inset-bottom)
   background color-bg-inverse
   box-sizing border-box
   transform translate3d(0, 0, 0)
@@ -558,7 +558,7 @@ export default {
 .md-picker-column-list
   display flex
   height 100%
-  padding 0 picker-padding-h
+  // padding 0 picker-padding-h
 
 .md-picker-column-item
   position relative
