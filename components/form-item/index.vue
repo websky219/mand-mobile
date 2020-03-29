@@ -1,16 +1,16 @@
 <template>
   <component
     :is="cName"
-    v-show="spe.show == undefined || spe.show"
+    v-show="spe.show === undefined || spe.show"
     class="md-form-item"
     v-slot="{ errors }"
     v-bind="spe.cprop"
   >
     <template>
-      <slot name="rowleft" :data="spe"></slot>
+      <slot name="rowLeft" :data="spe"></slot>
     </template>
     <md-input-item
-      v-if="spe.inputType == 'input' || !spe.inputType"
+      v-if="spe.inputType === 'input' || !spe.inputType"
       solid
       :type="spe.type"
       v-model="spe.value"
@@ -39,7 +39,7 @@
       </span>
     </md-input-item>
     <md-form-select
-      v-else-if="spe.inputType == 'select'"
+      v-else-if="spe.inputType === 'select'"
       v-model="spe.value"
       :min-height="spe.minHeight"
       :list="spe.list"
@@ -54,7 +54,7 @@
       </span>
     </md-form-select>
     <md-form-date
-      v-else-if="spe.inputType == 'datetime'"
+      v-else-if="spe.inputType === 'datetime'"
       :type="spe.type"
       :min="spe.startDate"
       :max="spe.endtDate"
@@ -66,7 +66,7 @@
     >
     </md-form-date>
     <md-form-city
-      v-else-if="spe.inputType == 'addressInput'"
+      v-else-if="spe.inputType === 'addressInput'"
       v-model="spe.value"
       :root="spe"
       :plabel="spe.plabel"
@@ -92,8 +92,7 @@
       v-bind="spe"
     ></md-form-fn>
     <template>
-      <slot name="rowright" :data="spe"></slot
-    ></template>
+      <slot name="rowRight" :data="spe"></slot></template>
   </component>
 </template>
 
@@ -138,13 +137,11 @@ export default {
       return el.offsetParent === null;
     },
     hasSlot(name) {
-      return this.$scopedSlots[name] ||
+      return !!(this.$scopedSlots[name] ||
         (this.$parent && this.$parent.$scopedSlots[name]) ||
         (this.$parent &&
           this.$parent.$parent &&
-          this.$parent.$parent.$scopedSlots[name])
-        ? true
-        : false;
+          this.$parent.$parent.$scopedSlots[name]));
     },
   },
   mounted() {

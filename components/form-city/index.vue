@@ -116,7 +116,7 @@ export default {
   },
   watch: {
     inputValue(val) {
-      if (this.selectValue == '') {
+      if (this.selectValue === '') {
         this.error = '请选择省市区';
       }
       this.$_emitValue(val);

@@ -49,5 +49,8 @@ export default {
         isInputBrief() {
             return this.$slots.brief || this.brief !== '';
         },
+      isInputSuffix(){
+          return this.$slots.suffix || this.suffix !== '';
+      }
     },
 };

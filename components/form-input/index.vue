@@ -15,11 +15,11 @@
       :componentName="vProvider"
       :usevee="usevee"
     >
-      <template v-slot:rowleft="{ data }">
-        <slot name="rowleft" :data="data"></slot>
+      <template v-slot:rowLeft="{ data }">
+        <slot name="rowLeft" :data="data"></slot>
       </template>
-      <template v-slot:rowright="{ data }">
-        <slot name="rowright" :data="data"></slot>
+      <template v-slot:rowRight="{ data }">
+        <slot name="rowRight" :data="data"></slot>
       </template>
     </md-form-item>
     <component style="display:none" :is="vProvider" rules="" vid="parent">
@@ -129,7 +129,7 @@ export default {
   methods: {
     isSlot(name) {
       console.log('tagp', this.$scopedSlots[name]);
-      return this.$scopedSlots[name] ? true : false;
+      return !!this.$scopedSlots[name];
     },
     updateData() {
       this.dataArr = [];
