@@ -128,6 +128,7 @@ export default {
       this.$emit('input', v);
     },
     showSelector() {
+      //no-unneeded-ternary
       if (this.preadonly) {
         return;
       }
@@ -142,6 +143,7 @@ export default {
         branch: data.options[1].c,
         codes: data.values,
       });
+      //no-unneeded-ternary
       if (this.rootObj) {
         this.rootObj.city = this.selectValue;
         this.rootObj.branch = data.options[1].c;
