@@ -58,118 +58,125 @@
 </template>
 
 <script>
-import DatePicker from '../date-picker';
-import FieldItem from '../field-item';
-import {
-  dateAdd,
-  strFormatToDate,
-  isNull,
-  isString,
-  isDate,
-} from '../_util/lang';
-import mixins from '../_util/form_mixins';
-import Icon from '../icon/';
-const FORMAT = {
-  date: 'yyyy-MM-dd',
-  datetime: 'yyyy-MM-dd HH:mm:ss',
-  time: 'HH:mm:ss',
-};
-export default {
-  mixins: [mixins],
-  name: 'md-form-date',
+  import DatePicker from '../date-picker';
+  import FieldItem from '../field-item';
+  import {
+    dateAdd,
+    strFormatToDate,
+    isNull,
+    isString,
+    isDate,
+  } from '../_util/lang';
+  import mixins from '../_util/form_mixins';
+  import Icon from '../icon/';
 
-  components: {
-    [FieldItem.name]: FieldItem,
-    [DatePicker.name]: DatePicker,
-    [Icon.name]: Icon,
-  },
-  data() {
-    return {
-      dfvalue: null,
-      maxDate: null,
-      minDate: null,
-      formatStr: '',
-    };
-  },
-  props: {
-    type: {
-      type: String,
-      default: 'date',
-    },
-    min: {
-      type: [String, Date],
-    },
-    max: {
-      type: [String, Date],
-    },
-    customTypes: {
-      type: Array,
-      default: () => ['yyyy', 'MM', 'dd', 'hh', 'mm'],
-    },
-  },
-  computed: {},
+  const FORMAT = {
+    date: 'yyyy-MM-dd',
+    datetime: 'yyyy-MM-dd HH:mm:ss',
+    time: 'HH:mm:ss',
+  };
+  export default {
+    mixins: [mixins],
+    name: 'md-form-date',
 
-  watch: {
-    min(val) {
-      console.log('up-min', val);
-      if (isDate(val)) {
-        this.minDate = val;
-      } else {
-        this.minDate = strFormatToDate(this.formatStr, val);
+    components: {
+      [FieldItem.name]: FieldItem,
+      [DatePicker.name]: DatePicker,
+      [Icon.name]: Icon,
+    },
+    data() {
+      return {
+        dfvalue: null,
+        maxDate: null,
+        minDate: null,
+        formatStr: '',
+      };
+    },
+    props: {
+      type: {
+        type: String,
+        default: 'date',
+      },
+      min: {
+        type: [String, Date],
+      },
+      max: {
+        type: [String, Date],
+      },
+      customTypes: {
+        type: Array,
+        default: () => ['yyyy', 'MM', 'dd', 'hh', 'mm'],
+      },
+    },
+    computed: {},
+
+    watch: {
+      min(val) {
+        console.log('up-min', val);
+        if (isDate(val)) {
+          this.minDate = val;
+        } else {
+          this.minDate = strFormatToDate(this.formatStr, val);
+        }
+      },
+      max(val) {
+        if (isDate(val)) {
+          this.maxDate = val;
+        } else {
+          this.maxDate = strFormatToDate(this.formatStr, val);
+        }
+      },
+    },
+    created() {
+      console.log('c-------min', this.min);
+      console.log('c-------max', this.max);
+
+      let formatStr = FORMAT[this.type];
+      if (!formatStr) {
+        formatStr = this.customTypes;
       }
+      this.formatStr = formatStr;
+      this.$_initMin('minDate', this.min, -100);
+      this.$_initMin('maxDate', this.max, 0);
+      this.dfvalue = this.maxDate;
+      this.selectValue = this.value;
     },
-    max(val) {
-      if (isDate(val)) {
-        this.maxDate = val;
-      } else {
-        this.maxDate = strFormatToDate(this.formatStr, val);
-      }
+    methods: {
+      $_initMin(data, prop, num) {
+        if (isNull(prop)) {
+          this[data] = dateAdd('y', num, new Date());
+        } else if (isString(prop)) {
+          this[data] = strFormatToDate(this.formatStr, prop);
+        } else {
+          this[data] = prop;
+        }
+      },
+      onDatePickerConfirm(columnsValue) {
+        console.log(
+          `[Mand Mobile] DatePicker Confirm\nvalue: ${JSON.stringify(
+            columnsValue,
+          )}`,
+        );
+        this.selectValue = this.$refs.datePicker.getFormatDate(this.formatStr);
+        this.$emit('input', this.selectValue);
+      },
     },
-  },
-  created() {
-    let formatStr = FORMAT[this.type];
-    if (!formatStr) {
-      formatStr = this.customTypes;
-    }
-    this.formatStr = formatStr;
-    this.$_initMin('minDate', this.min, -100);
-    this.$_initMin('maxDate', this.max, 0);
-    this.dfvalue = this.maxDate;
-    this.selectValue = this.value;
-  },
-  methods: {
-    $_initMin(data, prop, num) {
-      if (isNull(prop)) {
-        this[data] = dateAdd('y', num, new Date());
-      } else if (isString(prop)) {
-        this[data] = strFormatToDate(this.formatStr, prop);
-      } else {
-        this[data] = prop;
-      }
-    },
-    onDatePickerConfirm(columnsValue) {
-      console.log(
-        `[Mand Mobile] DatePicker Confirm\nvalue: ${JSON.stringify(
-          columnsValue
-        )}`
-      );
-      this.selectValue = this.$refs.datePicker.getFormatDate(this.formatStr);
-      this.$emit('input', this.selectValue);
-    },
-  },
-};
+  };
 </script>
 
 <style lang="stylus">
-.md-form-date
-  color color-gray-1
-  -webkit-font-smoothing antialiased
-  font-size field-item-font-size
-  text-align center
-  span
-    font-style italic
-.md-form-date-suffix
-  font-size field-item-font-size
-.md-form-content-placeholder
-  color color-text-caption
+  .md-form-date
+    color color-gray-1
+    -webkit-font-smoothing antialiased
+    font-size field-item-font-size
+    text-align center
+
+    span
+      font-style italic
+
+  .md-form-date-suffix
+    font-size field-item-font-size
+
+  .md-form-content-placeholder
+    color color-text-caption
 </style>

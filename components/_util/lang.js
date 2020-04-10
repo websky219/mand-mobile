@@ -130,6 +130,7 @@ export function strFormatToDate(formatStr, dateStr) {
   var year = 0;
   var start = -1;
   var len = dateStr.length;
+  if (dateStr ==='') return new Date();
   if ((start = formatStr.indexOf('yyyy')) > -1 && start < len) {
     year = dateStr.substr(start, 4);
   }
